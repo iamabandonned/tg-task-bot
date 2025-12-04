@@ -1,0 +1,29 @@
+---
+# TELEGRAM MINI APP TASK MANAGER - CURSOR DEVELOPMENT GUIDE
+
+## 📋 PROJECT OVERVIEW
+**Project:** Telegram Mini App для управления задачами и проектами
+**Tech Stack:** HTML5 + CSS3 + Vanilla JavaScript (Frontend Phase 1)
+**Platform:** Telegram Mini App (Mobile-first)
+**Architecture:** Single Page Application (SPA) with state management
+**Design System:** Modern, accessible, Telegram-native theme support
+
+---
+
+## 🎯 PHASE 1: PLANNING & ARCHITECTURE (START HERE)
+
+### 1.1 Before Writing Any Code - Create a Comprehensive Plan
+
+**TASK:** Analyze the TZ and create a detailed project plan document. Include:
+
+1. **Project Structure Overview**
+   - Frontend SPA architecture (5 pages)
+   - Component breakdown
+   - State management strategy
+   - Data flow diagrams (ASCII)
+   - Navigation flow chart
+
+2. **Frontend Architecture Deep Dive**
+
+---
+

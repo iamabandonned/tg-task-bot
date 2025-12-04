@@ -1,0 +1,160 @@
+/* ============================================
+   THEME - Light/Dark Mode Support
+   ============================================ */
+
+/* === DARK THEME === */
+[data-theme="dark"] {
+  /* === PRIMARY === */
+  --color-primary: #3a9be8;
+  --color-primary-hover: #2180ce;
+  --color-primary-light: #1e3a4d;
+  --color-primary-dark: #5cb3f5;
+  
+  /* === SECONDARY === */
+  --color-secondary: #8a9199;
+  --color-secondary-hover: #a0a8b0;
+  
+  /* === SEMANTIC === */
+  --color-success: #4aba64;
+  --color-success-light: #1e3d26;
+  --color-warning: #f5bc5e;
+  --color-warning-light: #3d3320;
+  --color-error: #e8545e;
+  --color-error-light: #3d1e21;
+  --color-info: #2db8cc;
+  --color-info-light: #1e3538;
+  
+  /* === TEXT === */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #b0b0b0;
+  --color-text-muted: #808080;
+  --color-text-inverse: #1a1a1a;
+  
+  /* === BACKGROUND === */
+  --color-bg-primary: #1a1a1a;
+  --color-bg-secondary: #242424;
+  --color-bg-tertiary: #2d2d2d;
+  --color-bg-hover: #333333;
+  
+  /* === BORDER === */
+  --color-border: #404040;
+  --color-border-focus: #3a9be8;
+  
+  /* === SHADOWS (darker for dark mode) === */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* === TELEGRAM THEME VARIABLES === */
+/* These are overridden by Telegram if available */
+body {
+  --tg-theme-bg-color: var(--color-bg-primary);
+  --tg-theme-text-color: var(--color-text-primary);
+  --tg-theme-hint-color: var(--color-text-secondary);
+  --tg-theme-link-color: var(--color-primary);
+  --tg-theme-button-color: var(--color-primary);
+  --tg-theme-button-text-color: var(--color-text-inverse);
+  --tg-theme-secondary-bg-color: var(--color-bg-secondary);
+}
+
+/* === AUTO THEME (follows system preference) === */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-primary: #3a9be8;
+    --color-primary-hover: #2180ce;
+    --color-primary-light: #1e3a4d;
+    --color-primary-dark: #5cb3f5;
+    
+    --color-secondary: #8a9199;
+    --color-secondary-hover: #a0a8b0;
+    
+    --color-success: #4aba64;
+    --color-success-light: #1e3d26;
+    --color-warning: #f5bc5e;
+    --color-warning-light: #3d3320;
+    --color-error: #e8545e;
+    --color-error-light: #3d1e21;
+    --color-info: #2db8cc;
+    --color-info-light: #1e3538;
+    
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #b0b0b0;
+    --color-text-muted: #808080;
+    --color-text-inverse: #1a1a1a;
+    
+    --color-bg-primary: #1a1a1a;
+    --color-bg-secondary: #242424;
+    --color-bg-tertiary: #2d2d2d;
+    --color-bg-hover: #333333;
+    
+    --color-border: #404040;
+    --color-border-focus: #3a9be8;
+    
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* === STATUS BADGE COLORS (consistent in both themes) === */
+.status-new {
+  background-color: var(--color-status-new);
+  color: white;
+}
+
+.status-in-progress {
+  background-color: var(--color-status-progress);
+  color: #1a1a1a;
+}
+
+.status-completed {
+  background-color: var(--color-status-completed);
+  color: white;
+}
+
+.status-cancelled {
+  background-color: var(--color-status-cancelled);
+  color: white;
+}
+
+/* === PRIORITY COLORS === */
+.priority-low {
+  color: var(--color-priority-low);
+}
+
+.priority-normal {
+  color: var(--color-priority-normal);
+}
+
+.priority-high {
+  color: var(--color-priority-high);
+}
+
+.priority-urgent {
+  color: var(--color-priority-urgent);
+}
+
+/* === PRIORITY BADGES === */
+.priority-badge--low {
+  background-color: var(--color-priority-low);
+  color: white;
+}
+
+.priority-badge--normal {
+  background-color: var(--color-priority-normal);
+  color: white;
+}
+
+.priority-badge--high {
+  background-color: var(--color-priority-high);
+  color: #1a1a1a;
+}
+
+.priority-badge--urgent {
+  background-color: var(--color-priority-urgent);
+  color: white;
+}
+
