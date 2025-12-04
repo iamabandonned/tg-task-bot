@@ -6,6 +6,7 @@ desktop.ini
 # Editor files
 .vscode/
 .idea/
+.cursor/
 *.swp
 *.swo
 *~
@@ -30,4 +31,7 @@ build/
 # Environment files
 .env
 .env.local
+
+# Deployment scripts (contain server-specific info)
+deploy.ps1
 
