@@ -45,6 +45,17 @@ async function initApp() {
   const initialPage = window.location.hash.slice(1) || 'tasks';
   navigateTo(initialPage);
 
+  // Some environments may have a tiny race between script load and render
+  // (especially when many modules modify state). Ensure page is rendered
+  // after the call stack finishes to avoid an initially-empty view.
+  setTimeout(() => {
+    try {
+      renderCurrentPage();
+    } catch (e) {
+      console.warn('Render retry failed:', e);
+    }
+  }, 20);
+
   console.log('✅ App initialized');
 }
 
