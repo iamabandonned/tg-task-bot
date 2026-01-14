@@ -7,16 +7,16 @@ function renderTasksPage() {
   const projects = getState('projects') || [];
   const departments = getState('departments') || [];
   const employees = getState('employees') || [];
-  
+
   const isEditing = form.editingTaskId !== null;
-  
+
   // Получаем имена выбранных проектов и сотрудников
   const selectedProjectNames = getProjectNames(form.selectedProjects);
   const selectedEmployeeNames = getEmployeeNames(form.selectedEmployees);
-  
+
   // Текущая дата для календаря
   const calendarDate = form.calendarMonth || new Date().toISOString().slice(0, 7);
-  
+
   const html = `
     <div class="task-form">
       <!-- Проекты -->
@@ -53,25 +53,36 @@ function renderTasksPage() {
           </div>
         </div>
         
-        ${form.allProjectsSelected ? `
+        ${
+          form.allProjectsSelected
+            ? `
           <div class="all-selected-notice">
             <span class="all-selected-notice__icon">📁</span>
             <span>Все проекты выбраны</span>
           </div>
-        ` : `
+        `
+            : `
           <div class="project-selector">
             ${renderProjectTree(projects, form.selectedProjects, form.projectSearchQuery)}
           </div>
-          ${form.selectedProjects.length > 0 ? `
+          ${
+            form.selectedProjects.length > 0
+              ? `
             <div class="selected-summary">
               <span class="selected-summary__label">Выбрано:</span>
-              ${renderChips(selectedProjectNames.map((name, i) => ({ 
-                id: form.selectedProjects[i], 
-                name 
-              })), 'removeProjectFromTask')}
+              ${renderChips(
+                selectedProjectNames.map((name, i) => ({
+                  id: form.selectedProjects[i],
+                  name,
+                })),
+                'removeProjectFromTask'
+              )}
             </div>
-          ` : ''}
-        `}
+          `
+              : ''
+          }
+        `
+        }
       </div>
       
       <!-- Исполнители -->
@@ -213,7 +224,7 @@ function renderTasksPage() {
       </div>
     </div>
   `;
-  
+
   return html;
 }
 
@@ -221,29 +232,55 @@ function renderTasksPage() {
 
 function getCalendarMonthName(dateStr) {
   const [year, month] = dateStr.split('-').map(Number);
-  const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
-                  'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+  const months = [
+    'Январь',
+    'Февраль',
+    'Март',
+    'Апрель',
+    'Май',
+    'Июнь',
+    'Июль',
+    'Август',
+    'Сентябрь',
+    'Октябрь',
+    'Ноябрь',
+    'Декабрь',
+  ];
   return `${months[month - 1]} ${year}`;
 }
 
 function getMonthOptions(dateStr) {
   const [year, month] = dateStr.split('-').map(Number);
-  const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
-                  'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
-  
-  return months.map((name, i) => 
-    `<option value="${i + 1}" ${i + 1 === month ? 'selected' : ''}>${name}</option>`
-  ).join('');
+  const months = [
+    'Январь',
+    'Февраль',
+    'Март',
+    'Апрель',
+    'Май',
+    'Июнь',
+    'Июль',
+    'Август',
+    'Сентябрь',
+    'Октябрь',
+    'Ноябрь',
+    'Декабрь',
+  ];
+
+  return months
+    .map(
+      (name, i) => `<option value="${i + 1}" ${i + 1 === month ? 'selected' : ''}>${name}</option>`
+    )
+    .join('');
 }
 
 function getYearOptions(dateStr) {
   const [currentYear] = dateStr.split('-').map(Number);
   const years = [];
-  
+
   for (let y = 2024; y <= 2030; y++) {
     years.push(`<option value="${y}" ${y === currentYear ? 'selected' : ''}>${y}</option>`);
   }
-  
+
   return years.join('');
 }
 
@@ -267,47 +304,47 @@ function renderCalendarDays(monthStr, selectedDate) {
   const lastDay = new Date(year, month, 0);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  
+
   // День недели первого дня (0=Вс, нужно 0=Пн)
   let startDay = firstDay.getDay() - 1;
   if (startDay < 0) startDay = 6;
-  
+
   const days = [];
-  
+
   // Пустые дни в начале
   for (let i = 0; i < startDay; i++) {
     days.push('<span class="calendar__day calendar__day--empty"></span>');
   }
-  
+
   // Дни месяца
   for (let day = 1; day <= lastDay.getDate(); day++) {
     const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     const date = new Date(year, month - 1, day);
-    
+
     const isToday = date.getTime() === today.getTime();
     const isSelected = dateStr === selectedDate;
     const isPast = date < today;
-    
+
     let classes = 'calendar__day';
     if (isToday) classes += ' calendar__day--today';
     if (isSelected) classes += ' calendar__day--selected';
     if (isPast) classes += ' calendar__day--past';
-    
+
     days.push(`
       <span class="${classes}" onclick="${!isPast ? `selectCalendarDate('${dateStr}')` : ''}">${day}</span>
     `);
   }
-  
+
   return days.join('');
 }
 
 function changeCalendarMonth(delta) {
   const current = getState('taskForm.calendarMonth') || new Date().toISOString().slice(0, 7);
   const [year, month] = current.split('-').map(Number);
-  
+
   let newMonth = month + delta;
   let newYear = year;
-  
+
   if (newMonth > 12) {
     newMonth = 1;
     newYear++;
@@ -315,7 +352,7 @@ function changeCalendarMonth(delta) {
     newMonth = 12;
     newYear--;
   }
-  
+
   setState('taskForm.calendarMonth', `${newYear}-${String(newMonth).padStart(2, '0')}`);
   haptic.light();
 }
@@ -346,23 +383,25 @@ function handleDateTextInput(value) {
   if (formatted.length > 5) {
     formatted = formatted.slice(0, 5) + '.' + formatted.slice(5, 9);
   }
-  
+
   const input = document.getElementById('scheduledDateText');
   if (input && input.value !== formatted) {
     input.value = formatted;
   }
-  
+
   // Формат: ДД.ММ.ГГГГ
   const match = formatted.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
   if (match) {
     const [, day, month, year] = match;
-    const d = parseInt(day), m = parseInt(month), y = parseInt(year);
-    
+    const d = parseInt(day),
+      m = parseInt(month),
+      y = parseInt(year);
+
     // Валидация даты
     if (d >= 1 && d <= 31 && m >= 1 && m <= 12 && y >= 2024) {
       const dateStr = `${year}-${month}-${day}`;
       const date = new Date(y, m - 1, d);
-      
+
       if (!isNaN(date.getTime()) && date.getDate() === d) {
         setState('taskForm.scheduledDate', dateStr, true);
         setState('taskForm.calendarMonth', `${year}-${month}`, true);
@@ -383,18 +422,19 @@ function handleTimeTextInput(value) {
   if (formatted.length > 2) {
     formatted = formatted.slice(0, 2) + ':' + formatted.slice(2, 4);
   }
-  
+
   const input = document.getElementById('scheduledTimeText');
   if (input && input.value !== formatted) {
     input.value = formatted;
   }
-  
+
   // Валидация времени ЧЧ:ММ
   const match = formatted.match(/^(\d{2}):(\d{2})$/);
   if (match) {
     const [, hours, minutes] = match;
-    const h = parseInt(hours), min = parseInt(minutes);
-    
+    const h = parseInt(hours),
+      min = parseInt(minutes);
+
     if (h >= 0 && h <= 23 && min >= 0 && min <= 59) {
       setState('taskForm.scheduledTime', formatted, true);
     }
@@ -405,39 +445,39 @@ function handleTimeTextInput(value) {
 
 function renderProjectTree(projects, selectedIds, searchQuery = '') {
   const tree = buildTree(projects);
-  
+
   if (tree.length === 0) {
     return renderEmptyState({
       icon: '📁',
       title: 'Нет проектов',
-      text: 'Создайте проекты на странице "Проекты"'
+      text: 'Создайте проекты на странице "Проекты"',
     });
   }
-  
+
   // Фильтрация по поиску
-  const filteredTree = searchQuery.trim() 
+  const filteredTree = searchQuery.trim()
     ? filterTreeBySearch(tree, searchQuery.toLowerCase())
     : tree;
-  
+
   if (filteredTree.length === 0) {
     return `<div class="empty-search">Ничего не найдено</div>`;
   }
-  
-  return filteredTree.map(node => renderProjectTreeNode(node, selectedIds, 0)).join('');
+
+  return filteredTree.map((node) => renderProjectTreeNode(node, selectedIds, 0)).join('');
 }
 
 function filterTreeBySearch(nodes, query) {
   return nodes.reduce((acc, node) => {
     const matches = node.name.toLowerCase().includes(query);
     const filteredChildren = node.children ? filterTreeBySearch(node.children, query) : [];
-    
+
     if (matches || filteredChildren.length > 0) {
       acc.push({
         ...node,
-        children: matches ? node.children : filteredChildren
+        children: matches ? node.children : filteredChildren,
       });
     }
-    
+
     return acc;
   }, []);
 }
@@ -446,16 +486,17 @@ function renderProjectTreeNode(node, selectedIds, level) {
   const hasChildren = node.children && node.children.length > 0;
   const isExpanded = getState('expandedProjects')?.includes(node.id) || level === 0;
   const isSelected = selectedIds.includes(node.id);
-  
+
   // Проверяем, выбраны ли все дети
   const allChildIds = hasChildren ? getAllChildIds(node) : [];
-  const selectedChildCount = allChildIds.filter(id => selectedIds.includes(id)).length;
+  const selectedChildCount = allChildIds.filter((id) => selectedIds.includes(id)).length;
   const isIndeterminate = selectedChildCount > 0 && selectedChildCount < allChildIds.length;
-  
-  const childrenHtml = hasChildren && isExpanded
-    ? node.children.map(child => renderProjectTreeNode(child, selectedIds, level + 1)).join('')
-    : '';
-  
+
+  const childrenHtml =
+    hasChildren && isExpanded
+      ? node.children.map((child) => renderProjectTreeNode(child, selectedIds, level + 1)).join('')
+      : '';
+
   return `
     <div class="tree-node ${level === 0 ? 'tree-node--root' : ''}" data-id="${node.id}">
       <div class="tree-node__header">
@@ -488,11 +529,15 @@ function renderProjectTreeNode(node, selectedIds, level) {
         </div>
       </div>
       
-      ${hasChildren ? `
+      ${
+        hasChildren
+          ? `
         <div class="tree-node__children collapse-content ${isExpanded ? 'expanded' : ''}">
           ${childrenHtml}
         </div>
-      ` : ''}
+      `
+          : ''
+      }
     </div>
   `;
 }
@@ -500,7 +545,7 @@ function renderProjectTreeNode(node, selectedIds, level) {
 function getAllChildIds(node) {
   let ids = [];
   if (node.children) {
-    node.children.forEach(child => {
+    node.children.forEach((child) => {
       ids.push(child.id);
       ids = ids.concat(getAllChildIds(child));
     });
@@ -510,48 +555,56 @@ function getAllChildIds(node) {
 
 // ===== EMPLOYEE SELECTOR =====
 
-function renderEmployeeSelector(departments, employees, selectedIds, selectedDepartmentsAll = [], searchQuery = '') {
+function renderEmployeeSelector(
+  departments,
+  employees,
+  selectedIds,
+  selectedDepartmentsAll = [],
+  searchQuery = ''
+) {
   const grouped = groupEmployeesByDepartment(
-    employees.filter(e => e.isActive),
+    employees.filter((e) => e.isActive),
     departments
   );
-  
+
   if (grouped.length === 0) {
     return renderEmptyState({
       icon: '👥',
       title: 'Нет сотрудников',
-      text: 'Добавьте сотрудников на странице "Сотрудники"'
+      text: 'Добавьте сотрудников на странице "Сотрудники"',
     });
   }
-  
+
   // Фильтрация по поиску
   const query = searchQuery.toLowerCase().trim();
-  const filteredGroups = query 
-    ? grouped.map(dept => ({
-        ...dept,
-        employees: dept.employees.filter(emp => 
-          getEmployeeFullName(emp).toLowerCase().includes(query) ||
-          (emp.position && emp.position.toLowerCase().includes(query))
-        )
-      })).filter(dept => 
-        dept.employees.length > 0 || 
-        dept.name.toLowerCase().includes(query)
-      )
+  const filteredGroups = query
+    ? grouped
+        .map((dept) => ({
+          ...dept,
+          employees: dept.employees.filter(
+            (emp) =>
+              getEmployeeFullName(emp).toLowerCase().includes(query) ||
+              (emp.position && emp.position.toLowerCase().includes(query))
+          ),
+        }))
+        .filter((dept) => dept.employees.length > 0 || dept.name.toLowerCase().includes(query))
     : grouped;
-  
+
   if (filteredGroups.length === 0) {
     return `<div class="empty-search">Ничего не найдено</div>`;
   }
-  
-  return filteredGroups.map(dept => {
-    const deptEmployees = dept.employees;
-    const isExpanded = getState('expandedDepartments')?.includes(dept.id);
-    const isDepartmentAllSelected = selectedDepartmentsAll.includes(dept.id);
-    const allSelected = isDepartmentAllSelected || (deptEmployees.length > 0 && 
-      deptEmployees.every(e => selectedIds.includes(e.id)));
-    const someSelected = deptEmployees.some(e => selectedIds.includes(e.id));
-    
-    return `
+
+  return filteredGroups
+    .map((dept) => {
+      const deptEmployees = dept.employees;
+      const isExpanded = getState('expandedDepartments')?.includes(dept.id);
+      const isDepartmentAllSelected = selectedDepartmentsAll.includes(dept.id);
+      const allSelected =
+        isDepartmentAllSelected ||
+        (deptEmployees.length > 0 && deptEmployees.every((e) => selectedIds.includes(e.id)));
+      const someSelected = deptEmployees.some((e) => selectedIds.includes(e.id));
+
+      return `
       <div class="employee-department ${isDepartmentAllSelected ? 'employee-department--all-selected' : ''}">
         <div class="employee-department__header" onclick="toggleDepartmentExpand(${dept.id})">
           <span class="tree-node__toggle ${isExpanded ? 'expanded' : ''}">
@@ -579,9 +632,13 @@ function renderEmployeeSelector(departments, employees, selectedIds, selectedDep
           ${isDepartmentAllSelected ? '<span class="badge badge--primary badge--sm">Весь отдел</span>' : ''}
         </div>
         
-        ${!isDepartmentAllSelected ? `
+        ${
+          !isDepartmentAllSelected
+            ? `
           <div class="employee-department__list collapse-content ${isExpanded ? 'expanded' : ''}">
-            ${deptEmployees.map(emp => `
+            ${deptEmployees
+              .map(
+                (emp) => `
               <div class="employee-item">
                 <label class="checkbox">
                   <input 
@@ -602,19 +659,24 @@ function renderEmployeeSelector(departments, employees, selectedIds, selectedDep
                   <div class="employee-item__position">${escapeHtml(emp.position || '')}</div>
                 </div>
               </div>
-            `).join('')}
+            `
+              )
+              .join('')}
           </div>
-        ` : ''}
+        `
+            : ''
+        }
       </div>
     `;
-  }).join('');
+    })
+    .join('');
 }
 
 // Helper functions for employee selection display
 function getEmployeeSummary(form) {
   const deptCount = form.selectedDepartmentsAll?.length || 0;
   const empCount = form.selectedEmployees?.length || 0;
-  
+
   if (deptCount > 0 && empCount > 0) {
     return `(${deptCount} отд., ${empCount} чел.)`;
   } else if (deptCount > 0) {
@@ -628,36 +690,38 @@ function getEmployeeSummary(form) {
 function renderSelectedEmployeesSummary(form, departments, employees) {
   const selectedDepts = form.selectedDepartmentsAll || [];
   const selectedEmps = form.selectedEmployees || [];
-  
+
   if (selectedDepts.length === 0 && selectedEmps.length === 0) {
     return '';
   }
-  
+
   const items = [];
-  
+
   // Добавляем выбранные отделы
-  selectedDepts.forEach(deptId => {
-    const dept = departments.find(d => d.id === deptId);
+  selectedDepts.forEach((deptId) => {
+    const dept = departments.find((d) => d.id === deptId);
     if (dept) {
       items.push({ id: `dept_${deptId}`, name: `📁 ${dept.name}`, isDept: true, deptId });
     }
   });
-  
+
   // Добавляем выбранных сотрудников (исключая тех, кто уже в выбранных отделах)
-  selectedEmps.forEach(empId => {
-    const emp = employees.find(e => e.id === empId);
+  selectedEmps.forEach((empId) => {
+    const emp = employees.find((e) => e.id === empId);
     if (emp && !selectedDepts.includes(emp.departmentId)) {
       items.push({ id: empId, name: getEmployeeFullName(emp), isDept: false });
     }
   });
-  
+
   if (items.length === 0) return '';
-  
+
   return `
     <div class="selected-summary">
       <span class="selected-summary__label">Выбрано:</span>
       <div class="chips">
-        ${items.map(item => `
+        ${items
+          .map(
+            (item) => `
           <span class="chip ${item.isDept ? 'chip--department' : ''}">
             ${escapeHtml(item.name)}
             <button 
@@ -665,7 +729,9 @@ function renderSelectedEmployeesSummary(form, departments, employees) {
               onclick="${item.isDept ? `removeDepartmentFromTask(${item.deptId})` : `removeEmployeeFromTask(${item.id})`}"
             >×</button>
           </span>
-        `).join('')}
+        `
+          )
+          .join('')}
       </div>
     </div>
   `;
@@ -680,13 +746,17 @@ function handleTaskFormChange(field, value) {
 function toggleProjectExpand(projectId) {
   const expanded = getState('expandedProjects') || [];
   const isExpanded = expanded.includes(projectId);
-  
+
   if (isExpanded) {
-    setState('expandedProjects', expanded.filter(id => id !== projectId), true);
+    setState(
+      'expandedProjects',
+      expanded.filter((id) => id !== projectId),
+      true
+    );
   } else {
     setState('expandedProjects', [...expanded, projectId], true);
   }
-  
+
   // Обновляем DOM напрямую
   toggleTreeNodeExpand(projectId, !isExpanded);
   haptic.light();
@@ -695,13 +765,17 @@ function toggleProjectExpand(projectId) {
 function toggleDepartmentExpand(deptId) {
   const expanded = getState('expandedDepartments') || [];
   const isExpanded = expanded.includes(deptId);
-  
+
   if (isExpanded) {
-    setState('expandedDepartments', expanded.filter(id => id !== deptId), true);
+    setState(
+      'expandedDepartments',
+      expanded.filter((id) => id !== deptId),
+      true
+    );
   } else {
     setState('expandedDepartments', [...expanded, deptId], true);
   }
-  
+
   // Обновляем DOM напрямую
   toggleDeptNodeExpand(deptId, !isExpanded);
   haptic.light();
@@ -726,7 +800,9 @@ function toggleDeptNodeExpand(deptId, expand) {
     if (toggle) {
       toggle.classList.toggle('expanded', expand);
     }
-    const list = header.closest('.employee-department')?.querySelector('.employee-department__list');
+    const list = header
+      .closest('.employee-department')
+      ?.querySelector('.employee-department__list');
     if (list) {
       list.classList.toggle('expanded', expand);
     }
@@ -735,15 +811,19 @@ function toggleDeptNodeExpand(deptId, expand) {
 
 function toggleProjectSelection(projectId, checked) {
   const selected = getState('taskForm.selectedProjects') || [];
-  
+
   if (checked) {
     if (!selected.includes(projectId)) {
       setState('taskForm.selectedProjects', [...selected, projectId], true);
     }
   } else {
-    setState('taskForm.selectedProjects', selected.filter(id => id !== projectId), true);
+    setState(
+      'taskForm.selectedProjects',
+      selected.filter((id) => id !== projectId),
+      true
+    );
   }
-  
+
   // Обновляем только секцию с выбранными, не всю страницу
   updateSelectedProjectsSummary();
   haptic.selection();
@@ -751,15 +831,19 @@ function toggleProjectSelection(projectId, checked) {
 
 function toggleEmployeeSelection(employeeId, checked) {
   const selected = getState('taskForm.selectedEmployees') || [];
-  
+
   if (checked) {
     if (!selected.includes(employeeId)) {
       setState('taskForm.selectedEmployees', [...selected, employeeId], true);
     }
   } else {
-    setState('taskForm.selectedEmployees', selected.filter(id => id !== employeeId), true);
+    setState(
+      'taskForm.selectedEmployees',
+      selected.filter((id) => id !== employeeId),
+      true
+    );
   }
-  
+
   // Обновляем только секцию с выбранными
   updateSelectedEmployeesSummary();
   haptic.selection();
@@ -768,16 +852,20 @@ function toggleEmployeeSelection(employeeId, checked) {
 function toggleDepartmentSelection(deptId, checked) {
   const employees = getState('employees') || [];
   const selected = getState('taskForm.selectedEmployees') || [];
-  const deptEmployees = employees.filter(e => e.departmentId === deptId && e.isActive);
-  const deptEmployeeIds = deptEmployees.map(e => e.id);
-  
+  const deptEmployees = employees.filter((e) => e.departmentId === deptId && e.isActive);
+  const deptEmployeeIds = deptEmployees.map((e) => e.id);
+
   if (checked) {
     const newSelected = [...new Set([...selected, ...deptEmployeeIds])];
     setState('taskForm.selectedEmployees', newSelected, true);
   } else {
-    setState('taskForm.selectedEmployees', selected.filter(id => !deptEmployeeIds.includes(id)), true);
+    setState(
+      'taskForm.selectedEmployees',
+      selected.filter((id) => !deptEmployeeIds.includes(id)),
+      true
+    );
   }
-  
+
   updateSelectedEmployeesSummary();
   haptic.selection();
 }
@@ -787,34 +875,47 @@ function toggleDepartmentAllSelection(deptId, checked) {
   const selectedDepts = getState('taskForm.selectedDepartmentsAll') || [];
   const selectedEmps = getState('taskForm.selectedEmployees') || [];
   const employees = getState('employees') || [];
-  const deptEmployeeIds = employees.filter(e => e.departmentId === deptId && e.isActive).map(e => e.id);
-  
+  const deptEmployeeIds = employees
+    .filter((e) => e.departmentId === deptId && e.isActive)
+    .map((e) => e.id);
+
   if (checked) {
     // Добавляем отдел в выбранные
     if (!selectedDepts.includes(deptId)) {
       setState('taskForm.selectedDepartmentsAll', [...selectedDepts, deptId], true);
     }
     // Удаляем отдельных сотрудников этого отдела из списка
-    setState('taskForm.selectedEmployees', selectedEmps.filter(id => !deptEmployeeIds.includes(id)), true);
+    setState(
+      'taskForm.selectedEmployees',
+      selectedEmps.filter((id) => !deptEmployeeIds.includes(id)),
+      true
+    );
   } else {
     // Убираем отдел из выбранных
-    setState('taskForm.selectedDepartmentsAll', selectedDepts.filter(id => id !== deptId), true);
+    setState(
+      'taskForm.selectedDepartmentsAll',
+      selectedDepts.filter((id) => id !== deptId),
+      true
+    );
   }
-  
+
   updateSelectedEmployeesSummary();
   haptic.selection();
 }
 
 function removeDepartmentFromTask(deptId) {
   const selectedDepts = getState('taskForm.selectedDepartmentsAll') || [];
-  setState('taskForm.selectedDepartmentsAll', selectedDepts.filter(id => id !== deptId));
+  setState(
+    'taskForm.selectedDepartmentsAll',
+    selectedDepts.filter((id) => id !== deptId)
+  );
   haptic.light();
 }
 
 // Выбор всех проектов
 function toggleAllProjectsSelection() {
   const isAllSelected = getState('taskForm.allProjectsSelected');
-  
+
   if (isAllSelected) {
     // Снимаем "все проекты"
     setState('taskForm.allProjectsSelected', false);
@@ -823,7 +924,7 @@ function toggleAllProjectsSelection() {
     setState('taskForm.allProjectsSelected', true);
     setState('taskForm.selectedProjects', [], true);
   }
-  
+
   haptic.selection();
 }
 
@@ -850,13 +951,19 @@ function updateSelectedEmployeesSummary() {
 
 function removeProjectFromTask(projectId) {
   const selected = getState('taskForm.selectedProjects') || [];
-  setState('taskForm.selectedProjects', selected.filter(id => id !== projectId));
+  setState(
+    'taskForm.selectedProjects',
+    selected.filter((id) => id !== projectId)
+  );
   haptic.light();
 }
 
 function removeEmployeeFromTask(employeeId) {
   const selected = getState('taskForm.selectedEmployees') || [];
-  setState('taskForm.selectedEmployees', selected.filter(id => id !== employeeId));
+  setState(
+    'taskForm.selectedEmployees',
+    selected.filter((id) => id !== employeeId)
+  );
   haptic.light();
 }
 
@@ -871,45 +978,47 @@ function clearTaskForm() {
       resetTaskForm();
       showToast('Форма очищена', 'info');
       haptic.success();
-    }
+    },
   });
 }
 
 function previewTask() {
   const form = getState('taskForm');
-  
+
   // Валидация
   const errors = [];
-  
+
   if (!form.title || form.title.trim().length < 3) {
     errors.push('Введите название задачи (минимум 3 символа)');
   }
-  
-  const hasProjects = form.allProjectsSelected || (form.selectedProjects && form.selectedProjects.length > 0);
+
+  const hasProjects =
+    form.allProjectsSelected || (form.selectedProjects && form.selectedProjects.length > 0);
   if (!hasProjects) {
     errors.push('Выберите хотя бы один проект');
   }
-  
-  const hasEmployees = (form.selectedDepartmentsAll && form.selectedDepartmentsAll.length > 0) || 
-                       (form.selectedEmployees && form.selectedEmployees.length > 0);
+
+  const hasEmployees =
+    (form.selectedDepartmentsAll && form.selectedDepartmentsAll.length > 0) ||
+    (form.selectedEmployees && form.selectedEmployees.length > 0);
   if (!hasEmployees) {
     errors.push('Выберите хотя бы одного исполнителя');
   }
-  
+
   if (!form.scheduledDate) {
     errors.push('Выберите дату');
   }
-  
+
   if (!form.scheduledTime) {
     errors.push('Укажите время');
   }
-  
+
   if (errors.length > 0) {
     showToast(errors[0], 'error');
     haptic.error();
     return;
   }
-  
+
   // Показываем превью
   showTaskPreviewModal();
 }
@@ -918,36 +1027,36 @@ function showTaskPreviewModal() {
   const form = getState('taskForm');
   const departments = getState('departments') || [];
   const employees = getState('employees') || [];
-  
+
   // Получаем названия проектов
-  const projectsDisplay = form.allProjectsSelected 
-    ? 'Все проекты' 
+  const projectsDisplay = form.allProjectsSelected
+    ? 'Все проекты'
     : getProjectNames(form.selectedProjects).join(', ');
-  
+
   // Получаем названия исполнителей
   const employeeItems = [];
-  
+
   // Добавляем отделы
-  (form.selectedDepartmentsAll || []).forEach(deptId => {
-    const dept = departments.find(d => d.id === deptId);
+  (form.selectedDepartmentsAll || []).forEach((deptId) => {
+    const dept = departments.find((d) => d.id === deptId);
     if (dept) {
-      const empCount = employees.filter(e => e.departmentId === deptId && e.isActive).length;
+      const empCount = employees.filter((e) => e.departmentId === deptId && e.isActive).length;
       employeeItems.push(`${dept.name} (${empCount} чел.)`);
     }
   });
-  
+
   // Добавляем отдельных сотрудников
   const selectedDepts = form.selectedDepartmentsAll || [];
-  (form.selectedEmployees || []).forEach(empId => {
-    const emp = employees.find(e => e.id === empId);
+  (form.selectedEmployees || []).forEach((empId) => {
+    const emp = employees.find((e) => e.id === empId);
     if (emp && !selectedDepts.includes(emp.departmentId)) {
       employeeItems.push(getEmployeeFullName(emp));
     }
   });
-  
+
   const employeesDisplay = employeeItems.join(', ');
   const isEditing = form.editingTaskId !== null;
-  
+
   showModal({
     title: isEditing ? 'Сохранить изменения?' : 'Создать задачу?',
     content: `
@@ -971,25 +1080,29 @@ function showTaskPreviewModal() {
           </div>
         </div>
         
-        ${form.description ? `
+        ${
+          form.description
+            ? `
           <div class="task-preview__description">${escapeHtml(form.description)}</div>
-        ` : ''}
+        `
+            : ''
+        }
       </div>
     `,
     footer: `
       <button class="btn btn--secondary" onclick="closeModal()">Отмена</button>
       <button class="btn btn--primary" onclick="saveTask()">${isEditing ? 'Сохранить' : 'Создать'}</button>
-    `
+    `,
   });
 }
 
 async function saveTask() {
   const form = getState('taskForm');
   const isEditing = form.editingTaskId !== null;
-  
+
   closeModal();
   setState('loading', true);
-  
+
   try {
     const taskData = {
       title: form.title.trim(),
@@ -999,9 +1112,9 @@ async function saveTask() {
       scheduledDate: form.scheduledDate,
       scheduledTime: form.scheduledTime,
       priority: 'normal',
-      creatorId: getState('currentUser.telegramId')
+      creatorId: getState('currentUser.telegramId'),
     };
-    
+
     if (isEditing) {
       await API.updateTask(form.editingTaskId, taskData);
       showToast('Задача обновлена', 'success');
@@ -1009,10 +1122,9 @@ async function saveTask() {
       await API.createTask(taskData);
       showToast('Задача создана', 'success');
     }
-    
+
     resetTaskForm();
     haptic.success();
-    
   } catch (error) {
     console.error('Error saving task:', error);
     showToast('Ошибка сохранения', 'error');
@@ -1025,12 +1137,12 @@ async function saveTask() {
 // Загрузка задачи для редактирования
 function loadTaskForEdit(taskId) {
   const task = findInArray('tasks', taskId);
-  
+
   if (!task) {
     showToast('Задача не найдена', 'error');
     return;
   }
-  
+
   setState('taskForm', {
     selectedProjects: [...task.projectIds],
     selectedEmployees: [...task.assigneeIds],
@@ -1040,9 +1152,9 @@ function loadTaskForEdit(taskId) {
     description: task.description || '',
     priority: task.priority,
     editingTaskId: taskId,
-    calendarMonth: task.scheduledDate ? task.scheduledDate.slice(0, 7) : null
+    calendarMonth: task.scheduledDate ? task.scheduledDate.slice(0, 7) : null,
   });
-  
+
   navigateTo('tasks');
   showToast('Редактирование задачи', 'info');
 }

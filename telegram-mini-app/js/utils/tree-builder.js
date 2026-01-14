@@ -10,11 +10,11 @@
  */
 function buildTree(items, parentId = null) {
   return items
-    .filter(item => item.parentId === parentId)
+    .filter((item) => item.parentId === parentId)
     .sort((a, b) => (a.order || 0) - (b.order || 0))
-    .map(item => ({
+    .map((item) => ({
       ...item,
-      children: buildTree(items, item.id)
+      children: buildTree(items, item.id),
     }));
 }
 
@@ -25,9 +25,9 @@ function buildTree(items, parentId = null) {
  */
 function flattenTree(tree) {
   const result = [];
-  
+
   function traverse(nodes) {
-    nodes.forEach(node => {
+    nodes.forEach((node) => {
       const { children, ...rest } = node;
       result.push(rest);
       if (children && children.length > 0) {
@@ -35,7 +35,7 @@ function flattenTree(tree) {
       }
     });
   }
-  
+
   traverse(tree);
   return result;
 }
@@ -65,16 +65,16 @@ function findInTree(tree, id) {
  */
 function getDescendantIds(items, parentId) {
   const result = [];
-  
+
   function findChildren(pid) {
-    items.forEach(item => {
+    items.forEach((item) => {
       if (item.parentId === pid) {
         result.push(item.id);
         findChildren(item.id);
       }
     });
   }
-  
+
   findChildren(parentId);
   return result;
 }
@@ -87,13 +87,13 @@ function getDescendantIds(items, parentId) {
  */
 function getAncestorIds(items, itemId) {
   const result = [];
-  let currentItem = items.find(i => i.id === itemId);
-  
+  let currentItem = items.find((i) => i.id === itemId);
+
   while (currentItem && currentItem.parentId !== null) {
     result.push(currentItem.parentId);
-    currentItem = items.find(i => i.id === currentItem.parentId);
+    currentItem = items.find((i) => i.id === currentItem.parentId);
   }
-  
+
   return result;
 }
 
@@ -105,14 +105,14 @@ function getAncestorIds(items, itemId) {
  */
 function getPath(items, itemId) {
   const path = [];
-  let currentItem = items.find(i => i.id === itemId);
-  
+  let currentItem = items.find((i) => i.id === itemId);
+
   while (currentItem) {
     path.unshift(currentItem);
     if (currentItem.parentId === null) break;
-    currentItem = items.find(i => i.id === currentItem.parentId);
+    currentItem = items.find((i) => i.id === currentItem.parentId);
   }
-  
+
   return path;
 }
 
@@ -124,13 +124,13 @@ function getPath(items, itemId) {
  */
 function getDepth(items, itemId) {
   let depth = 0;
-  let currentItem = items.find(i => i.id === itemId);
-  
+  let currentItem = items.find((i) => i.id === itemId);
+
   while (currentItem && currentItem.parentId !== null) {
     depth++;
-    currentItem = items.find(i => i.id === currentItem.parentId);
+    currentItem = items.find((i) => i.id === currentItem.parentId);
   }
-  
+
   return depth;
 }
 
@@ -153,17 +153,15 @@ function isDescendantOf(items, childId, parentId) {
  */
 function filterTree(tree, predicate) {
   return tree
-    .map(node => {
-      const filteredChildren = node.children 
-        ? filterTree(node.children, predicate) 
-        : [];
-      
+    .map((node) => {
+      const filteredChildren = node.children ? filterTree(node.children, predicate) : [];
+
       // Показываем узел если он сам подходит под фильтр
       // или если у него есть подходящие дети
       if (predicate(node) || filteredChildren.length > 0) {
         return {
           ...node,
-          children: filteredChildren
+          children: filteredChildren,
         };
       }
       return null;
@@ -181,23 +179,25 @@ function searchProjects(projects, query) {
   if (!query || query.trim() === '') {
     return buildTree(projects);
   }
-  
+
   const lowerQuery = query.toLowerCase();
-  
+
   // Находим все проекты, которые соответствуют запросу
   const matchingIds = new Set();
-  
-  projects.forEach(project => {
-    if (project.name.toLowerCase().includes(lowerQuery) ||
-        (project.description && project.description.toLowerCase().includes(lowerQuery))) {
+
+  projects.forEach((project) => {
+    if (
+      project.name.toLowerCase().includes(lowerQuery) ||
+      (project.description && project.description.toLowerCase().includes(lowerQuery))
+    ) {
       // Добавляем сам проект и всех его предков
       matchingIds.add(project.id);
-      getAncestorIds(projects, project.id).forEach(id => matchingIds.add(id));
+      getAncestorIds(projects, project.id).forEach((id) => matchingIds.add(id));
     }
   });
-  
+
   // Фильтруем и строим дерево
-  const filteredProjects = projects.filter(p => matchingIds.has(p.id));
+  const filteredProjects = projects.filter((p) => matchingIds.has(p.id));
   return buildTree(filteredProjects);
 }
 
@@ -210,11 +210,11 @@ function searchProjects(projects, query) {
 function groupEmployeesByDepartment(employees, departments) {
   return departments
     .sort((a, b) => (a.order || 0) - (b.order || 0))
-    .map(dept => ({
+    .map((dept) => ({
       ...dept,
       employees: employees
-        .filter(emp => emp.departmentId === dept.id)
-        .sort((a, b) => a.lastName.localeCompare(b.lastName, 'ru'))
+        .filter((emp) => emp.departmentId === dept.id)
+        .sort((a, b) => a.lastName.localeCompare(b.lastName, 'ru')),
     }));
 }
 
@@ -228,14 +228,15 @@ function searchEmployees(employees, query) {
   if (!query || query.trim() === '') {
     return employees;
   }
-  
+
   const lowerQuery = query.toLowerCase();
-  
-  return employees.filter(emp => 
-    emp.firstName.toLowerCase().includes(lowerQuery) ||
-    emp.lastName.toLowerCase().includes(lowerQuery) ||
-    emp.email.toLowerCase().includes(lowerQuery) ||
-    (emp.position && emp.position.toLowerCase().includes(lowerQuery))
+
+  return employees.filter(
+    (emp) =>
+      emp.firstName.toLowerCase().includes(lowerQuery) ||
+      emp.lastName.toLowerCase().includes(lowerQuery) ||
+      emp.email.toLowerCase().includes(lowerQuery) ||
+      (emp.position && emp.position.toLowerCase().includes(lowerQuery))
   );
 }
 
@@ -246,8 +247,8 @@ function searchEmployees(employees, query) {
  */
 function getProjectNames(projectIds) {
   const projects = getState('projects') || [];
-  return projectIds.map(id => {
-    const project = projects.find(p => p.id === id);
+  return projectIds.map((id) => {
+    const project = projects.find((p) => p.id === id);
     return project ? project.name : 'Неизвестный проект';
   });
 }
@@ -259,8 +260,8 @@ function getProjectNames(projectIds) {
  */
 function getEmployeeNames(employeeIds) {
   const employees = getState('employees') || [];
-  return employeeIds.map(id => {
-    const employee = employees.find(e => e.id === id);
+  return employeeIds.map((id) => {
+    const employee = employees.find((e) => e.id === id);
     return employee ? getEmployeeFullName(employee) : 'Неизвестный сотрудник';
   });
 }
@@ -280,4 +281,3 @@ window.groupEmployeesByDepartment = groupEmployeesByDepartment;
 window.searchEmployees = searchEmployees;
 window.getProjectNames = getProjectNames;
 window.getEmployeeNames = getEmployeeNames;
-

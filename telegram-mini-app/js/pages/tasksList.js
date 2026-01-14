@@ -7,20 +7,20 @@ function renderTasksListPage() {
   const searchQuery = getState('tasksSearchQuery') || '';
   const filters = getState('tasksFilters') || getDefaultTaskFilters();
   const expandedTasks = getState('expandedTasks') || [];
-  
+
   // Фильтрация
   let filteredTasks = applyTaskFilters(tasks, filters, searchQuery);
-  
+
   // Сортировка по дедлайну
   filteredTasks.sort((a, b) => {
     const dateA = new Date(a.deadline || a.scheduledDate);
     const dateB = new Date(b.deadline || b.scheduledDate);
     return dateA - dateB;
   });
-  
+
   const hasActiveFilters = checkHasActiveFilters(filters);
   const activeFilterCount = countActiveFilters(filters);
-  
+
   const html = `
     <div class="tasks-list-page">
       <!-- Toolbar -->
@@ -31,7 +31,7 @@ function renderTasksListPage() {
             placeholder: 'Поиск задач...',
             value: searchQuery,
             onInput: 'handleTaskListSearch(this.value)',
-            onClear: 'clearTaskListSearch()'
+            onClear: 'clearTaskListSearch()',
           })}
         </div>
         <button 
@@ -46,36 +46,43 @@ function renderTasksListPage() {
         </button>
       </div>
       
-      ${hasActiveFilters ? `
+      ${
+        hasActiveFilters
+          ? `
         <div class="tasks-list-page__active-filters">
           <span class="active-filters__label">Активные фильтры:</span>
           <button class="btn btn--sm btn--ghost" onclick="clearTaskFilters()">
             Очистить все
           </button>
         </div>
-      ` : ''}
+      `
+          : ''
+      }
       
       <!-- Task List -->
       <div class="task-list">
-        ${filteredTasks.length > 0 
-          ? filteredTasks.map(task => 
-              renderTaskListCard(task, expandedTasks.includes(task.id))
-            ).join('')
-          : renderEmptyState({
-              icon: '📋',
-              title: hasActiveFilters || searchQuery ? 'Задачи не найдены' : 'Нет задач',
-              text: hasActiveFilters || searchQuery 
-                ? 'Попробуйте изменить фильтры' 
-                : 'Создайте первую задачу',
-              action: !hasActiveFilters && !searchQuery 
-                ? '<button class="btn btn--primary" onclick="navigateTo(\'tasks\')">Создать задачу</button>' 
-                : ''
-            })
+        ${
+          filteredTasks.length > 0
+            ? filteredTasks
+                .map((task) => renderTaskListCard(task, expandedTasks.includes(task.id)))
+                .join('')
+            : renderEmptyState({
+                icon: '📋',
+                title: hasActiveFilters || searchQuery ? 'Задачи не найдены' : 'Нет задач',
+                text:
+                  hasActiveFilters || searchQuery
+                    ? 'Попробуйте изменить фильтры'
+                    : 'Создайте первую задачу',
+                action:
+                  !hasActiveFilters && !searchQuery
+                    ? '<button class="btn btn--primary" onclick="navigateTo(\'tasks\')">Создать задачу</button>'
+                    : '',
+              })
         }
       </div>
     </div>
   `;
-  
+
   return html;
 }
 
@@ -88,26 +95,31 @@ function getDefaultTaskFilters() {
     departmentIds: [],
     employeeIds: [],
     expandedFilterProjects: [],
-    expandedFilterDepartments: []
+    expandedFilterDepartments: [],
   };
 }
 
 function checkHasActiveFilters(filters) {
-  return Object.values(filters.statuses || {}).some(v => v !== 0) || 
-         filters.dateFrom || 
-         filters.dateTo ||
-         (filters.projectIds && filters.projectIds.length > 0) ||
-         (filters.departmentIds && filters.departmentIds.length > 0) ||
-         (filters.employeeIds && filters.employeeIds.length > 0);
+  return (
+    Object.values(filters.statuses || {}).some((v) => v !== 0) ||
+    filters.dateFrom ||
+    filters.dateTo ||
+    (filters.projectIds && filters.projectIds.length > 0) ||
+    (filters.departmentIds && filters.departmentIds.length > 0) ||
+    (filters.employeeIds && filters.employeeIds.length > 0)
+  );
 }
 
 function countActiveFilters(filters) {
   let count = 0;
-  if (Object.values(filters.statuses || {}).some(v => v !== 0)) count++;
+  if (Object.values(filters.statuses || {}).some((v) => v !== 0)) count++;
   if (filters.dateFrom || filters.dateTo) count++;
   if (filters.projectIds && filters.projectIds.length > 0) count++;
-  if (filters.departmentIds && filters.departmentIds.length > 0 || 
-      filters.employeeIds && filters.employeeIds.length > 0) count++;
+  if (
+    (filters.departmentIds && filters.departmentIds.length > 0) ||
+    (filters.employeeIds && filters.employeeIds.length > 0)
+  )
+    count++;
   return count;
 }
 
@@ -116,7 +128,7 @@ function renderFilterChip(status, label, state, onClickFn = 'toggleTaskFilter') 
   let className = 'filter-chip';
   if (state === 1) className += ' filter-chip--active';
   if (state === -1) className += ' filter-chip--excluded';
-  
+
   return `
     <button 
       class="${className}"
@@ -134,7 +146,7 @@ function showTaskFilterModal() {
   const projects = getState('projects') || [];
   const departments = getState('departments') || [];
   const employees = getState('employees') || [];
-  
+
   showModal({
     title: 'Фильтры задач',
     content: `
@@ -200,39 +212,46 @@ function showTaskFilterModal() {
     footer: `
       <button class="btn btn--ghost" onclick="clearTaskFiltersModal()">Очистить</button>
       <button class="btn btn--primary" onclick="closeModal()">Применить</button>
-    `
+    `,
   });
 }
 
 function renderFilterProjectTree(projects, selectedIds, expandedIds) {
   const tree = buildTree(projects);
-  
+
   if (tree.length === 0) {
     return '<div class="empty-state--small">Нет проектов</div>';
   }
-  
-  return tree.map(node => renderFilterProjectNode(node, selectedIds, expandedIds, 0)).join('');
+
+  return tree.map((node) => renderFilterProjectNode(node, selectedIds, expandedIds, 0)).join('');
 }
 
 function renderFilterProjectNode(node, selectedIds, expandedIds, level) {
   const hasChildren = node.children && node.children.length > 0;
   const isExpanded = expandedIds.includes(node.id);
   const isSelected = selectedIds.includes(node.id);
-  
-  const childrenHtml = hasChildren && isExpanded
-    ? node.children.map(child => renderFilterProjectNode(child, selectedIds, expandedIds, level + 1)).join('')
-    : '';
-  
+
+  const childrenHtml =
+    hasChildren && isExpanded
+      ? node.children
+          .map((child) => renderFilterProjectNode(child, selectedIds, expandedIds, level + 1))
+          .join('')
+      : '';
+
   return `
     <div class="filter-tree-node" style="padding-left: ${level * 16}px">
       <div class="filter-tree-node__header">
-        ${hasChildren ? `
+        ${
+          hasChildren
+            ? `
           <span class="filter-tree-node__toggle ${isExpanded ? 'expanded' : ''}" onclick="toggleFilterProjectExpand(${node.id})">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="9 18 15 12 9 6"></polyline>
             </svg>
           </span>
-        ` : '<span class="filter-tree-node__toggle--empty"></span>'}
+        `
+            : '<span class="filter-tree-node__toggle--empty"></span>'
+        }
         
         <label class="checkbox checkbox--sm">
           <input 
@@ -252,33 +271,47 @@ function renderFilterProjectNode(node, selectedIds, expandedIds, level) {
         <span class="filter-tree-node__name">${escapeHtml(node.name)}</span>
       </div>
       
-      ${hasChildren ? `
+      ${
+        hasChildren
+          ? `
         <div class="filter-tree-node__children collapse-content ${isExpanded ? 'expanded' : ''}">
           ${childrenHtml}
         </div>
-      ` : ''}
+      `
+          : ''
+      }
     </div>
   `;
 }
 
-function renderFilterEmployeeTree(departments, employees, selectedDeptIds, selectedEmpIds, expandedIds) {
+function renderFilterEmployeeTree(
+  departments,
+  employees,
+  selectedDeptIds,
+  selectedEmpIds,
+  expandedIds
+) {
   const grouped = groupEmployeesByDepartment(
-    employees.filter(e => e.isActive),
+    employees.filter((e) => e.isActive),
     departments
   );
-  
+
   if (grouped.length === 0) {
     return '<div class="empty-state--small">Нет сотрудников</div>';
   }
-  
-  return grouped.map(dept => {
-    const deptEmployees = dept.employees;
-    const isExpanded = expandedIds.includes(dept.id);
-    const isDeptSelected = selectedDeptIds.includes(dept.id);
-    const selectedEmployeesInDept = deptEmployees.filter(e => selectedEmpIds.includes(e.id)).length;
-    const isIndeterminate = selectedEmployeesInDept > 0 && selectedEmployeesInDept < deptEmployees.length;
-    
-    return `
+
+  return grouped
+    .map((dept) => {
+      const deptEmployees = dept.employees;
+      const isExpanded = expandedIds.includes(dept.id);
+      const isDeptSelected = selectedDeptIds.includes(dept.id);
+      const selectedEmployeesInDept = deptEmployees.filter((e) =>
+        selectedEmpIds.includes(e.id)
+      ).length;
+      const isIndeterminate =
+        selectedEmployeesInDept > 0 && selectedEmployeesInDept < deptEmployees.length;
+
+      return `
       <div class="filter-tree-node">
         <div class="filter-tree-node__header">
           <span class="filter-tree-node__toggle ${isExpanded ? 'expanded' : ''}" onclick="toggleFilterDepartmentExpand(${dept.id})">
@@ -306,7 +339,9 @@ function renderFilterEmployeeTree(departments, employees, selectedDeptIds, selec
         </div>
         
         <div class="filter-tree-node__children collapse-content ${isExpanded ? 'expanded' : ''}">
-          ${deptEmployees.map(emp => `
+          ${deptEmployees
+            .map(
+              (emp) => `
             <div class="filter-tree-node" style="padding-left: 16px">
               <div class="filter-tree-node__header">
                 <span class="filter-tree-node__toggle--empty"></span>
@@ -328,76 +363,80 @@ function renderFilterEmployeeTree(departments, employees, selectedDeptIds, selec
                 <span class="filter-tree-node__name">${escapeHtml(getEmployeeFullName(emp))}</span>
               </div>
             </div>
-          `).join('')}
+          `
+            )
+            .join('')}
         </div>
       </div>
     `;
-  }).join('');
+    })
+    .join('');
 }
 
 function applyTaskFilters(tasks, filters, searchQuery) {
   const now = new Date();
-  
-  return tasks.filter(task => {
+
+  return tasks.filter((task) => {
     // Поиск
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      const matches = task.title.toLowerCase().includes(query) ||
-                     (task.description && task.description.toLowerCase().includes(query));
+      const matches =
+        task.title.toLowerCase().includes(query) ||
+        (task.description && task.description.toLowerCase().includes(query));
       if (!matches) return false;
     }
-    
+
     // Даты
     const deadline = new Date(task.deadline || task.scheduledDate);
-    
+
     if (filters.dateFrom) {
       const from = parseDateTime(filters.dateFrom);
       if (from && deadline < from) return false;
     }
-    
+
     if (filters.dateTo) {
       const to = parseDateTime(filters.dateTo);
       if (to && deadline > to) return false;
     }
-    
+
     // Проверка статусов
     const isOverdue = deadline < now && task.status !== 'completed';
-    
+
     // Собираем включённые и исключённые статусы
     const included = [];
     const excluded = [];
-    
+
     Object.entries(filters.statuses || {}).forEach(([key, val]) => {
       if (val === 1) included.push(key);
       if (val === -1) excluded.push(key);
     });
-    
+
     // Если есть исключённые - проверяем
     if (excluded.includes('overdue') && isOverdue) return false;
     if (excluded.includes(task.status)) return false;
-    
+
     // Если есть включённые - должен соответствовать хотя бы одному
     if (included.length > 0) {
-      const matchesIncluded = included.some(s => {
+      const matchesIncluded = included.some((s) => {
         if (s === 'overdue') return isOverdue;
         return task.status === s;
       });
       if (!matchesIncluded) return false;
     }
-    
+
     // Фильтр по проектам
     if (filters.projectIds && filters.projectIds.length > 0) {
       const taskProjectId = task.projectId || (task.projectIds && task.projectIds[0]);
       if (!filters.projectIds.includes(taskProjectId)) return false;
     }
-    
+
     // Фильтр по сотрудникам
     if (filters.employeeIds && filters.employeeIds.length > 0) {
       const taskAssignees = task.assigneeIds || [];
-      const hasMatchingAssignee = taskAssignees.some(id => filters.employeeIds.includes(id));
+      const hasMatchingAssignee = taskAssignees.some((id) => filters.employeeIds.includes(id));
       if (!hasMatchingAssignee) return false;
     }
-    
+
     return true;
   });
 }
@@ -409,14 +448,14 @@ function parseDateTime(str) {
     const [, day, month, year, hours, minutes] = match;
     return new Date(year, month - 1, day, hours, minutes);
   }
-  
+
   // Только дата: дд.мм.гггг
   const dateMatch = str.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
   if (dateMatch) {
     const [, day, month, year] = dateMatch;
     return new Date(year, month - 1, day);
   }
-  
+
   return null;
 }
 
@@ -426,41 +465,43 @@ function formatDateTimeForDisplay(date, time) {
   const day = String(d.getDate()).padStart(2, '0');
   const month = String(d.getMonth() + 1).padStart(2, '0');
   const year = d.getFullYear();
-  
+
   // Используем переданное время или время из даты
   if (time) {
     return `${day}.${month}.${year} ${time}`;
   }
-  
+
   const hours = String(d.getHours()).padStart(2, '0');
   const minutes = String(d.getMinutes()).padStart(2, '0');
-  
+
   // Не показываем 00:00
   if (hours === '00' && minutes === '00') {
     return `${day}.${month}.${year}`;
   }
-  
+
   return `${day}.${month}.${year} ${hours}:${minutes}`;
 }
 
 function renderTaskListCard(task, isExpanded) {
   const projects = getState('projects') || [];
   const employees = getState('employees') || [];
-  
+
   const projectId = task.projectId || (task.projectIds && task.projectIds[0]);
-  const project = projects.find(p => p.id === projectId);
-  
-  const assigneeNames = (task.assigneeIds || []).map(id => {
-    const e = employees.find(emp => emp.id === id);
-    return e ? getEmployeeFullName(e) : '';
-  }).filter(Boolean);
-  
+  const project = projects.find((p) => p.id === projectId);
+
+  const assigneeNames = (task.assigneeIds || [])
+    .map((id) => {
+      const e = employees.find((emp) => emp.id === id);
+      return e ? getEmployeeFullName(e) : '';
+    })
+    .filter(Boolean);
+
   const now = new Date();
   const deadline = new Date(task.deadline || task.scheduledDate);
   const time = task.scheduledTime || '00:00';
   const taskIsOverdue = deadline < now && task.status !== 'completed';
   const daysLeft = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24));
-  
+
   return `
     <div class="task-card ${taskIsOverdue ? 'task-card--overdue' : ''}">
       <div class="task-card__header" onclick="toggleTaskListExpand(${task.id})">
@@ -485,9 +526,13 @@ function renderTaskListCard(task, isExpanded) {
       </div>
       
       <div class="task-card__details collapse-content ${isExpanded ? 'expanded' : ''}">
-        ${task.description ? `
+        ${
+          task.description
+            ? `
           <div class="task-card__description">${escapeHtml(task.description)}</div>
-        ` : ''}
+        `
+            : ''
+        }
         
         <div class="task-card__info">
           <div class="task-card__info-item">
@@ -554,7 +599,7 @@ let taskListSearchTimeout = null;
 function handleTaskListSearch(query) {
   // Дебаунс для поиска - не перерисовываем при каждом символе
   setState('tasksSearchQuery', query, true);
-  
+
   clearTimeout(taskListSearchTimeout);
   taskListSearchTimeout = setTimeout(() => {
     setState('tasksSearchQuery', query);
@@ -569,13 +614,13 @@ function clearTaskListSearch() {
 function toggleTaskFilter(status) {
   const filters = getState('tasksFilters') || getDefaultTaskFilters();
   const current = filters.statuses?.[status] || 0;
-  
+
   // 3 состояния: 0 -> 1 -> -1 -> 0
   let next = 0;
   if (current === 0) next = 1;
   else if (current === 1) next = -1;
   else next = 0;
-  
+
   filters.statuses = filters.statuses || {};
   filters.statuses[status] = next;
   setState('tasksFilters', { ...filters });
@@ -585,17 +630,17 @@ function toggleTaskFilter(status) {
 function toggleTaskFilterModal(status) {
   const filters = getState('tasksFilters') || getDefaultTaskFilters();
   const current = filters.statuses?.[status] || 0;
-  
+
   // 3 состояния: 0 -> 1 -> -1 -> 0
   let next = 0;
   if (current === 0) next = 1;
   else if (current === 1) next = -1;
   else next = 0;
-  
+
   filters.statuses = filters.statuses || {};
   filters.statuses[status] = next;
   setState('tasksFilters', { ...filters }, true);
-  
+
   // Обновляем только кнопку статуса в модалке, не перезагружая её
   updateStatusChipInModal(status, next);
   haptic.light();
@@ -606,13 +651,15 @@ function updateStatusChipInModal(status, state) {
     pending: 'Ожидают',
     in_progress: 'В работе',
     completed: 'Завершены',
-    overdue: 'Просрочены'
+    overdue: 'Просрочены',
   };
-  
+
   const chips = document.querySelectorAll('.filter-modal__chips .filter-chip');
-  chips.forEach(chip => {
+  chips.forEach((chip) => {
     if (chip.onclick && chip.onclick.toString().includes(`'${status}'`)) {
-      chip.className = 'filter-chip' + (state === 1 ? ' filter-chip--active' : state === -1 ? ' filter-chip--excluded' : '');
+      chip.className =
+        'filter-chip' +
+        (state === 1 ? ' filter-chip--active' : state === -1 ? ' filter-chip--excluded' : '');
       chip.innerHTML = state === -1 ? `<s>${statusLabels[status]}</s>` : statusLabels[status];
     }
   });
@@ -648,13 +695,13 @@ function formatDateWithDefaultTime(value, isEndDate = false) {
   if (/\d{2}:\d{2}$/.test(value)) {
     return value;
   }
-  
+
   // Если введена полная дата дд.мм.гггг, добавляем время
   const dateMatch = value.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
   if (dateMatch) {
     return value + (isEndDate ? ' 23:59' : ' 00:00');
   }
-  
+
   return value;
 }
 
@@ -662,17 +709,17 @@ function formatDateWithDefaultTime(value, isEndDate = false) {
 function toggleFilterProjectExpand(projectId) {
   const filters = getState('tasksFilters') || getDefaultTaskFilters();
   const expanded = filters.expandedFilterProjects || [];
-  
+
   const isExpanded = expanded.includes(projectId);
-  
+
   if (isExpanded) {
-    filters.expandedFilterProjects = expanded.filter(id => id !== projectId);
+    filters.expandedFilterProjects = expanded.filter((id) => id !== projectId);
   } else {
     filters.expandedFilterProjects = [...expanded, projectId];
   }
-  
+
   setState('tasksFilters', { ...filters }, true);
-  
+
   // Обновляем DOM напрямую
   toggleFilterTreeNode(projectId, !isExpanded);
   haptic.light();
@@ -681,17 +728,17 @@ function toggleFilterProjectExpand(projectId) {
 function toggleFilterDepartmentExpand(deptId) {
   const filters = getState('tasksFilters') || getDefaultTaskFilters();
   const expanded = filters.expandedFilterDepartments || [];
-  
+
   const isExpanded = expanded.includes(deptId);
-  
+
   if (isExpanded) {
-    filters.expandedFilterDepartments = expanded.filter(id => id !== deptId);
+    filters.expandedFilterDepartments = expanded.filter((id) => id !== deptId);
   } else {
     filters.expandedFilterDepartments = [...expanded, deptId];
   }
-  
+
   setState('tasksFilters', { ...filters }, true);
-  
+
   // Обновляем DOM напрямую
   toggleFilterTreeNodeDept(deptId, !isExpanded);
   haptic.light();
@@ -699,11 +746,17 @@ function toggleFilterDepartmentExpand(deptId) {
 
 // Обновляет DOM дерева без перезагрузки модалки
 function toggleFilterTreeNode(nodeId, expand) {
-  const node = document.querySelector(`.filter-tree-node [onclick*="toggleFilterProjectExpand(${nodeId})"]`);
+  const node = document.querySelector(
+    `.filter-tree-node [onclick*="toggleFilterProjectExpand(${nodeId})"]`
+  );
   if (node) {
-    const toggle = node.closest('.filter-tree-node__header')?.querySelector('.filter-tree-node__toggle');
-    const children = node.closest('.filter-tree-node')?.querySelector('.filter-tree-node__children');
-    
+    const toggle = node
+      .closest('.filter-tree-node__header')
+      ?.querySelector('.filter-tree-node__toggle');
+    const children = node
+      .closest('.filter-tree-node')
+      ?.querySelector('.filter-tree-node__children');
+
     if (toggle) {
       toggle.classList.toggle('expanded', expand);
     }
@@ -714,11 +767,17 @@ function toggleFilterTreeNode(nodeId, expand) {
 }
 
 function toggleFilterTreeNodeDept(nodeId, expand) {
-  const node = document.querySelector(`.filter-tree-node [onclick*="toggleFilterDepartmentExpand(${nodeId})"]`);
+  const node = document.querySelector(
+    `.filter-tree-node [onclick*="toggleFilterDepartmentExpand(${nodeId})"]`
+  );
   if (node) {
-    const toggle = node.closest('.filter-tree-node__header')?.querySelector('.filter-tree-node__toggle');
-    const children = node.closest('.filter-tree-node')?.querySelector('.filter-tree-node__children');
-    
+    const toggle = node
+      .closest('.filter-tree-node__header')
+      ?.querySelector('.filter-tree-node__toggle');
+    const children = node
+      .closest('.filter-tree-node')
+      ?.querySelector('.filter-tree-node__children');
+
     if (toggle) {
       toggle.classList.toggle('expanded', expand);
     }
@@ -731,15 +790,15 @@ function toggleFilterTreeNodeDept(nodeId, expand) {
 function toggleFilterProject(projectId, checked) {
   const filters = getState('tasksFilters') || getDefaultTaskFilters();
   const projectIds = filters.projectIds || [];
-  
+
   if (checked) {
     if (!projectIds.includes(projectId)) {
       filters.projectIds = [...projectIds, projectId];
     }
   } else {
-    filters.projectIds = projectIds.filter(id => id !== projectId);
+    filters.projectIds = projectIds.filter((id) => id !== projectId);
   }
-  
+
   setState('tasksFilters', { ...filters }, true);
   // Не перезагружаем модалку - чекбокс уже обновлён
   haptic.selection();
@@ -750,9 +809,11 @@ function toggleFilterDepartment(deptId, checked) {
   const employees = getState('employees') || [];
   const deptIds = filters.departmentIds || [];
   const empIds = filters.employeeIds || [];
-  
-  const deptEmployeeIds = employees.filter(e => e.departmentId === deptId && e.isActive).map(e => e.id);
-  
+
+  const deptEmployeeIds = employees
+    .filter((e) => e.departmentId === deptId && e.isActive)
+    .map((e) => e.id);
+
   if (checked) {
     // Добавляем весь отдел
     if (!deptIds.includes(deptId)) {
@@ -762,11 +823,11 @@ function toggleFilterDepartment(deptId, checked) {
     filters.employeeIds = [...new Set([...empIds, ...deptEmployeeIds])];
   } else {
     // Убираем отдел
-    filters.departmentIds = deptIds.filter(id => id !== deptId);
+    filters.departmentIds = deptIds.filter((id) => id !== deptId);
     // Убираем сотрудников отдела
-    filters.employeeIds = empIds.filter(id => !deptEmployeeIds.includes(id));
+    filters.employeeIds = empIds.filter((id) => !deptEmployeeIds.includes(id));
   }
-  
+
   setState('tasksFilters', { ...filters }, true);
   // Не перезагружаем модалку - чекбоксы уже обновлены
   haptic.selection();
@@ -775,15 +836,15 @@ function toggleFilterDepartment(deptId, checked) {
 function toggleFilterEmployee(empId, checked) {
   const filters = getState('tasksFilters') || getDefaultTaskFilters();
   const empIds = filters.employeeIds || [];
-  
+
   if (checked) {
     if (!empIds.includes(empId)) {
       filters.employeeIds = [...empIds, empId];
     }
   } else {
-    filters.employeeIds = empIds.filter(id => id !== empId);
+    filters.employeeIds = empIds.filter((id) => id !== empId);
   }
-  
+
   setState('tasksFilters', { ...filters }, true);
   // Не перезагружаем модалку - чекбокс уже обновлён
   haptic.selection();
@@ -796,7 +857,7 @@ function editTaskFromList(taskId) {
     showToast('Задача не найдена', 'error');
     return;
   }
-  
+
   // Заполняем форму данными задачи
   setState('taskForm', {
     selectedProjects: task.projectIds || (task.projectId ? [task.projectId] : []),
@@ -810,9 +871,9 @@ function editTaskFromList(taskId) {
     priority: task.priority || 'normal',
     editingTaskId: taskId,
     projectSearchQuery: '',
-    employeeSearchQuery: ''
+    employeeSearchQuery: '',
   });
-  
+
   // Переходим на страницу редактирования
   navigateTo('tasks');
   showToast('Редактирование задачи', 'info');
@@ -821,19 +882,22 @@ function editTaskFromList(taskId) {
 
 function toggleTaskListExpand(taskId) {
   const expanded = getState('expandedTasks') || [];
-  
+
   if (expanded.includes(taskId)) {
-    setState('expandedTasks', expanded.filter(id => id !== taskId));
+    setState(
+      'expandedTasks',
+      expanded.filter((id) => id !== taskId)
+    );
   } else {
     setState('expandedTasks', [...expanded, taskId]);
   }
-  
+
   haptic.light();
 }
 
 async function changeTaskListStatus(taskId, newStatus) {
   setState('loading', true);
-  
+
   try {
     await API.updateTask(taskId, { status: newStatus });
     showToast(`Статус изменён`, 'success');
@@ -850,7 +914,7 @@ async function changeTaskListStatus(taskId, newStatus) {
 function confirmDeleteTaskList(taskId) {
   const task = findInArray('tasks', taskId);
   if (!task) return;
-  
+
   showConfirm({
     title: 'Удалить задачу?',
     message: `"${task.title}" будет удалена`,
@@ -869,7 +933,7 @@ function confirmDeleteTaskList(taskId) {
       } finally {
         setState('loading', false);
       }
-    }
+    },
   });
 }
 

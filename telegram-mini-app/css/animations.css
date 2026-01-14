@@ -11,7 +11,9 @@
 .page-enter-active {
   opacity: 1;
   transform: translateX(0);
-  transition: opacity var(--transition-normal), transform var(--transition-normal);
+  transition:
+    opacity var(--transition-normal),
+    transform var(--transition-normal);
 }
 
 .page-exit {
@@ -22,7 +24,9 @@
 .page-exit-active {
   opacity: 0;
   transform: translateX(-20px);
-  transition: opacity var(--transition-normal), transform var(--transition-normal);
+  transition:
+    opacity var(--transition-normal),
+    transform var(--transition-normal);
 }
 
 /* === FADE ANIMATIONS === */
@@ -185,7 +189,8 @@
 
 /* === PULSE ANIMATION === */
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -238,7 +243,8 @@
 
 /* === BOUNCE ANIMATION === */
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -252,13 +258,21 @@
 
 /* === SHAKE ANIMATION (for errors) === */
 @keyframes shake {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
   }
-  10%, 30%, 50%, 70%, 90% {
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
     transform: translateX(-5px);
   }
-  20%, 40%, 60%, 80% {
+  20%,
+  40%,
+  60%,
+  80% {
     transform: translateX(5px);
   }
 }
@@ -290,7 +304,10 @@
   width: 200px;
   height: 200px;
   opacity: 0;
-  transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+  transition:
+    width 0.3s ease,
+    height 0.3s ease,
+    opacity 0.3s ease;
 }
 
 /* === CHECKBOX ANIMATION === */
@@ -316,8 +333,9 @@
 .collapse-content {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
-              opacity 0.3s ease;
+  transition:
+    max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s ease;
   opacity: 0;
 }
 
@@ -377,7 +395,9 @@
 .modal-content {
   opacity: 0;
   transform: scale(0.95) translateY(10px);
-  transition: opacity var(--transition-normal), transform var(--transition-normal);
+  transition:
+    opacity var(--transition-normal),
+    transform var(--transition-normal);
 }
 
 .modal-content.visible {
@@ -423,16 +443,36 @@
   animation: fadeInUp var(--transition-normal) ease forwards;
 }
 
-.stagger-item:nth-child(1) { animation-delay: 0ms; }
-.stagger-item:nth-child(2) { animation-delay: 50ms; }
-.stagger-item:nth-child(3) { animation-delay: 100ms; }
-.stagger-item:nth-child(4) { animation-delay: 150ms; }
-.stagger-item:nth-child(5) { animation-delay: 200ms; }
-.stagger-item:nth-child(6) { animation-delay: 250ms; }
-.stagger-item:nth-child(7) { animation-delay: 300ms; }
-.stagger-item:nth-child(8) { animation-delay: 350ms; }
-.stagger-item:nth-child(9) { animation-delay: 400ms; }
-.stagger-item:nth-child(10) { animation-delay: 450ms; }
+.stagger-item:nth-child(1) {
+  animation-delay: 0ms;
+}
+.stagger-item:nth-child(2) {
+  animation-delay: 50ms;
+}
+.stagger-item:nth-child(3) {
+  animation-delay: 100ms;
+}
+.stagger-item:nth-child(4) {
+  animation-delay: 150ms;
+}
+.stagger-item:nth-child(5) {
+  animation-delay: 200ms;
+}
+.stagger-item:nth-child(6) {
+  animation-delay: 250ms;
+}
+.stagger-item:nth-child(7) {
+  animation-delay: 300ms;
+}
+.stagger-item:nth-child(8) {
+  animation-delay: 350ms;
+}
+.stagger-item:nth-child(9) {
+  animation-delay: 400ms;
+}
+.stagger-item:nth-child(10) {
+  animation-delay: 450ms;
+}
 
 /* === BUTTON PRESS EFFECT === */
 .btn-press {
@@ -445,7 +485,9 @@
 
 /* === HOVER LIFT EFFECT === */
 .hover-lift {
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .hover-lift:hover {
@@ -462,10 +504,9 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  
+
   .loading-spinner {
     animation: none;
     border-top-color: var(--color-primary);
   }
 }
-

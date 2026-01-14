@@ -167,7 +167,9 @@
   border-radius: var(--radius-md);
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
   min-height: 44px;
 }
 
@@ -364,10 +366,11 @@
   background-repeat: no-repeat;
   background-position: right 12px center;
   min-height: 44px;
-  transition: border-color 0.25s ease, 
-              box-shadow 0.25s ease, 
-              transform 0.15s ease,
-              background-color 0.2s ease;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.15s ease,
+    background-color 0.2s ease;
 }
 
 .select:focus {
@@ -389,7 +392,9 @@
 }
 
 .card--hover {
-  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+  transition:
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .card--hover:hover {
@@ -791,9 +796,10 @@
   overflow: hidden;
   max-height: 0;
   opacity: 0;
-  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.3s ease,
-              padding 0.3s ease;
+  transition:
+    max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s ease,
+    padding 0.3s ease;
 }
 
 .tree-node__children.expanded {
@@ -1129,7 +1135,10 @@
 .email-edit-section {
   max-height: 0;
   overflow: hidden;
-  transition: max-height var(--transition-normal), padding var(--transition-normal), margin var(--transition-normal);
+  transition:
+    max-height var(--transition-normal),
+    padding var(--transition-normal),
+    margin var(--transition-normal);
   background-color: var(--color-bg-tertiary);
   border-radius: var(--radius-md);
 }
@@ -1197,11 +1206,21 @@
   margin-top: var(--space-3);
 }
 
-.mt-2 { margin-top: var(--space-2); }
-.mt-3 { margin-top: var(--space-3); }
-.mb-2 { margin-bottom: var(--space-2); }
-.text-sm { font-size: var(--font-size-sm); }
-.p-3 { padding: var(--space-3); }
+.mt-2 {
+  margin-top: var(--space-2);
+}
+.mt-3 {
+  margin-top: var(--space-3);
+}
+.mb-2 {
+  margin-bottom: var(--space-2);
+}
+.text-sm {
+  font-size: var(--font-size-sm);
+}
+.p-3 {
+  padding: var(--space-3);
+}
 
 /* === INPUT GROUP === */
 .input-group {
@@ -1230,4 +1249,3 @@
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
 }
-

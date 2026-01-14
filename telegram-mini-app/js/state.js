@@ -11,23 +11,23 @@ const AppState = {
     username: '',
     language_code: 'ru',
     is_premium: false,
-    photo_url: ''
+    photo_url: '',
   },
-  
+
   // ===== APP USER (админ из whitelist) =====
   currentUser: {
     telegramId: null,
-    name: ''
+    name: '',
   },
-  
+
   // ===== АВТОРИЗАЦИЯ =====
   isAuthenticated: false,
   accessDeniedReason: null,
-  
+
   // ===== NAVIGATION =====
   currentPage: 'tasks',
   previousPage: null,
-  
+
   // ===== PAGE 1: ПОСТАНОВКА ЗАДАЧ =====
   taskForm: {
     selectedProjects: [],
@@ -41,10 +41,10 @@ const AppState = {
     priority: 'normal',
     editingTaskId: null,
     projectSearchQuery: '',
-    employeeSearchQuery: ''
+    employeeSearchQuery: '',
   },
   showTaskPreview: false,
-  
+
   // ===== PAGE 2: ПРОЕКТЫ =====
   projects: [],
   projectsEditMode: false,
@@ -53,7 +53,7 @@ const AppState = {
   expandedProjects: [],
   showAddProjectModal: false,
   editingProject: null,
-  
+
   // ===== PAGE 3: СОТРУДНИКИ =====
   departments: [],
   employees: [],
@@ -66,7 +66,7 @@ const AppState = {
   showAddEmployeeModal: false,
   editingDepartment: null,
   editingEmployee: null,
-  
+
   // ===== PAGE 4: АНАЛИТИКА =====
   analyticsFilters: {
     dateFrom: '',
@@ -74,7 +74,7 @@ const AppState = {
     selectedDepartments: [],
     selectedEmployees: [],
     selectedProjects: [],
-    status: 'all'
+    status: 'all',
   },
   analyticsData: {
     totalTasks: 0,
@@ -82,22 +82,22 @@ const AppState = {
     averageCompletionTime: 0,
     tasksByStatus: {},
     tasksByEmployee: [],
-    tasksByProject: []
+    tasksByProject: [],
   },
-  
+
   // ===== PAGE 5: СПИСОК ЗАДАЧ =====
   tasks: [],
   tasksSearchQuery: '',
   tasksFilter: {
     status: 'all',
     sortBy: 'createdAt',
-    sortOrder: 'desc'
+    sortOrder: 'desc',
   },
   selectedTasksForDelete: [],
   expandedTasks: [],
   showDeleteConfirmModal: false,
   taskToDelete: null,
-  
+
   // ===== УВЕДОМЛЕНИЯ =====
   notificationSettings: {
     emailEnabled: true,
@@ -106,11 +106,11 @@ const AppState = {
     telegramChatIds: [],
     notifyOnComplete: true,
     notifyOnDeadline: true,
-    notifyOnOverdue: true
+    notifyOnOverdue: true,
   },
   notificationRules: null, // Инициализируется по умолчанию в компоненте
   reminders: [],
-  
+
   // ===== GLOBAL UI =====
   theme: 'auto',
   loading: false,
@@ -118,8 +118,8 @@ const AppState = {
   toast: {
     show: false,
     message: '',
-    type: 'info'
-  }
+    type: 'info',
+  },
 };
 
 // ===== STATE MANAGEMENT FUNCTIONS =====
@@ -133,19 +133,19 @@ const AppState = {
 function setState(path, value, skipRender = false) {
   const keys = path.split('.');
   let obj = AppState;
-  
+
   for (let i = 0; i < keys.length - 1; i++) {
     if (obj[keys[i]] === undefined) {
       obj[keys[i]] = {};
     }
     obj = obj[keys[i]];
   }
-  
+
   obj[keys[keys.length - 1]] = value;
-  
+
   // Notify subscribers
   notifySubscribers(path, value);
-  
+
   // Trigger re-render (if not skipped)
   if (!skipRender && typeof renderCurrentPage === 'function') {
     renderCurrentPage();
@@ -193,7 +193,10 @@ function addToArray(path, item) {
  */
 function removeFromArray(path, id) {
   const arr = getState(path) || [];
-  setState(path, arr.filter(item => item.id !== id));
+  setState(
+    path,
+    arr.filter((item) => item.id !== id)
+  );
 }
 
 /**
@@ -204,9 +207,10 @@ function removeFromArray(path, id) {
  */
 function updateInArray(path, id, updates) {
   const arr = getState(path) || [];
-  setState(path, arr.map(item => 
-    item.id === id ? { ...item, ...updates } : item
-  ));
+  setState(
+    path,
+    arr.map((item) => (item.id === id ? { ...item, ...updates } : item))
+  );
 }
 
 /**
@@ -217,7 +221,7 @@ function updateInArray(path, id, updates) {
  */
 function findInArray(path, id) {
   const arr = getState(path) || [];
-  return arr.find(item => item.id === id);
+  return arr.find((item) => item.id === id);
 }
 
 /**
@@ -231,7 +235,10 @@ function toggleInArray(path, item) {
   if (index === -1) {
     setState(path, [...arr, item]);
   } else {
-    setState(path, arr.filter((_, i) => i !== index));
+    setState(
+      path,
+      arr.filter((_, i) => i !== index)
+    );
   }
 }
 
@@ -243,7 +250,7 @@ function subscribe(path, callback) {
     subscribers.set(path, []);
   }
   subscribers.get(path).push(callback);
-  
+
   // Return unsubscribe function
   return () => {
     const callbacks = subscribers.get(path);
@@ -257,15 +264,15 @@ function subscribe(path, callback) {
 function notifySubscribers(path, value) {
   // Exact path match
   if (subscribers.has(path)) {
-    subscribers.get(path).forEach(cb => cb(value));
+    subscribers.get(path).forEach((cb) => cb(value));
   }
-  
+
   // Parent path notifications
   const parts = path.split('.');
   for (let i = 1; i < parts.length; i++) {
     const parentPath = parts.slice(0, i).join('.');
     if (subscribers.has(parentPath)) {
-      subscribers.get(parentPath).forEach(cb => cb(getState(parentPath)));
+      subscribers.get(parentPath).forEach((cb) => cb(getState(parentPath)));
     }
   }
 }
@@ -285,7 +292,7 @@ function resetTaskForm() {
     priority: 'normal',
     editingTaskId: null,
     projectSearchQuery: '',
-    employeeSearchQuery: ''
+    employeeSearchQuery: '',
   });
   setState('showTaskPreview', false);
 }
@@ -297,13 +304,13 @@ function resetFilters() {
     selectedDepartments: [],
     selectedEmployees: [],
     selectedProjects: [],
-    status: 'all'
+    status: 'all',
   });
   setState('tasksSearchQuery', '');
   setState('tasksFilter', {
     status: 'all',
     sortBy: 'createdAt',
-    sortOrder: 'desc'
+    sortOrder: 'desc',
   });
   setState('projectSearchQuery', '');
   setState('employeeSearchQuery', '');
@@ -331,4 +338,3 @@ window.logState = logState;
 window.findInArray = findInArray;
 window.resetTaskForm = resetTaskForm;
 window.resetEditMode = resetEditMode;
-

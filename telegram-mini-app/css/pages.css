@@ -119,7 +119,7 @@
 /* ========================================
    PAGE 1: ПОСТАНОВКА ЗАДАЧ
    ======================================== */
-   
+
 .task-form {
   display: flex;
   flex-direction: column;
@@ -503,13 +503,13 @@
   overflow: hidden;
 }
 
-.project-node[data-level="1"] {
+.project-node[data-level='1'] {
   margin-left: var(--space-4);
   background-color: var(--color-bg-primary);
   border: 1px solid var(--color-border);
 }
 
-.project-node[data-level="2"] {
+.project-node[data-level='2'] {
   margin-left: var(--space-4);
   background-color: var(--color-bg-primary);
   border: 1px solid var(--color-border);
@@ -880,10 +880,18 @@
   text-transform: uppercase;
 }
 
-.stat-card--primary .stat-card__value { color: var(--color-primary); }
-.stat-card--success .stat-card__value { color: var(--color-success); }
-.stat-card--warning .stat-card__value { color: var(--color-warning); }
-.stat-card--danger .stat-card__value { color: var(--color-error); }
+.stat-card--primary .stat-card__value {
+  color: var(--color-primary);
+}
+.stat-card--success .stat-card__value {
+  color: var(--color-success);
+}
+.stat-card--warning .stat-card__value {
+  color: var(--color-warning);
+}
+.stat-card--danger .stat-card__value {
+  color: var(--color-error);
+}
 
 /* Progress Ring */
 .progress-overview {
@@ -1358,9 +1366,15 @@
   color: var(--color-text-muted);
 }
 
-.timeline-stat--danger .timeline-stat__value { color: var(--color-error); }
-.timeline-stat--warning .timeline-stat__value { color: var(--color-warning); }
-.timeline-stat--success .timeline-stat__value { color: var(--color-success); }
+.timeline-stat--danger .timeline-stat__value {
+  color: var(--color-error);
+}
+.timeline-stat--warning .timeline-stat__value {
+  color: var(--color-warning);
+}
+.timeline-stat--success .timeline-stat__value {
+  color: var(--color-success);
+}
 
 /* Progress bar small */
 .progress-bar--sm {
@@ -1818,4 +1832,3 @@
   background-color: var(--color-warning-light);
   color: #8a6d00;
 }
-

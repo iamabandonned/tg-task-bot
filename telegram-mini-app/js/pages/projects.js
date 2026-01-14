@@ -6,16 +6,16 @@ function renderProjectsPage() {
   const projects = getState('projects') || [];
   const searchQuery = getState('projectSearchQuery') || '';
   const expandedProjects = getState('expandedProjects') || [];
-  
+
   // Строим дерево проектов
   const tree = buildProjectTree(projects);
-  
+
   // Фильтруем если есть поиск
   let filteredTree = tree;
   if (searchQuery) {
     filteredTree = filterProjectTree(tree, searchQuery.toLowerCase());
   }
-  
+
   const html = `
     <div class="projects-page">
       <!-- Toolbar -->
@@ -25,7 +25,7 @@ function renderProjectsPage() {
           placeholder: 'Поиск проектов...',
           value: searchQuery,
           onInput: 'handleProjectSearch(this.value)',
-          onClear: 'clearProjectSearch()'
+          onClear: 'clearProjectSearch()',
         })}
         
         <button 
@@ -42,53 +42,61 @@ function renderProjectsPage() {
       
       <!-- Projects Tree -->
       <div class="projects-tree">
-        ${filteredTree.length > 0 
-          ? filteredTree.map(project => renderProjectNode(project, expandedProjects, 0)).join('')
-          : renderEmptyState({
-              icon: '📁',
-              title: searchQuery ? 'Проекты не найдены' : 'Нет проектов',
-              text: searchQuery ? 'Попробуйте изменить поисковый запрос' : 'Создайте первый проект',
-              action: !searchQuery ? '<button class="btn btn--primary" onclick="showAddProjectModal()">Создать проект</button>' : ''
-            })
+        ${
+          filteredTree.length > 0
+            ? filteredTree
+                .map((project) => renderProjectNode(project, expandedProjects, 0))
+                .join('')
+            : renderEmptyState({
+                icon: '📁',
+                title: searchQuery ? 'Проекты не найдены' : 'Нет проектов',
+                text: searchQuery
+                  ? 'Попробуйте изменить поисковый запрос'
+                  : 'Создайте первый проект',
+                action: !searchQuery
+                  ? '<button class="btn btn--primary" onclick="showAddProjectModal()">Создать проект</button>'
+                  : '',
+              })
         }
       </div>
     </div>
   `;
-  
+
   return html;
 }
 
 function buildProjectTree(projects) {
   const map = {};
   const roots = [];
-  
+
   // Создаём карту
-  projects.forEach(p => {
+  projects.forEach((p) => {
     map[p.id] = { ...p, children: [] };
   });
-  
+
   // Строим дерево
-  projects.forEach(p => {
+  projects.forEach((p) => {
     if (p.parentId && map[p.parentId]) {
       map[p.parentId].children.push(map[p.id]);
     } else if (!p.parentId) {
       roots.push(map[p.id]);
     }
   });
-  
+
   return roots;
 }
 
 function filterProjectTree(tree, query) {
-  return tree.filter(node => {
-    const matches = node.name.toLowerCase().includes(query) ||
-                   (node.description && node.description.toLowerCase().includes(query));
-    
+  return tree.filter((node) => {
+    const matches =
+      node.name.toLowerCase().includes(query) ||
+      (node.description && node.description.toLowerCase().includes(query));
+
     if (node.children && node.children.length > 0) {
       node.children = filterProjectTree(node.children, query);
       return matches || node.children.length > 0;
     }
-    
+
     return matches;
   });
 }
@@ -97,21 +105,22 @@ function renderProjectNode(project, expandedProjects, level) {
   const hasChildren = project.children && project.children.length > 0;
   const isExpanded = expandedProjects.includes(project.id);
   const tasks = getState('tasks') || [];
-  
+
   // Подсчёт задач
-  const projectTasks = tasks.filter(t => {
+  const projectTasks = tasks.filter((t) => {
     if (t.projectIds) return t.projectIds.includes(project.id);
     return t.projectId === project.id;
   });
-  const completedTasks = projectTasks.filter(t => t.status === 'completed').length;
+  const completedTasks = projectTasks.filter((t) => t.status === 'completed').length;
   const totalTasks = projectTasks.length;
-  
-  const childrenHtml = hasChildren && isExpanded
-    ? `<div class="project-children ${isExpanded ? 'expanded' : ''}">
-        ${project.children.map(child => renderProjectNode(child, expandedProjects, level + 1)).join('')}
+
+  const childrenHtml =
+    hasChildren && isExpanded
+      ? `<div class="project-children ${isExpanded ? 'expanded' : ''}">
+        ${project.children.map((child) => renderProjectNode(child, expandedProjects, level + 1)).join('')}
        </div>`
-    : '';
-  
+      : '';
+
   return `
     <div class="project-node" data-id="${project.id}" data-level="${level}">
       <div class="project-node__header">
@@ -190,7 +199,10 @@ function clearProjectSearch() {
 function toggleProjectExpand(projectId) {
   const expanded = getState('expandedProjects') || [];
   if (expanded.includes(projectId)) {
-    setState('expandedProjects', expanded.filter(id => id !== projectId));
+    setState(
+      'expandedProjects',
+      expanded.filter((id) => id !== projectId)
+    );
   } else {
     setState('expandedProjects', [...expanded, projectId]);
   }
@@ -201,7 +213,7 @@ function toggleProjectExpand(projectId) {
 
 function showAddProjectModal(parentId = null) {
   const parentProject = parentId ? findInArray('projects', parentId) : null;
-  
+
   // Цвет: от родителя или случайный незанятый
   let defaultColor;
   if (parentProject) {
@@ -209,9 +221,9 @@ function showAddProjectModal(parentId = null) {
   } else {
     defaultColor = getRandomUnusedColor();
   }
-  
+
   setState('selectedProjectColor', defaultColor, true);
-  
+
   showModal({
     title: parentId ? `Подпроект для "${parentProject?.name}"` : 'Новый проект',
     content: `
@@ -250,9 +262,9 @@ function showAddProjectModal(parentId = null) {
     footer: `
       <button class="btn btn--secondary" onclick="closeModal()">Отмена</button>
       <button class="btn btn--primary" onclick="saveProject()">Создать</button>
-    `
+    `,
   });
-  
+
   setTimeout(() => document.getElementById('projectName')?.focus(), 100);
 }
 
@@ -263,17 +275,17 @@ function showAddSubprojectModal(parentId) {
 function showEditProjectModal(projectId) {
   const project = findInArray('projects', projectId);
   if (!project) return;
-  
+
   setState('selectedProjectColor', project.color || '#3B82F6', true);
-  
+
   const tasks = getState('tasks') || [];
   const projects = getState('projects') || [];
-  const hasTasks = tasks.some(t => {
+  const hasTasks = tasks.some((t) => {
     if (t.projectIds) return t.projectIds.includes(projectId);
     return t.projectId === projectId;
   });
-  const hasChildren = projects.some(p => p.parentId === projectId);
-  
+  const hasChildren = projects.some((p) => p.parentId === projectId);
+
   showModal({
     title: 'Редактировать проект',
     content: `
@@ -327,22 +339,34 @@ function showEditProjectModal(projectId) {
     footer: `
       <button class="btn btn--secondary" onclick="closeModal()">Отмена</button>
       <button class="btn btn--primary" onclick="saveProject()">Сохранить</button>
-    `
+    `,
   });
 }
 
 const PROJECT_COLORS = [
-  '#EF4444', '#F97316', '#F59E0B', '#EAB308',
-  '#84CC16', '#22C55E', '#10B981', '#14B8A6',
-  '#06B6D4', '#0EA5E9', '#3B82F6', '#6366F1',
-  '#8B5CF6', '#A855F7', '#D946EF', '#EC4899'
+  '#EF4444',
+  '#F97316',
+  '#F59E0B',
+  '#EAB308',
+  '#84CC16',
+  '#22C55E',
+  '#10B981',
+  '#14B8A6',
+  '#06B6D4',
+  '#0EA5E9',
+  '#3B82F6',
+  '#6366F1',
+  '#8B5CF6',
+  '#A855F7',
+  '#D946EF',
+  '#EC4899',
 ];
 
 function getRandomUnusedColor() {
   const projects = getState('projects') || [];
-  const usedColors = projects.map(p => p.color).filter(Boolean);
-  const availableColors = PROJECT_COLORS.filter(c => !usedColors.includes(c));
-  
+  const usedColors = projects.map((p) => p.color).filter(Boolean);
+  const availableColors = PROJECT_COLORS.filter((c) => !usedColors.includes(c));
+
   if (availableColors.length > 0) {
     return availableColors[Math.floor(Math.random() * availableColors.length)];
   }
@@ -351,8 +375,9 @@ function getRandomUnusedColor() {
 
 function renderColorOptions(selected = '#3B82F6') {
   const currentSelected = getState('selectedProjectColor') || selected;
-  
-  return PROJECT_COLORS.map(color => `
+
+  return PROJECT_COLORS.map(
+    (color) => `
     <button 
       type="button" 
       class="color-option ${color === currentSelected ? 'color-option--selected' : ''}"
@@ -360,16 +385,17 @@ function renderColorOptions(selected = '#3B82F6') {
       onclick="selectProjectColor('${color}')"
       data-color="${color}"
     ></button>
-  `).join('');
+  `
+  ).join('');
 }
 
 function selectProjectColor(color) {
   setState('selectedProjectColor', color, true);
-  
-  document.querySelectorAll('.color-option').forEach(opt => {
+
+  document.querySelectorAll('.color-option').forEach((opt) => {
     opt.classList.toggle('color-option--selected', opt.dataset.color === color);
   });
-  
+
   haptic.light();
 }
 
@@ -379,24 +405,24 @@ async function saveProject() {
   const name = document.getElementById('projectName')?.value?.trim();
   const description = document.getElementById('projectDescription')?.value?.trim();
   const color = getState('selectedProjectColor') || '#3B82F6';
-  
+
   if (!name || name.length < 2) {
     showToast('Введите название (минимум 2 символа)', 'error');
     haptic.error();
     return;
   }
-  
+
   closeModal();
   setState('loading', true);
-  
+
   try {
-    const projectData = { 
-      name, 
-      description, 
+    const projectData = {
+      name,
+      description,
       color,
-      parentId: parentId ? parseInt(parentId) : null
+      parentId: parentId ? parseInt(parentId) : null,
     };
-    
+
     if (projectId) {
       await API.updateProject(parseInt(projectId), projectData);
       showToast('Проект обновлён', 'success');
@@ -411,7 +437,7 @@ async function saveProject() {
       }
       showToast('Проект создан', 'success');
     }
-    
+
     haptic.success();
   } catch (error) {
     console.error('Error saving project:', error);
@@ -425,22 +451,22 @@ async function saveProject() {
 function confirmDeleteProject(projectId) {
   const project = findInArray('projects', projectId);
   if (!project) return;
-  
+
   const tasks = getState('tasks') || [];
   const projects = getState('projects') || [];
-  const hasTasks = tasks.some(t => {
+  const hasTasks = tasks.some((t) => {
     if (t.projectIds) return t.projectIds.includes(projectId);
     return t.projectId === projectId;
   });
-  const hasChildren = projects.some(p => p.parentId === projectId);
-  
+  const hasChildren = projects.some((p) => p.parentId === projectId);
+
   if (hasTasks || hasChildren) {
     showToast('Сначала удалите подпроекты и задачи', 'error');
     return;
   }
-  
+
   closeModal();
-  
+
   showConfirm({
     title: 'Удалить проект?',
     message: `Проект "${project.name}" будет удалён`,
@@ -459,7 +485,7 @@ function confirmDeleteProject(projectId) {
       } finally {
         setState('loading', false);
       }
-    }
+    },
   });
 }
 

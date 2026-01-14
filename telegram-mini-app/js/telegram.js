@@ -10,7 +10,7 @@ let tg = null;
  */
 function initTelegramWebApp() {
   tg = window.Telegram?.WebApp;
-  
+
   if (!tg) {
     console.warn('Telegram WebApp not available');
     // Для разработки вне Telegram
@@ -21,13 +21,13 @@ function initTelegramWebApp() {
     }
     return false;
   }
-  
+
   // 1. Сигнал готовности
   tg.ready();
-  
+
   // 2. Раскрываем на весь экран
   tg.expand();
-  
+
   // 3. Цвета хедера
   try {
     tg.setHeaderColor('#2180ce');
@@ -35,25 +35,25 @@ function initTelegramWebApp() {
   } catch (e) {
     console.warn('Could not set header color:', e);
   }
-  
+
   // 4. Тема (light/dark)
   setTheme(tg.colorScheme || 'light');
-  
+
   // 5. Подписка на изменение темы
   tg.onEvent('themeChanged', () => {
     setTheme(tg.colorScheme);
   });
-  
+
   // 6. Кнопка "Назад"
   tg.BackButton.onClick(() => {
     if (typeof navigateBack === 'function') {
       navigateBack();
     }
   });
-  
+
   // 7. Haptic feedback
   initHapticFeedback();
-  
+
   return true;
 }
 
@@ -66,14 +66,14 @@ function initTelegramAuth() {
     showAccessDeniedScreen('not_telegram');
     return false;
   }
-  
+
   // В dev mode уже создан mock пользователь
   if (isDevelopment() && getState('isAuthenticated')) {
     return true;
   }
-  
+
   const user = tg?.initDataUnsafe?.user;
-  
+
   // Проверяем данные пользователя
   if (!user || !user.id) {
     if (isDevelopment()) {
@@ -83,39 +83,47 @@ function initTelegramAuth() {
     showAccessDeniedScreen('no_user_data');
     return false;
   }
-  
+
   // ГЛАВНАЯ ПРОВЕРКА: есть ли пользователь в whitelist
-  const admin = ALLOWED_ADMINS.find(a => a.telegramId === user.id);
-  
+  const admin = ALLOWED_ADMINS.find((a) => a.telegramId === user.id);
+
   if (!admin) {
     // ДОСТУП ЗАПРЕЩЁН — ID не в списке
     showAccessDeniedScreen('not_in_whitelist', user);
     return false;
   }
-  
+
   // Пользователь в whitelist — ПОЛНЫЙ ДОСТУП
-  
+
   // Сохраняем данные Telegram пользователя
-  setState('telegramUser', {
-    id: user.id,
-    first_name: user.first_name || '',
-    last_name: user.last_name || '',
-    username: user.username || '',
-    language_code: user.language_code || 'ru',
-    is_premium: user.is_premium || false,
-    photo_url: user.photo_url || ''
-  }, true);
-  
+  setState(
+    'telegramUser',
+    {
+      id: user.id,
+      first_name: user.first_name || '',
+      last_name: user.last_name || '',
+      username: user.username || '',
+      language_code: user.language_code || 'ru',
+      is_premium: user.is_premium || false,
+      photo_url: user.photo_url || '',
+    },
+    true
+  );
+
   // Устанавливаем текущего пользователя
-  setState('currentUser', {
-    telegramId: user.id,
-    name: admin.name
-  }, true);
-  
+  setState(
+    'currentUser',
+    {
+      telegramId: user.id,
+      name: admin.name,
+    },
+    true
+  );
+
   setState('isAuthenticated', true, true);
-  
+
   console.log('✅ User authenticated:', admin.name);
-  
+
   return true;
 }
 
@@ -126,26 +134,34 @@ function createMockTelegramUser() {
   // Берём первого админа из списка для тестирования
   const mockAdmin = ALLOWED_ADMINS[0] || {
     telegramId: 999999999,
-    name: 'Dev Admin'
+    name: 'Dev Admin',
   };
-  
-  setState('telegramUser', {
-    id: mockAdmin.telegramId,
-    first_name: 'Dev',
-    last_name: 'Admin',
-    username: 'dev_admin',
-    language_code: 'ru',
-    is_premium: false,
-    photo_url: ''
-  }, true);
-  
-  setState('currentUser', {
-    telegramId: mockAdmin.telegramId,
-    name: mockAdmin.name
-  }, true);
-  
+
+  setState(
+    'telegramUser',
+    {
+      id: mockAdmin.telegramId,
+      first_name: 'Dev',
+      last_name: 'Admin',
+      username: 'dev_admin',
+      language_code: 'ru',
+      is_premium: false,
+      photo_url: '',
+    },
+    true
+  );
+
+  setState(
+    'currentUser',
+    {
+      telegramId: mockAdmin.telegramId,
+      name: mockAdmin.name,
+    },
+    true
+  );
+
   setState('isAuthenticated', true, true);
-  
+
   console.log('🔧 Mock user created:', mockAdmin.name);
 }
 
@@ -155,10 +171,10 @@ function createMockTelegramUser() {
  */
 function isDevelopment() {
   // TODO: Вернуть проверку перед деплоем
-  // return window.location.hostname === 'localhost' || 
+  // return window.location.hostname === 'localhost' ||
   //        window.location.hostname === '127.0.0.1' ||
   //        window.location.protocol === 'file:';
-  
+
   return true; // Всегда dev mode для тестирования
 }
 
@@ -168,35 +184,35 @@ function isDevelopment() {
 function showAccessDeniedScreen(reason, user = null) {
   setState('isAuthenticated', false, true);
   setState('accessDeniedReason', reason, true);
-  
+
   const messages = {
-    'not_telegram': {
+    not_telegram: {
       title: '⚠️ Ошибка запуска',
       text: 'Приложение работает только в Telegram',
-      icon: '📱'
+      icon: '📱',
     },
-    'no_user_data': {
+    no_user_data: {
       title: '⚠️ Ошибка авторизации',
       text: 'Не удалось получить данные пользователя',
-      icon: '🔐'
+      icon: '🔐',
     },
-    'not_in_whitelist': {
+    not_in_whitelist: {
       title: '🚫 Доступ запрещён',
       text: `Ваш аккаунт (ID: ${user?.id || 'неизвестен'}) не имеет доступа к этому приложению.\n\nОбратитесь к администратору для получения доступа.`,
-      icon: '🔒'
-    }
+      icon: '🔒',
+    },
   };
-  
+
   const config = messages[reason] || messages['not_telegram'];
-  
+
   // Скрываем loading и app
   const loadingScreen = document.getElementById('loading-screen');
   const appContainer = document.getElementById('app');
   const accessDenied = document.getElementById('access-denied');
-  
+
   if (loadingScreen) loadingScreen.classList.add('hidden');
   if (appContainer) appContainer.classList.add('hidden');
-  
+
   if (accessDenied) {
     accessDenied.querySelector('.access-denied__icon').textContent = config.icon;
     accessDenied.querySelector('.access-denied__title').textContent = config.title;
@@ -252,7 +268,7 @@ function initHapticFeedback() {
       try {
         tg?.HapticFeedback?.selectionChanged();
       } catch (e) {}
-    }
+    },
   };
 }
 
@@ -261,7 +277,7 @@ function initHapticFeedback() {
  */
 function showBackButton(show = true) {
   if (!tg) return;
-  
+
   if (show) {
     tg.BackButton.show();
   } else {
@@ -274,14 +290,14 @@ function showBackButton(show = true) {
  */
 function showMainButton(text, onClick, color = null) {
   if (!tg) return;
-  
+
   tg.MainButton.setText(text);
   tg.MainButton.onClick(onClick);
-  
+
   if (color) {
     tg.MainButton.setParams({ color });
   }
-  
+
   tg.MainButton.show();
 }
 
@@ -290,7 +306,7 @@ function showMainButton(text, onClick, color = null) {
  */
 function hideMainButton() {
   if (!tg) return;
-  
+
   tg.MainButton.hide();
   tg.MainButton.offClick();
 }
@@ -370,6 +386,5 @@ window.haptic = window.haptic || {
   success: () => {},
   error: () => {},
   warning: () => {},
-  selection: () => {}
+  selection: () => {},
 };
-

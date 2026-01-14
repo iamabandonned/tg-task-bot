@@ -6,15 +6,13 @@ function renderEmployeesPage() {
   const departments = getState('departments') || [];
   const employees = getState('employees') || [];
   const searchQuery = getState('employeeSearchQuery') || '';
-  
+
   // Фильтруем сотрудников
-  const filteredEmployees = searchQuery 
-    ? searchEmployees(employees, searchQuery)
-    : employees;
-  
+  const filteredEmployees = searchQuery ? searchEmployees(employees, searchQuery) : employees;
+
   // Группируем по отделам
   const grouped = groupEmployeesByDepartment(filteredEmployees, departments);
-  
+
   const html = `
     <div class="employees-page">
       <!-- Toolbar -->
@@ -24,7 +22,7 @@ function renderEmployeesPage() {
           placeholder: 'Поиск сотрудников...',
           value: searchQuery,
           onInput: 'handleEmployeeSearch(this.value)',
-          onClear: 'clearEmployeeSearch()'
+          onClear: 'clearEmployeeSearch()',
         })}
         
         <button 
@@ -54,26 +52,31 @@ function renderEmployeesPage() {
       </div>
       
       <!-- Departments & Employees -->
-      ${grouped.length > 0 
-        ? grouped.map(dept => renderDepartmentSection(dept)).join('')
-        : renderEmptyState({
-            icon: '👥',
-            title: searchQuery ? 'Сотрудники не найдены' : 'Нет сотрудников',
-            text: searchQuery ? 'Попробуйте изменить поисковый запрос' : 'Создайте отдел и добавьте сотрудников',
-            action: !searchQuery ? '<button class="btn btn--primary" onclick="showAddDepartmentModal()">Создать отдел</button>' : ''
-          })
+      ${
+        grouped.length > 0
+          ? grouped.map((dept) => renderDepartmentSection(dept)).join('')
+          : renderEmptyState({
+              icon: '👥',
+              title: searchQuery ? 'Сотрудники не найдены' : 'Нет сотрудников',
+              text: searchQuery
+                ? 'Попробуйте изменить поисковый запрос'
+                : 'Создайте отдел и добавьте сотрудников',
+              action: !searchQuery
+                ? '<button class="btn btn--primary" onclick="showAddDepartmentModal()">Создать отдел</button>'
+                : '',
+            })
       }
     </div>
   `;
-  
+
   return html;
 }
 
 function renderDepartmentSection(dept) {
   const isExpanded = getState('expandedDepartments')?.includes(dept.id);
   const employeeCount = dept.employees.length;
-  const activeCount = dept.employees.filter(e => e.isActive).length;
-  
+  const activeCount = dept.employees.filter((e) => e.isActive).length;
+
   return `
     <div class="department-section">
       <div class="department-header" onclick="toggleDepartmentExpand(${dept.id})">
@@ -116,9 +119,10 @@ function renderDepartmentSection(dept) {
       </div>
       
       <div class="department-employees ${isExpanded ? 'expanded' : ''}">
-        ${dept.employees.length > 0 
-          ? dept.employees.map(emp => renderEmployeeCard(emp)).join('')
-          : '<p class="text-muted text-center p-4">Нет сотрудников в отделе</p>'
+        ${
+          dept.employees.length > 0
+            ? dept.employees.map((emp) => renderEmployeeCard(emp)).join('')
+            : '<p class="text-muted text-center p-4">Нет сотрудников в отделе</p>'
         }
       </div>
     </div>
@@ -166,7 +170,10 @@ function clearEmployeeSearch() {
 function toggleDepartmentExpand(deptId) {
   const expanded = getState('expandedDepartments') || [];
   if (expanded.includes(deptId)) {
-    setState('expandedDepartments', expanded.filter(id => id !== deptId));
+    setState(
+      'expandedDepartments',
+      expanded.filter((id) => id !== deptId)
+    );
   } else {
     setState('expandedDepartments', [...expanded, deptId]);
   }
@@ -205,19 +212,19 @@ function showAddDepartmentModal() {
     footer: `
       <button class="btn btn--secondary" onclick="closeModal()">Отмена</button>
       <button class="btn btn--primary" onclick="saveDepartment()">Создать</button>
-    `
+    `,
   });
-  
+
   setTimeout(() => document.getElementById('departmentName')?.focus(), 100);
 }
 
 function showEditDepartmentModal(deptId) {
   const dept = findInArray('departments', deptId);
   if (!dept) return;
-  
+
   const employees = getState('employees') || [];
-  const hasEmployees = employees.some(e => e.departmentId === deptId);
-  
+  const hasEmployees = employees.some((e) => e.departmentId === deptId);
+
   showModal({
     title: 'Редактировать отдел',
     content: `
@@ -264,7 +271,7 @@ function showEditDepartmentModal(deptId) {
     footer: `
       <button class="btn btn--secondary" onclick="closeModal()">Отмена</button>
       <button class="btn btn--primary" onclick="saveDepartment()">Сохранить</button>
-    `
+    `,
   });
 }
 
@@ -272,35 +279,35 @@ async function saveDepartment() {
   const deptId = document.getElementById('departmentId')?.value;
   const name = document.getElementById('departmentName')?.value?.trim();
   const description = document.getElementById('departmentDescription')?.value?.trim();
-  
+
   const validation = validateDepartmentForm({ name });
-  
+
   if (!validation.isValid) {
     showToast(Object.values(validation.errors)[0], 'error');
     haptic.error();
     return;
   }
-  
+
   closeModal();
   setState('loading', true);
-  
+
   try {
     const deptData = { name, description };
-    
+
     if (deptId) {
       await API.updateDepartment(parseInt(deptId), deptData);
       showToast('Отдел обновлён', 'success');
     } else {
       await API.createDepartment(deptData);
       // Раскрываем новый отдел
-      const newDept = getState('departments').find(d => d.name === name);
+      const newDept = getState('departments').find((d) => d.name === name);
       if (newDept) {
         const expanded = getState('expandedDepartments') || [];
         setState('expandedDepartments', [...expanded, newDept.id], true);
       }
       showToast('Отдел создан', 'success');
     }
-    
+
     haptic.success();
   } catch (error) {
     console.error('Error saving department:', error);
@@ -314,9 +321,9 @@ async function saveDepartment() {
 function confirmDeleteDepartment(deptId) {
   const dept = findInArray('departments', deptId);
   if (!dept) return;
-  
+
   closeModal();
-  
+
   showConfirm({
     title: 'Удалить отдел?',
     message: `Отдел "${dept.name}" будет удалён`,
@@ -335,7 +342,7 @@ function confirmDeleteDepartment(deptId) {
       } finally {
         setState('loading', false);
       }
-    }
+    },
   });
 }
 
@@ -343,7 +350,7 @@ function confirmDeleteDepartment(deptId) {
 
 function showAddEmployeeModal(departmentId = null) {
   const departments = getState('departments') || [];
-  
+
   showModal({
     title: 'Новый сотрудник',
     content: `
@@ -368,9 +375,13 @@ function showAddEmployeeModal(departmentId = null) {
           <label class="form-label form-label--required">Отдел</label>
           <select class="select" id="employeeDepartment" required>
             <option value="">Выберите отдел</option>
-            ${departments.map(d => `
+            ${departments
+              .map(
+                (d) => `
               <option value="${d.id}" ${d.id === departmentId ? 'selected' : ''}>${escapeHtml(d.name)}</option>
-            `).join('')}
+            `
+              )
+              .join('')}
           </select>
         </div>
         
@@ -383,18 +394,18 @@ function showAddEmployeeModal(departmentId = null) {
     footer: `
       <button class="btn btn--secondary" onclick="closeModal()">Отмена</button>
       <button class="btn btn--primary" onclick="saveEmployee()">Создать</button>
-    `
+    `,
   });
-  
+
   setTimeout(() => document.getElementById('employeeFirstName')?.focus(), 100);
 }
 
 function showEditEmployeeModal(employeeId) {
   const employee = findInArray('employees', employeeId);
   if (!employee) return;
-  
+
   const departments = getState('departments') || [];
-  
+
   showModal({
     title: 'Редактировать сотрудника',
     content: `
@@ -420,9 +431,13 @@ function showEditEmployeeModal(employeeId) {
         <div class="form-group">
           <label class="form-label form-label--required">Отдел</label>
           <select class="select" id="employeeDepartment" required>
-            ${departments.map(d => `
+            ${departments
+              .map(
+                (d) => `
               <option value="${d.id}" ${d.id === employee.departmentId ? 'selected' : ''}>${escapeHtml(d.name)}</option>
-            `).join('')}
+            `
+              )
+              .join('')}
           </select>
         </div>
         
@@ -435,7 +450,7 @@ function showEditEmployeeModal(employeeId) {
           ${renderToggle({
             id: 'employeeActive',
             checked: employee.isActive,
-            label: 'Активный сотрудник'
+            label: 'Активный сотрудник',
           })}
         </div>
         
@@ -455,7 +470,7 @@ function showEditEmployeeModal(employeeId) {
     footer: `
       <button class="btn btn--secondary" onclick="closeModal()">Отмена</button>
       <button class="btn btn--primary" onclick="saveEmployee()">Сохранить</button>
-    `
+    `,
   });
 }
 
@@ -467,44 +482,44 @@ async function saveEmployee() {
   const departmentId = parseInt(document.getElementById('employeeDepartment')?.value);
   const position = document.getElementById('employeePosition')?.value?.trim();
   const isActive = document.getElementById('employeeActive')?.checked ?? true;
-  
+
   // Простая валидация
   if (!firstName || firstName.length < 2) {
     showToast('Введите имя (минимум 2 символа)', 'error');
     haptic.error();
     return;
   }
-  
+
   if (!lastName || lastName.length < 2) {
     showToast('Введите фамилию (минимум 2 символа)', 'error');
     haptic.error();
     return;
   }
-  
+
   if (!email || !isValidEmail(email)) {
     showToast('Введите корректный email', 'error');
     haptic.error();
     return;
   }
-  
+
   if (!isEmailUnique(email, employeeId ? parseInt(employeeId) : null)) {
     showToast('Этот email уже используется', 'error');
     haptic.error();
     return;
   }
-  
+
   if (!departmentId) {
     showToast('Выберите отдел', 'error');
     haptic.error();
     return;
   }
-  
+
   closeModal();
   setState('loading', true);
-  
+
   try {
     const empData = { firstName, lastName, email, departmentId, position, isActive };
-    
+
     if (employeeId) {
       await API.updateEmployee(parseInt(employeeId), empData);
       showToast('Сотрудник обновлён', 'success');
@@ -512,7 +527,7 @@ async function saveEmployee() {
       await API.createEmployee(empData);
       showToast('Сотрудник добавлен', 'success');
     }
-    
+
     haptic.success();
   } catch (error) {
     console.error('Error saving employee:', error);
@@ -526,9 +541,9 @@ async function saveEmployee() {
 function confirmDeleteEmployee(employeeId) {
   const employee = findInArray('employees', employeeId);
   if (!employee) return;
-  
+
   closeModal();
-  
+
   showConfirm({
     title: 'Удалить сотрудника?',
     message: `${getEmployeeFullName(employee)} будет удалён`,
@@ -551,7 +566,7 @@ function confirmDeleteEmployee(employeeId) {
       } finally {
         setState('loading', false);
       }
-    }
+    },
   });
 }
 

@@ -32,7 +32,7 @@ const MOCK_PROJECTS = [
     color: '#2180ce',
     createdAt: '2024-01-15T10:00:00Z',
     updatedAt: '2024-01-15T10:00:00Z',
-    order: 1
+    order: 1,
   },
   {
     id: 2,
@@ -42,7 +42,7 @@ const MOCK_PROJECTS = [
     color: '#31a24c',
     createdAt: '2024-01-20T10:00:00Z',
     updatedAt: '2024-01-20T10:00:00Z',
-    order: 2
+    order: 2,
   },
   {
     id: 3,
@@ -52,9 +52,9 @@ const MOCK_PROJECTS = [
     color: '#f0ad4e',
     createdAt: '2024-01-25T10:00:00Z',
     updatedAt: '2024-01-25T10:00:00Z',
-    order: 3
+    order: 3,
   },
-  
+
   // Дочерние проекты для "Рога и Копыта"
   {
     id: 4,
@@ -64,7 +64,7 @@ const MOCK_PROJECTS = [
     color: '#2180ce',
     createdAt: '2024-02-01T10:00:00Z',
     updatedAt: '2024-02-01T10:00:00Z',
-    order: 1
+    order: 1,
   },
   {
     id: 5,
@@ -74,7 +74,7 @@ const MOCK_PROJECTS = [
     color: '#2180ce',
     createdAt: '2024-02-05T10:00:00Z',
     updatedAt: '2024-02-05T10:00:00Z',
-    order: 2
+    order: 2,
   },
   {
     id: 6,
@@ -84,9 +84,9 @@ const MOCK_PROJECTS = [
     color: '#2180ce',
     createdAt: '2024-02-10T10:00:00Z',
     updatedAt: '2024-02-10T10:00:00Z',
-    order: 3
+    order: 3,
   },
-  
+
   // Под-подпроекты
   {
     id: 7,
@@ -96,7 +96,7 @@ const MOCK_PROJECTS = [
     color: '#17a2b8',
     createdAt: '2024-02-15T10:00:00Z',
     updatedAt: '2024-02-15T10:00:00Z',
-    order: 1
+    order: 1,
   },
   {
     id: 8,
@@ -106,9 +106,9 @@ const MOCK_PROJECTS = [
     color: '#17a2b8',
     createdAt: '2024-02-20T10:00:00Z',
     updatedAt: '2024-02-20T10:00:00Z',
-    order: 2
+    order: 2,
   },
-  
+
   // Дочерние для ИП Сидоров
   {
     id: 9,
@@ -118,9 +118,9 @@ const MOCK_PROJECTS = [
     color: '#31a24c',
     createdAt: '2024-03-01T10:00:00Z',
     updatedAt: '2024-03-01T10:00:00Z',
-    order: 1
+    order: 1,
   },
-  
+
   // Дочерние для внутренних
   {
     id: 10,
@@ -130,7 +130,7 @@ const MOCK_PROJECTS = [
     color: '#f0ad4e',
     createdAt: '2024-03-05T10:00:00Z',
     updatedAt: '2024-03-05T10:00:00Z',
-    order: 1
+    order: 1,
   },
   {
     id: 11,
@@ -140,8 +140,8 @@ const MOCK_PROJECTS = [
     color: '#f0ad4e',
     createdAt: '2024-03-10T10:00:00Z',
     updatedAt: '2024-03-10T10:00:00Z',
-    order: 2
-  }
+    order: 2,
+  },
 ];
 
 // ===== DEPARTMENTS =====
@@ -153,7 +153,7 @@ const MOCK_DEPARTMENTS = [
     managerId: 1,
     createdAt: '2024-01-10T10:00:00Z',
     updatedAt: '2024-01-10T10:00:00Z',
-    order: 1
+    order: 1,
   },
   {
     id: 2,
@@ -162,7 +162,7 @@ const MOCK_DEPARTMENTS = [
     managerId: 4,
     createdAt: '2024-01-10T10:00:00Z',
     updatedAt: '2024-01-10T10:00:00Z',
-    order: 2
+    order: 2,
   },
   {
     id: 3,
@@ -171,7 +171,7 @@ const MOCK_DEPARTMENTS = [
     managerId: 6,
     createdAt: '2024-01-10T10:00:00Z',
     updatedAt: '2024-01-10T10:00:00Z',
-    order: 3
+    order: 3,
   },
   {
     id: 4,
@@ -180,8 +180,8 @@ const MOCK_DEPARTMENTS = [
     managerId: 8,
     createdAt: '2024-01-10T10:00:00Z',
     updatedAt: '2024-01-10T10:00:00Z',
-    order: 4
-  }
+    order: 4,
+  },
 ];
 
 // ===== EMPLOYEES =====
@@ -198,7 +198,7 @@ const MOCK_EMPLOYEES = [
     avatar: null,
     isActive: true,
     createdAt: '2024-01-10T10:00:00Z',
-    updatedAt: '2024-01-10T10:00:00Z'
+    updatedAt: '2024-01-10T10:00:00Z',
   },
   {
     id: 2,
@@ -211,7 +211,7 @@ const MOCK_EMPLOYEES = [
     avatar: null,
     isActive: true,
     createdAt: '2024-01-10T10:00:00Z',
-    updatedAt: '2024-01-10T10:00:00Z'
+    updatedAt: '2024-01-10T10:00:00Z',
   },
   {
     id: 3,
@@ -224,9 +224,9 @@ const MOCK_EMPLOYEES = [
     avatar: null,
     isActive: true,
     createdAt: '2024-01-15T10:00:00Z',
-    updatedAt: '2024-01-15T10:00:00Z'
+    updatedAt: '2024-01-15T10:00:00Z',
   },
-  
+
   // Отдел дизайна
   {
     id: 4,
@@ -239,7 +239,7 @@ const MOCK_EMPLOYEES = [
     avatar: null,
     isActive: true,
     createdAt: '2024-01-10T10:00:00Z',
-    updatedAt: '2024-01-10T10:00:00Z'
+    updatedAt: '2024-01-10T10:00:00Z',
   },
   {
     id: 5,
@@ -252,9 +252,9 @@ const MOCK_EMPLOYEES = [
     avatar: null,
     isActive: true,
     createdAt: '2024-01-12T10:00:00Z',
-    updatedAt: '2024-01-12T10:00:00Z'
+    updatedAt: '2024-01-12T10:00:00Z',
   },
-  
+
   // Отдел маркетинга
   {
     id: 6,
@@ -267,7 +267,7 @@ const MOCK_EMPLOYEES = [
     avatar: null,
     isActive: true,
     createdAt: '2024-01-10T10:00:00Z',
-    updatedAt: '2024-01-10T10:00:00Z'
+    updatedAt: '2024-01-10T10:00:00Z',
   },
   {
     id: 7,
@@ -280,9 +280,9 @@ const MOCK_EMPLOYEES = [
     avatar: null,
     isActive: true,
     createdAt: '2024-01-14T10:00:00Z',
-    updatedAt: '2024-01-14T10:00:00Z'
+    updatedAt: '2024-01-14T10:00:00Z',
   },
-  
+
   // Отдел продаж
   {
     id: 8,
@@ -295,7 +295,7 @@ const MOCK_EMPLOYEES = [
     avatar: null,
     isActive: true,
     createdAt: '2024-01-10T10:00:00Z',
-    updatedAt: '2024-01-10T10:00:00Z'
+    updatedAt: '2024-01-10T10:00:00Z',
   },
   {
     id: 9,
@@ -308,7 +308,7 @@ const MOCK_EMPLOYEES = [
     avatar: null,
     isActive: true,
     createdAt: '2024-01-16T10:00:00Z',
-    updatedAt: '2024-01-16T10:00:00Z'
+    updatedAt: '2024-01-16T10:00:00Z',
   },
   {
     id: 10,
@@ -321,8 +321,8 @@ const MOCK_EMPLOYEES = [
     avatar: null,
     isActive: false, // Неактивный сотрудник
     createdAt: '2024-01-18T10:00:00Z',
-    updatedAt: '2024-02-20T10:00:00Z'
-  }
+    updatedAt: '2024-02-20T10:00:00Z',
+  },
 ];
 
 // ===== TASKS =====
@@ -331,7 +331,8 @@ const MOCK_TASKS = [
   {
     id: 1,
     title: 'Разработать модуль авторизации',
-    description: 'Необходимо внедрить OAuth 2.0 для мобильного приложения. Включает интеграцию с Google и Apple ID.',
+    description:
+      'Необходимо внедрить OAuth 2.0 для мобильного приложения. Включает интеграцию с Google и Apple ID.',
     projectIds: [5],
     assigneeIds: [1, 2],
     creatorId: 1,
@@ -344,7 +345,7 @@ const MOCK_TASKS = [
     nextReminderDate: formatDateTime(new Date(today.getTime() + 24 * 60 * 60 * 1000)),
     completedAt: null,
     createdAt: '2024-01-20T10:00:00Z',
-    updatedAt: '2024-01-25T15:30:00Z'
+    updatedAt: '2024-01-25T15:30:00Z',
   },
   {
     id: 2,
@@ -362,7 +363,7 @@ const MOCK_TASKS = [
     nextReminderDate: formatDateTime(new Date(today.getTime() + 24 * 60 * 60 * 1000)),
     completedAt: null,
     createdAt: '2024-01-22T10:00:00Z',
-    updatedAt: '2024-01-22T10:00:00Z'
+    updatedAt: '2024-01-22T10:00:00Z',
   },
   {
     id: 3,
@@ -380,7 +381,7 @@ const MOCK_TASKS = [
     nextReminderDate: formatDateTime(today),
     completedAt: null,
     createdAt: '2024-01-18T10:00:00Z',
-    updatedAt: '2024-01-28T10:00:00Z'
+    updatedAt: '2024-01-28T10:00:00Z',
   },
   {
     id: 4,
@@ -398,7 +399,7 @@ const MOCK_TASKS = [
     nextReminderDate: formatDateTime(new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)),
     completedAt: null,
     createdAt: '2024-01-25T10:00:00Z',
-    updatedAt: '2024-01-25T10:00:00Z'
+    updatedAt: '2024-01-25T10:00:00Z',
   },
   {
     id: 5,
@@ -416,7 +417,7 @@ const MOCK_TASKS = [
     nextReminderDate: formatDateTime(new Date(today.getTime() + 24 * 60 * 60 * 1000)),
     completedAt: null,
     createdAt: '2024-01-26T10:00:00Z',
-    updatedAt: '2024-01-26T10:00:00Z'
+    updatedAt: '2024-01-26T10:00:00Z',
   },
   {
     id: 6,
@@ -434,7 +435,7 @@ const MOCK_TASKS = [
     nextReminderDate: null,
     completedAt: formatDateTime(new Date(today.getTime() - 3 * 24 * 60 * 60 * 1000)),
     createdAt: '2024-01-15T10:00:00Z',
-    updatedAt: '2024-01-27T14:00:00Z'
+    updatedAt: '2024-01-27T14:00:00Z',
   },
   {
     id: 7,
@@ -452,7 +453,7 @@ const MOCK_TASKS = [
     nextReminderDate: null,
     completedAt: null,
     createdAt: '2024-01-28T10:00:00Z',
-    updatedAt: '2024-01-28T10:00:00Z'
+    updatedAt: '2024-01-28T10:00:00Z',
   },
   {
     id: 8,
@@ -470,8 +471,8 @@ const MOCK_TASKS = [
     nextReminderDate: formatDateTime(new Date(today.getTime() + 12 * 60 * 60 * 1000)),
     completedAt: null,
     createdAt: '2024-01-29T08:00:00Z',
-    updatedAt: '2024-01-29T08:00:00Z'
-  }
+    updatedAt: '2024-01-29T08:00:00Z',
+  },
 ];
 
 // ===== REMINDERS (Log) =====
@@ -484,7 +485,7 @@ const MOCK_REMINDERS = [
     status: 'sent',
     sentAt: formatDateTime(new Date(today.getTime() - 24 * 60 * 60 * 1000)),
     errorMessage: null,
-    createdAt: formatDateTime(new Date(today.getTime() - 24 * 60 * 60 * 1000))
+    createdAt: formatDateTime(new Date(today.getTime() - 24 * 60 * 60 * 1000)),
   },
   {
     id: 2,
@@ -494,8 +495,8 @@ const MOCK_REMINDERS = [
     status: 'sent',
     sentAt: formatDateTime(new Date(today.getTime() - 2 * 60 * 60 * 1000)),
     errorMessage: null,
-    createdAt: formatDateTime(new Date(today.getTime() - 2 * 60 * 60 * 1000))
-  }
+    createdAt: formatDateTime(new Date(today.getTime() - 2 * 60 * 60 * 1000)),
+  },
 ];
 
 // ===== NOTIFICATION SETTINGS =====
@@ -506,7 +507,7 @@ const MOCK_NOTIFICATION_SETTINGS = {
   telegramChatIds: [],
   notifyOnComplete: true,
   notifyOnDeadline: true,
-  notifyOnOverdue: true
+  notifyOnOverdue: true,
 };
 
 // ===== INITIALIZE MOCK DATA =====
@@ -517,12 +518,12 @@ function initMockData() {
   setState('tasks', [...MOCK_TASKS], true);
   setState('reminders', [...MOCK_REMINDERS], true);
   setState('notificationSettings', { ...MOCK_NOTIFICATION_SETTINGS }, true);
-  
+
   // Expand root projects and departments by default
   setState('expandedProjects', [1, 2, 3], true);
   setState('expandedDepartments', [1, 2, 3, 4], true);
   setState('expandedProjectSections', ['active'], true);
-  
+
   console.log('📦 Mock data initialized');
 }
 
@@ -533,4 +534,3 @@ window.MOCK_EMPLOYEES = MOCK_EMPLOYEES;
 window.MOCK_TASKS = MOCK_TASKS;
 window.initMockData = initMockData;
 window.generateId = generateId;
-

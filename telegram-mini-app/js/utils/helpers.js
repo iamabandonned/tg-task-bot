@@ -22,11 +22,11 @@ function debounce(func, wait) {
  */
 function throttle(func, limit) {
   let inThrottle;
-  return function(...args) {
+  return function (...args) {
     if (!inThrottle) {
       func.apply(this, args);
       inThrottle = true;
-      setTimeout(() => inThrottle = false, limit);
+      setTimeout(() => (inThrottle = false), limit);
     }
   };
 }
@@ -36,17 +36,17 @@ function throttle(func, limit) {
  */
 function formatDate(dateStr, format = 'short') {
   if (!dateStr) return '';
-  
+
   const date = new Date(dateStr);
-  
+
   if (isNaN(date.getTime())) return dateStr;
-  
+
   const options = {
     short: { day: '2-digit', month: '2-digit', year: 'numeric' },
     long: { day: 'numeric', month: 'long', year: 'numeric' },
-    weekday: { weekday: 'short', day: 'numeric', month: 'short' }
+    weekday: { weekday: 'short', day: 'numeric', month: 'short' },
   };
-  
+
   return date.toLocaleDateString('ru-RU', options[format] || options.short);
 }
 
@@ -63,16 +63,16 @@ function formatTime(timeStr) {
  */
 function formatDateTime(dateStr) {
   if (!dateStr) return '';
-  
+
   const date = new Date(dateStr);
   if (isNaN(date.getTime())) return dateStr;
-  
+
   return date.toLocaleString('ru-RU', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   });
 }
 
@@ -81,20 +81,20 @@ function formatDateTime(dateStr) {
  */
 function getRelativeDate(dateStr) {
   if (!dateStr) return '';
-  
+
   const date = new Date(dateStr);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   date.setHours(0, 0, 0, 0);
-  
+
   const diff = Math.floor((date - today) / (1000 * 60 * 60 * 24));
-  
+
   if (diff === 0) return 'Сегодня';
   if (diff === 1) return 'Завтра';
   if (diff === -1) return 'Вчера';
   if (diff > 1 && diff <= 7) return `Через ${diff} дн.`;
   if (diff < -1 && diff >= -7) return `${Math.abs(diff)} дн. назад`;
-  
+
   return formatDate(dateStr);
 }
 
@@ -103,12 +103,12 @@ function getRelativeDate(dateStr) {
  */
 function daysUntil(dateStr) {
   if (!dateStr) return null;
-  
+
   const date = new Date(dateStr);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   date.setHours(0, 0, 0, 0);
-  
+
   return Math.floor((date - today) / (1000 * 60 * 60 * 24));
 }
 
@@ -143,9 +143,7 @@ function getInitials(firstName, lastName) {
 function pluralize(count, words) {
   // words = ['задача', 'задачи', 'задач']
   const cases = [2, 0, 1, 1, 1, 2];
-  const index = (count % 100 > 4 && count % 100 < 20) 
-    ? 2 
-    : cases[Math.min(count % 10, 5)];
+  const index = count % 100 > 4 && count % 100 < 20 ? 2 : cases[Math.min(count % 10, 5)];
   return words[index];
 }
 
@@ -163,23 +161,23 @@ function countByStatus(tasks) {
  * Фильтрация задач
  */
 function filterTasks(tasks, filters) {
-  return tasks.filter(task => {
+  return tasks.filter((task) => {
     // Status filter
     if (filters.status && filters.status !== 'all' && task.status !== filters.status) {
       return false;
     }
-    
+
     // Search query
     if (filters.query) {
       const query = filters.query.toLowerCase();
       const title = task.title.toLowerCase();
       const description = (task.description || '').toLowerCase();
-      
+
       if (!title.includes(query) && !description.includes(query)) {
         return false;
       }
     }
-    
+
     // Date range
     if (filters.dateFrom && task.scheduledDate < filters.dateFrom) {
       return false;
@@ -187,19 +185,19 @@ function filterTasks(tasks, filters) {
     if (filters.dateTo && task.scheduledDate > filters.dateTo) {
       return false;
     }
-    
+
     // Projects
     if (filters.projectIds && filters.projectIds.length > 0) {
-      const hasProject = task.projectIds.some(id => filters.projectIds.includes(id));
+      const hasProject = task.projectIds.some((id) => filters.projectIds.includes(id));
       if (!hasProject) return false;
     }
-    
+
     // Employees
     if (filters.employeeIds && filters.employeeIds.length > 0) {
-      const hasEmployee = task.assigneeIds.some(id => filters.employeeIds.includes(id));
+      const hasEmployee = task.assigneeIds.some((id) => filters.employeeIds.includes(id));
       if (!hasEmployee) return false;
     }
-    
+
     return true;
   });
 }
@@ -210,7 +208,7 @@ function filterTasks(tasks, filters) {
 function sortTasks(tasks, sortBy, sortOrder) {
   return [...tasks].sort((a, b) => {
     let comparison = 0;
-    
+
     switch (sortBy) {
       case 'createdAt':
         comparison = new Date(a.createdAt) - new Date(b.createdAt);
@@ -232,7 +230,7 @@ function sortTasks(tasks, sortBy, sortOrder) {
       default:
         comparison = 0;
     }
-    
+
     return sortOrder === 'desc' ? -comparison : comparison;
   });
 }
@@ -252,8 +250,16 @@ function escapeHtml(text) {
  */
 function randomColor() {
   const colors = [
-    '#2180ce', '#31a24c', '#f0ad4e', '#d33f49', '#17a2b8',
-    '#6c757d', '#9c27b0', '#ff5722', '#795548', '#607d8b'
+    '#2180ce',
+    '#31a24c',
+    '#f0ad4e',
+    '#d33f49',
+    '#17a2b8',
+    '#6c757d',
+    '#9c27b0',
+    '#ff5722',
+    '#795548',
+    '#607d8b',
   ];
   return colors[Math.floor(Math.random() * colors.length)];
 }
@@ -282,9 +288,9 @@ async function copyToClipboard(text) {
  * Генерация UUID
  */
 function uuid() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
 }
@@ -294,9 +300,9 @@ function uuid() {
  */
 function getStatusLabel(status) {
   const labels = {
-    'pending': 'Ожидает',
-    'in_progress': 'В работе',
-    'completed': 'Завершена'
+    pending: 'Ожидает',
+    in_progress: 'В работе',
+    completed: 'Завершена',
   };
   return labels[status] || status;
 }
@@ -306,10 +312,10 @@ function getStatusLabel(status) {
  */
 function getPriorityLabel(priority) {
   const labels = {
-    'low': 'Низкий',
-    'normal': 'Обычный',
-    'high': 'Высокий',
-    'urgent': 'Срочный'
+    low: 'Низкий',
+    normal: 'Обычный',
+    high: 'Высокий',
+    urgent: 'Срочный',
   };
   return labels[priority] || priority;
 }
@@ -336,4 +342,3 @@ window.copyToClipboard = copyToClipboard;
 window.uuid = uuid;
 window.getStatusLabel = getStatusLabel;
 window.getPriorityLabel = getPriorityLabel;
-

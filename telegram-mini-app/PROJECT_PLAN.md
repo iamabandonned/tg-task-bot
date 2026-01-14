@@ -38,6 +38,7 @@
 ## 🏗️ Frontend SPA Архитектура
 
 ### Навигация
+
 ```
 ┌─────────────────────────────────────────────────┐
 │              BOTTOM NAVIGATION BAR              │
@@ -49,13 +50,13 @@
 
 ### 5 Основных Страниц
 
-| # | Страница | URL Hash | Описание |
-|---|----------|----------|----------|
-| 1 | Постановка задач | `#tasks` | Создание новой задачи с выбором проекта, сотрудников, даты |
-| 2 | Проекты | `#projects` | CRUD операции с иерархией проектов |
-| 3 | Сотрудники | `#employees` | CRUD операции с отделами и сотрудниками |
-| 4 | Аналитика | `#analytics` | Фильтры и статистика по задачам |
-| 5 | Список задач | `#tasks-list` | Просмотр, поиск, редактирование задач |
+| #   | Страница         | URL Hash      | Описание                                                   |
+| --- | ---------------- | ------------- | ---------------------------------------------------------- |
+| 1   | Постановка задач | `#tasks`      | Создание новой задачи с выбором проекта, сотрудников, даты |
+| 2   | Проекты          | `#projects`   | CRUD операции с иерархией проектов                         |
+| 3   | Сотрудники       | `#employees`  | CRUD операции с отделами и сотрудниками                    |
+| 4   | Аналитика        | `#analytics`  | Фильтры и статистика по задачам                            |
+| 5   | Список задач     | `#tasks-list` | Просмотр, поиск, редактирование задач                      |
 
 ---
 
@@ -163,23 +164,23 @@ App
 
 ### Переиспользуемые компоненты
 
-| Компонент | Файл | Использование |
-|-----------|------|---------------|
-| `TreeNode` | components.js | Проекты, выбор проектов |
-| `Checkbox` | components.js | Везде |
-| `Modal` | components.js | Все модальные окна |
-| `SearchBar` | components.js | Проекты, Сотрудники, Задачи |
-| `DatePicker` | components.js | Постановка задач, Аналитика |
-| `MultiSelect` | components.js | Все фильтры |
-| `Button` | components.js | Везде |
-| `Input` | components.js | Все формы |
-| `Toast` | components.js | Уведомления |
-| `Loader` | components.js | Загрузка |
-| `ConfirmDialog` | components.js | Удаление |
-| `Badge` | components.js | Статусы |
-| `Card` | components.js | Контейнеры |
-| `ToggleSwitch` | components.js | Настройки уведомлений |
-| `TimePicker` | components.js | Выбор времени напоминаний |
+| Компонент       | Файл          | Использование               |
+| --------------- | ------------- | --------------------------- |
+| `TreeNode`      | components.js | Проекты, выбор проектов     |
+| `Checkbox`      | components.js | Везде                       |
+| `Modal`         | components.js | Все модальные окна          |
+| `SearchBar`     | components.js | Проекты, Сотрудники, Задачи |
+| `DatePicker`    | components.js | Постановка задач, Аналитика |
+| `MultiSelect`   | components.js | Все фильтры                 |
+| `Button`        | components.js | Везде                       |
+| `Input`         | components.js | Все формы                   |
+| `Toast`         | components.js | Уведомления                 |
+| `Loader`        | components.js | Загрузка                    |
+| `ConfirmDialog` | components.js | Удаление                    |
+| `Badge`         | components.js | Статусы                     |
+| `Card`          | components.js | Контейнеры                  |
+| `ToggleSwitch`  | components.js | Настройки уведомлений       |
+| `TimePicker`    | components.js | Выбор времени напоминаний   |
 
 ---
 
@@ -190,72 +191,72 @@ App
 ```javascript
 const AppState = {
   // ===== NAVIGATION =====
-  currentPage: 'tasks',        // 'tasks' | 'projects' | 'employees' | 'analytics' | 'tasks-list'
+  currentPage: 'tasks', // 'tasks' | 'projects' | 'employees' | 'analytics' | 'tasks-list'
   previousPage: null,
-  
+
   // ===== TELEGRAM USER (из WebApp.initDataUnsafe.user) =====
   telegramUser: {
-    id: null,                    // Telegram user_id (number)
-    first_name: '',              // Имя пользователя
-    last_name: '',               // Фамилия (опционально)
-    username: '',                // @username (опционально)
-    language_code: 'ru',         // Язык пользователя
-    is_premium: false,           // Premium подписка
-    photo_url: ''                // URL аватара (опционально)
+    id: null, // Telegram user_id (number)
+    first_name: '', // Имя пользователя
+    last_name: '', // Фамилия (опционально)
+    username: '', // @username (опционально)
+    language_code: 'ru', // Язык пользователя
+    is_premium: false, // Premium подписка
+    photo_url: '', // URL аватара (опционально)
   },
-  
+
   // ===== APP USER (админ из whitelist) =====
   currentUser: {
-    telegramId: null,            // Telegram user_id
-    name: ''                     // Имя из whitelist
+    telegramId: null, // Telegram user_id
+    name: '', // Имя из whitelist
   },
   // Все пользователи из whitelist = ПОЛНЫЙ ДОСТУП (без ролей)
-  
+
   // ===== АВТОРИЗАЦИЯ =====
-  isAuthenticated: false,        // Успешно ли прошла авторизация
-  accessDeniedReason: null,      // 'not_telegram' | 'no_user_data' | 'not_in_whitelist'
-  
+  isAuthenticated: false, // Успешно ли прошла авторизация
+  accessDeniedReason: null, // 'not_telegram' | 'no_user_data' | 'not_in_whitelist'
+
   // ===== WHITELIST АДМИНИСТРАТОРОВ (mock, потом с бэкенда) =====
   allowedAdmins: [
     { telegramId: 123456789, name: 'Иван Директоров' },
-    { telegramId: 987654321, name: 'Пётр Руководителев' }
+    { telegramId: 987654321, name: 'Пётр Руководителев' },
   ],
-  
+
   // ===== PAGE 1: ПОСТАНОВКА ЗАДАЧ =====
   taskForm: {
-    selectedProjects: [],      // [projectId, ...]
-    selectedEmployees: [],     // [employeeId, ...]
-    scheduledDate: '',         // 'YYYY-MM-DD'
-    scheduledTime: '',         // 'HH:MM'
+    selectedProjects: [], // [projectId, ...]
+    selectedEmployees: [], // [employeeId, ...]
+    scheduledDate: '', // 'YYYY-MM-DD'
+    scheduledTime: '', // 'HH:MM'
     title: '',
     description: '',
-    priority: 'normal',        // 'low' | 'normal' | 'high' | 'urgent'
-    editingTaskId: null        // null = new, id = editing
+    priority: 'normal', // 'low' | 'normal' | 'high' | 'urgent'
+    editingTaskId: null, // null = new, id = editing
   },
   showTaskPreview: false,
-  
+
   // ===== PAGE 2: ПРОЕКТЫ =====
-  projects: [],                // Project[]
+  projects: [], // Project[]
   projectsEditMode: false,
   selectedProjectsForDelete: [],
   projectSearchQuery: '',
-  expandedProjects: [],        // [projectId, ...]
+  expandedProjects: [], // [projectId, ...]
   showAddProjectModal: false,
   editingProject: null,
-  
+
   // ===== PAGE 3: СОТРУДНИКИ =====
-  departments: [],             // Department[]
-  employees: [],               // Employee[]
+  departments: [], // Department[]
+  employees: [], // Employee[]
   employeesEditMode: false,
   selectedEmployeesForDelete: [],
   selectedDepartmentsForDelete: [],
   employeeSearchQuery: '',
-  expandedDepartments: [],     // [departmentId, ...]
+  expandedDepartments: [], // [departmentId, ...]
   showAddDepartmentModal: false,
   showAddEmployeeModal: false,
   editingDepartment: null,
   editingEmployee: null,
-  
+
   // ===== PAGE 4: АНАЛИТИКА =====
   analyticsFilters: {
     dateFrom: '',
@@ -263,7 +264,7 @@ const AppState = {
     selectedDepartments: [],
     selectedEmployees: [],
     selectedProjects: [],
-    status: 'all'
+    status: 'all',
   },
   analyticsData: {
     totalTasks: 0,
@@ -271,22 +272,22 @@ const AppState = {
     averageCompletionTime: 0,
     tasksByStatus: {},
     tasksByEmployee: [],
-    tasksByProject: []
+    tasksByProject: [],
   },
-  
+
   // ===== PAGE 5: СПИСОК ЗАДАЧ =====
-  tasks: [],                   // Task[]
+  tasks: [], // Task[]
   tasksSearchQuery: '',
   tasksFilter: {
     status: 'all',
     sortBy: 'createdAt',
-    sortOrder: 'desc'
+    sortOrder: 'desc',
   },
   selectedTasksForDelete: [],
-  expandedTasks: [],           // [taskId, ...]
+  expandedTasks: [], // [taskId, ...]
   showDeleteConfirmModal: false,
   taskToDelete: null,
-  
+
   // ===== УВЕДОМЛЕНИЯ (для текущего пользователя) =====
   notificationSettings: {
     emailEnabled: true,
@@ -296,22 +297,22 @@ const AppState = {
     notifyOnDeadline: true,
     reminderTime: '09:00',
     quietHoursStart: '22:00',
-    quietHoursEnd: '08:00'
+    quietHoursEnd: '08:00',
   },
-  showNotificationSettings: false,  // Модалка настроек
-  
+  showNotificationSettings: false, // Модалка настроек
+
   // ===== НАПОМИНАНИЯ (лог) =====
-  reminders: [],                 // Reminder[] — история отправленных
-  
+  reminders: [], // Reminder[] — история отправленных
+
   // ===== GLOBAL UI =====
-  theme: 'auto',               // 'light' | 'dark' | 'auto'
+  theme: 'auto', // 'light' | 'dark' | 'auto'
   loading: false,
   error: null,
   toast: {
     show: false,
     message: '',
-    type: 'info'               // 'success' | 'error' | 'warning' | 'info'
-  }
+    type: 'info', // 'success' | 'error' | 'warning' | 'info'
+  },
 };
 ```
 
@@ -322,13 +323,13 @@ const AppState = {
 function setState(path, value) {
   const keys = path.split('.');
   let obj = AppState;
-  
+
   for (let i = 0; i < keys.length - 1; i++) {
     obj = obj[keys[i]];
   }
-  
+
   obj[keys[keys.length - 1]] = value;
-  
+
   // Trigger re-render
   renderCurrentPage();
 }
@@ -362,11 +363,11 @@ function subscribe(path, callback) {
   --color-primary-hover: #1a6bb5;
   --color-primary-light: #e8f4fc;
   --color-primary-dark: #145a8c;
-  
+
   /* === SECONDARY === */
   --color-secondary: #6c757d;
   --color-secondary-hover: #5a6268;
-  
+
   /* === SEMANTIC === */
   --color-success: #31a24c;
   --color-success-light: #e8f5eb;
@@ -376,30 +377,30 @@ function subscribe(path, callback) {
   --color-error-light: #fce8ea;
   --color-info: #17a2b8;
   --color-info-light: #e8f6f8;
-  
+
   /* === TEXT === */
   --color-text-primary: #1a1a1a;
   --color-text-secondary: #666666;
   --color-text-muted: #999999;
   --color-text-inverse: #ffffff;
-  
+
   /* === BACKGROUND === */
   --color-bg-primary: #ffffff;
   --color-bg-secondary: #f5f5f5;
   --color-bg-tertiary: #e9ecef;
   --color-bg-hover: #f0f0f0;
-  
+
   /* === BORDER === */
   --color-border: #e0e0e0;
   --color-border-focus: #2180ce;
   --color-border-error: #d33f49;
-  
+
   /* === PRIORITY COLORS === */
   --color-priority-low: #6c757d;
   --color-priority-normal: #2180ce;
   --color-priority-high: #f0ad4e;
   --color-priority-urgent: #d33f49;
-  
+
   /* === STATUS COLORS === */
   --color-status-new: #17a2b8;
   --color-status-progress: #f0ad4e;
@@ -408,20 +409,20 @@ function subscribe(path, callback) {
 }
 
 /* === DARK THEME === */
-[data-theme="dark"] {
+[data-theme='dark'] {
   --color-primary: #3a9be8;
   --color-primary-hover: #2180ce;
   --color-primary-light: #1e3a4d;
-  
+
   --color-text-primary: #ffffff;
   --color-text-secondary: #b0b0b0;
   --color-text-muted: #808080;
-  
+
   --color-bg-primary: #1a1a1a;
   --color-bg-secondary: #242424;
   --color-bg-tertiary: #2d2d2d;
   --color-bg-hover: #333333;
-  
+
   --color-border: #404040;
 }
 ```
@@ -431,9 +432,10 @@ function subscribe(path, callback) {
 ```css
 :root {
   /* === FONT FAMILY === */
-  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+  --font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
   --font-family-mono: 'SF Mono', 'Consolas', 'Monaco', monospace;
-  
+
   /* === FONT SIZE === */
   --font-size-xs: 11px;
   --font-size-sm: 13px;
@@ -443,18 +445,18 @@ function subscribe(path, callback) {
   --font-size-xl: 18px;
   --font-size-2xl: 20px;
   --font-size-3xl: 24px;
-  
+
   /* === FONT WEIGHT === */
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
-  
+
   /* === LINE HEIGHT === */
   --line-height-tight: 1.2;
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.75;
-  
+
   /* === LETTER SPACING === */
   --letter-spacing-tight: -0.02em;
   --letter-spacing-normal: 0;
@@ -730,12 +732,12 @@ telegram-mini-app/
   status: string,                // 'new' | 'in_progress' | 'completed' | 'cancelled'
   priority: string,              // 'low' | 'normal' | 'high' | 'urgent'
   completedAt: string | null,    // ISO date когда завершена
-  
+
   // === НАПОМИНАНИЯ ===
   remindersEnabled: boolean,     // Включены ли напоминания
   lastReminderSent: string|null, // ISO date последнего напоминания
   nextReminderDate: string|null, // ISO date следующего напоминания
-  
+
   createdAt: string,
   updatedAt: string
 }
@@ -793,22 +795,22 @@ telegram-mini-app/
 ```javascript
 {
   employeeId: number,            // ID сотрудника
-  
+
   // Каналы уведомлений
   emailEnabled: boolean,         // Email уведомления
   telegramEnabled: boolean,      // Telegram уведомления
-  
+
   // Типы уведомлений
   notifyOnAssign: boolean,       // При назначении задачи
   notifyOnStatusChange: boolean, // При изменении статуса
   notifyOnDeadline: boolean,     // Напоминания о дедлайне
   notifyOnComment: boolean,      // При комментариях (будущее)
-  
+
   // Время отправки напоминаний
   reminderTime: string,          // 'HH:MM' — во сколько отправлять
   quietHoursStart: string,       // 'HH:MM' — начало тихих часов
   quietHoursEnd: string,         // 'HH:MM' — конец тихих часов
-  
+
   updatedAt: string
 }
 
@@ -836,15 +838,15 @@ telegram-mini-app/
   smtpHost: string,              // 'smtp.gmail.com'
   smtpPort: number,              // 587
   smtpSecure: boolean,           // true для SSL
-  
+
   // Авторизация
   smtpUser: string,              // 'your-email@gmail.com'
   smtpPassword: string,          // App password
-  
+
   // Отправитель
   fromName: string,              // 'Task Manager'
   fromEmail: string,             // 'noreply@taskmanager.ru'
-  
+
   // Шаблоны (опционально)
   templateTaskAssigned: string,
   templateReminder: string,
@@ -989,12 +991,12 @@ Task.assigneeIds[] ──► Employee.email ──► Email с напомина�
 
 ### Правила напоминаний
 
-| Дней до дедлайна | Частота | Время отправки |
-|------------------|---------|----------------|
-| ≤ 7 дней         | **Ежедневно** | В `reminderTime` (по умолчанию 09:00) |
+| Дней до дедлайна | Частота              | Время отправки                        |
+| ---------------- | -------------------- | ------------------------------------- |
+| ≤ 7 дней         | **Ежедневно**        | В `reminderTime` (по умолчанию 09:00) |
 | > 7 дней         | **Еженедельно** (Пн) | В `reminderTime` (по умолчанию 09:00) |
-| = 0 (сегодня)    | **Утром + за 1 час** | 09:00 и за час до `scheduledTime` |
-| Просрочено       | **Ежедневно** | С пометкой "ПРОСРОЧЕНО" |
+| = 0 (сегодня)    | **Утром + за 1 час** | 09:00 и за час до `scheduledTime`     |
+| Просрочено       | **Ежедневно**        | С пометкой "ПРОСРОЧЕНО"               |
 
 ### Расчёт следующего напоминания (JavaScript)
 
@@ -1002,28 +1004,28 @@ Task.assigneeIds[] ──► Employee.email ──► Email с напомина�
 function calculateNextReminder(task) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  
+
   const deadline = new Date(task.scheduledDate);
   deadline.setHours(0, 0, 0, 0);
-  
+
   const daysLeft = Math.ceil((deadline - today) / (1000 * 60 * 60 * 24));
-  
+
   // Задача завершена или отменена — не напоминаем
   if (task.status === 'completed' || task.status === 'cancelled') {
     return null;
   }
-  
+
   const reminderTime = AppState.notificationSettings?.reminderTime || '09:00';
   const [hours, minutes] = reminderTime.split(':').map(Number);
-  
+
   let nextReminder = new Date();
   nextReminder.setHours(hours, minutes, 0, 0);
-  
+
   // Если уже прошло время напоминания сегодня
   if (nextReminder <= new Date()) {
     nextReminder.setDate(nextReminder.getDate() + 1);
   }
-  
+
   if (daysLeft <= 7) {
     // Ежедневно — следующее напоминание завтра (или сегодня если не прошло)
     return nextReminder.toISOString();
@@ -1067,53 +1069,77 @@ function calculateNextReminder(task) {
 
 ### Типы уведомлений
 
-| Событие | Email | Telegram | Описание |
-|---------|-------|----------|----------|
-| Назначение задачи | ✅ | ✅ | Вам назначена новая задача |
-| Напоминание о дедлайне | ✅ | ✅ | Срок задачи через X дней |
-| Задача просрочена | ✅ | ✅ | Срок задачи истёк |
-| Изменение статуса | ⚙️ | ✅ | Статус задачи изменён на... |
-| Задача завершена | ✅ | ✅ | Создатель получает уведомление |
+| Событие                | Email | Telegram | Описание                       |
+| ---------------------- | ----- | -------- | ------------------------------ |
+| Назначение задачи      | ✅    | ✅       | Вам назначена новая задача     |
+| Напоминание о дедлайне | ✅    | ✅       | Срок задачи через X дней       |
+| Задача просрочена      | ✅    | ✅       | Срок задачи истёк              |
+| Изменение статуса      | ⚙️    | ✅       | Статус задачи изменён на...    |
+| Задача завершена       | ✅    | ✅       | Создатель получает уведомление |
 
 ### Email шаблон напоминания
 
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <style>
-    .container { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; }
-    .header { background: #2180ce; color: white; padding: 20px; }
-    .content { padding: 20px; }
-    .task-card { border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; margin: 16px 0; }
-    .deadline { color: #d33f49; font-weight: bold; }
-    .btn { background: #2180ce; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>⏰ Напоминание о задаче</h1>
-    </div>
-    <div class="content">
-      <p>Здравствуйте, {{employeeName}}!</p>
-      
-      <p>Напоминаем о задаче, срок которой {{#if isOverdue}}истёк{{else}}приближается{{/if}}:</p>
-      
-      <div class="task-card">
-        <h2>{{taskTitle}}</h2>
-        <p>{{taskDescription}}</p>
-        <p><strong>Проект:</strong> {{projectName}}</p>
-        <p class="deadline">
-          <strong>Срок:</strong> {{scheduledDate}} {{scheduledTime}}
-          {{#if isOverdue}}(ПРОСРОЧЕНО на {{daysOverdue}} дн.){{else}}(осталось {{daysLeft}} дн.){{/if}}
-        </p>
+  <head>
+    <style>
+      .container {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .header {
+        background: #2180ce;
+        color: white;
+        padding: 20px;
+      }
+      .content {
+        padding: 20px;
+      }
+      .task-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 16px;
+        margin: 16px 0;
+      }
+      .deadline {
+        color: #d33f49;
+        font-weight: bold;
+      }
+      .btn {
+        background: #2180ce;
+        color: white;
+        padding: 12px 24px;
+        text-decoration: none;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>⏰ Напоминание о задаче</h1>
       </div>
-      
-      <p><a href="{{appUrl}}" class="btn">Открыть задачу</a></p>
+      <div class="content">
+        <p>Здравствуйте, {{employeeName}}!</p>
+
+        <p>Напоминаем о задаче, срок которой {{#if isOverdue}}истёк{{else}}приближается{{/if}}:</p>
+
+        <div class="task-card">
+          <h2>{{taskTitle}}</h2>
+          <p>{{taskDescription}}</p>
+          <p><strong>Проект:</strong> {{projectName}}</p>
+          <p class="deadline">
+            <strong>Срок:</strong> {{scheduledDate}} {{scheduledTime}} {{#if isOverdue}}(ПРОСРОЧЕНО
+            на {{daysOverdue}} дн.){{else}}(осталось {{daysLeft}} дн.){{/if}}
+          </p>
+        </div>
+
+        <p><a href="{{appUrl}}" class="btn">Открыть задачу</a></p>
+      </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>
 ```
 
@@ -1142,69 +1168,69 @@ function calculateNextReminder(task) {
 
 async function processReminders() {
   const now = new Date();
-  
+
   // 1. Найти задачи, которым пора отправить напоминание
   const tasks = await db.tasks.findMany({
     where: {
       status: { in: ['new', 'in_progress'] },
       remindersEnabled: true,
-      nextReminderDate: { lte: now }
+      nextReminderDate: { lte: now },
     },
     include: {
       assignees: {
-        include: { notificationSettings: true }
-      }
-    }
+        include: { notificationSettings: true },
+      },
+    },
   });
-  
+
   for (const task of tasks) {
     for (const assignee of task.assignees) {
       const settings = assignee.notificationSettings;
-      
+
       // Проверка тихих часов
       if (isQuietHours(now, settings)) continue;
-      
+
       // Отправка email
       if (settings.emailEnabled && settings.notifyOnDeadline) {
         await sendEmailReminder(task, assignee);
       }
-      
+
       // Отправка Telegram
       if (settings.telegramEnabled && settings.notifyOnDeadline && assignee.telegramId) {
         await sendTelegramReminder(task, assignee);
       }
-      
+
       // Логирование
       await db.reminders.create({
         taskId: task.id,
         employeeId: assignee.id,
         type: getNotificationType(settings),
         status: 'sent',
-        sentAt: now
+        sentAt: now,
       });
     }
-    
+
     // Обновить nextReminderDate
     await db.tasks.update({
       where: { id: task.id },
       data: {
         lastReminderSent: now,
-        nextReminderDate: calculateNextReminder(task)
-      }
+        nextReminderDate: calculateNextReminder(task),
+      },
     });
   }
 }
 
 function isQuietHours(now, settings) {
   if (!settings.quietHoursStart || !settings.quietHoursEnd) return false;
-  
+
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
   const [startH, startM] = settings.quietHoursStart.split(':').map(Number);
   const [endH, endM] = settings.quietHoursEnd.split(':').map(Number);
-  
+
   const start = startH * 60 + startM;
   const end = endH * 60 + endM;
-  
+
   if (start <= end) {
     return currentMinutes >= start && currentMinutes < end;
   } else {
@@ -1216,61 +1242,66 @@ function isQuietHours(now, settings) {
 
 ### SMTP настройка (популярные провайдеры)
 
-| Провайдер | SMTP Host | Port | Secure | Примечание |
-|-----------|-----------|------|--------|------------|
-| Gmail | smtp.gmail.com | 587 | TLS | Требуется App Password |
-| Yandex | smtp.yandex.ru | 465 | SSL | Разрешить SMTP в настройках |
-| Mail.ru | smtp.mail.ru | 465 | SSL | Пароль приложения |
-| Outlook | smtp.office365.com | 587 | TLS | |
-| Custom | your-smtp.domain.ru | 25/465/587 | - | |
+| Провайдер | SMTP Host           | Port       | Secure | Примечание                  |
+| --------- | ------------------- | ---------- | ------ | --------------------------- |
+| Gmail     | smtp.gmail.com      | 587        | TLS    | Требуется App Password      |
+| Yandex    | smtp.yandex.ru      | 465        | SSL    | Разрешить SMTP в настройках |
+| Mail.ru   | smtp.mail.ru        | 465        | SSL    | Пароль приложения           |
+| Outlook   | smtp.office365.com  | 587        | TLS    |                             |
+| Custom    | your-smtp.domain.ru | 25/465/587 | -      |                             |
 
 ---
 
 ## 📅 Timeline Реализации
 
 ### День 1: Основа
-| Время | Задача | Файлы |
-|-------|--------|-------|
-| 2ч | Создание PROJECT_PLAN.md | PROJECT_PLAN.md |
-| 2ч | Design System CSS | design-system.css |
-| 1ч | Base HTML структура | index.html |
-| 1ч | Animations CSS | animations.css |
+
+| Время | Задача                   | Файлы             |
+| ----- | ------------------------ | ----------------- |
+| 2ч    | Создание PROJECT_PLAN.md | PROJECT_PLAN.md   |
+| 2ч    | Design System CSS        | design-system.css |
+| 1ч    | Base HTML структура      | index.html        |
+| 1ч    | Animations CSS           | animations.css    |
 
 **Результат:** Базовая структура проекта, CSS переменные, пустая страница
 
 ### День 2: Инфраструктура
-| Время | Задача | Файлы |
-|-------|--------|-------|
-| 2ч | State management | state.js |
-| 3ч | UI компоненты | components.js, components.css |
-| 2ч | Mock данные | mock-data.js |
-| 1ч | Роутинг и навигация | main.js |
+
+| Время | Задача              | Файлы                         |
+| ----- | ------------------- | ----------------------------- |
+| 2ч    | State management    | state.js                      |
+| 3ч    | UI компоненты       | components.js, components.css |
+| 2ч    | Mock данные         | mock-data.js                  |
+| 1ч    | Роутинг и навигация | main.js                       |
 
 **Результат:** Работающий SPA с навигацией, компоненты готовы
 
 ### День 3: Страницы 1-2
-| Время | Задача | Файлы |
-|-------|--------|-------|
-| 4ч | Страница 1: Постановка задач | pages/tasks.js, pages.css |
-| 4ч | Страница 2: Проекты | pages/projects.js |
+
+| Время | Задача                       | Файлы                     |
+| ----- | ---------------------------- | ------------------------- |
+| 4ч    | Страница 1: Постановка задач | pages/tasks.js, pages.css |
+| 4ч    | Страница 2: Проекты          | pages/projects.js         |
 
 **Результат:** Полнофункциональные страницы создания задач и управления проектами
 
 ### День 4: Страницы 3 и 5
-| Время | Задача | Файлы |
-|-------|--------|-------|
-| 4ч | Страница 3: Сотрудники | pages/employees.js |
-| 4ч | Страница 5: Список задач | pages/tasksList.js |
+
+| Время | Задача                   | Файлы              |
+| ----- | ------------------------ | ------------------ |
+| 4ч    | Страница 3: Сотрудники   | pages/employees.js |
+| 4ч    | Страница 5: Список задач | pages/tasksList.js |
 
 **Результат:** CRUD для сотрудников, просмотр и управление задачами
 
 ### День 5: Страница 4 + Полировка
-| Время | Задача | Файлы |
-|-------|--------|-------|
-| 3ч | Страница 4: Аналитика | pages/analytics.js |
-| 2ч | Theme switching (dark/light) | theme.css |
-| 2ч | Анимации и transitions | animations.css |
-| 1ч | Тестирование и баг-фиксы | all |
+
+| Время | Задача                       | Файлы              |
+| ----- | ---------------------------- | ------------------ |
+| 3ч    | Страница 4: Аналитика        | pages/analytics.js |
+| 2ч    | Theme switching (dark/light) | theme.css          |
+| 2ч    | Анимации и transitions       | animations.css     |
+| 1ч    | Тестирование и баг-фиксы     | all                |
 
 **Результат:** Готовый фронтенд со всеми 5 страницами
 
@@ -1279,6 +1310,7 @@ function isQuietHours(now, settings) {
 ## ✅ Definition of Done
 
 ### Общие требования
+
 - [ ] Все 5 страниц полностью функциональны
 - [ ] Навигация работает через hash routing
 - [ ] Все данные хранятся в памяти (AppState)
@@ -1286,6 +1318,7 @@ function isQuietHours(now, settings) {
 - [ ] Нет ошибок в консоли браузера
 
 ### Авторизация Telegram (только администраторы)
+
 - [ ] Данные пользователя получаются из `initDataUnsafe.user`
 - [ ] Проверка Telegram ID по whitelist
 - [ ] Экран "Доступ запрещён" если ID не в списке
@@ -1295,6 +1328,7 @@ function isQuietHours(now, settings) {
 - [ ] Кнопка "Закрыть" на экране запрета
 
 ### UI/UX
+
 - [ ] Responsive дизайн (320px - 428px)
 - [ ] Touch-friendly (min 44px touch targets)
 - [ ] Smooth transitions (60fps)
@@ -1304,6 +1338,7 @@ function isQuietHours(now, settings) {
 ### Функциональность по страницам
 
 #### Страница 1: Постановка задач
+
 - [ ] Иерархический выбор проектов (дерево с чекбоксами)
 - [ ] Выбор сотрудников по отделам с "Выбрать всех"
 - [ ] Date и Time pickers работают
@@ -1313,6 +1348,7 @@ function isQuietHours(now, settings) {
 - [ ] Сохранение создаёт задачу в state
 
 #### Страница 2: Проекты
+
 - [ ] Древовидное отображение проектов
 - [ ] Collapse/Expand работает
 - [ ] Поиск фильтрует проекты
@@ -1321,6 +1357,7 @@ function isQuietHours(now, settings) {
 - [ ] Bulk delete работает
 
 #### Страница 3: Сотрудники
+
 - [ ] Отделы с вложенными сотрудниками
 - [ ] Поиск по имени/email
 - [ ] Edit mode для bulk операций
@@ -1329,6 +1366,7 @@ function isQuietHours(now, settings) {
 - [ ] Валидация email (уникальность)
 
 #### Страница 4: Аналитика
+
 - [ ] Фильтры по датам
 - [ ] Мультиселект отделов/сотрудников/проектов
 - [ ] Статистика отображается корректно
@@ -1336,6 +1374,7 @@ function isQuietHours(now, settings) {
 - [ ] Данные пересчитываются при изменении фильтров
 
 #### Страница 5: Список задач
+
 - [ ] Collapsible список задач
 - [ ] Поиск работает
 - [ ] Фильтр по статусу
@@ -1345,6 +1384,7 @@ function isQuietHours(now, settings) {
 - [ ] Bulk select и delete
 
 #### Настройки уведомлений (модальное окно)
+
 - [ ] Toggle Email уведомлений
 - [ ] Toggle Telegram уведомлений
 - [ ] Toggle уведомлений при назначении
@@ -1354,6 +1394,7 @@ function isQuietHours(now, settings) {
 - [ ] Сохранение настроек
 
 #### Система напоминаний (подготовка к бэкенду)
+
 - [ ] UI отображает дни до дедлайна
 - [ ] Визуальная индикация просроченных задач
 - [ ] Mock напоминания в state
@@ -1365,7 +1406,8 @@ function isQuietHours(now, settings) {
 
 ### 🔐 Авторизация через Telegram (ТОЛЬКО для руководителей)
 
-**Принцип:** 
+**Принцип:**
+
 - Приложение работает ТОЛЬКО внутри Telegram Mini App
 - Доступ ТОЛЬКО для руководителей из whitelist
 - Если Telegram ID не в списке → экран "Доступ запрещён"
@@ -1395,14 +1437,14 @@ const ALLOWED_ADMINS = [
 ```javascript
 // Telegram предоставляет данные пользователя автоматически
 window.Telegram.WebApp.initDataUnsafe.user = {
-  id: 123456789,              // Уникальный Telegram user_id
-  first_name: "Иван",
-  last_name: "Петров",        // Может быть undefined
-  username: "ivan_petrov",    // Может быть undefined
-  language_code: "ru",
-  is_premium: true,           // Может быть undefined
-  photo_url: "https://..."    // Может быть undefined
-}
+  id: 123456789, // Уникальный Telegram user_id
+  first_name: 'Иван',
+  last_name: 'Петров', // Может быть undefined
+  username: 'ivan_petrov', // Может быть undefined
+  language_code: 'ru',
+  is_premium: true, // Может быть undefined
+  photo_url: 'https://...', // Может быть undefined
+};
 ```
 
 #### Процесс авторизации (Frontend)
@@ -1410,32 +1452,32 @@ window.Telegram.WebApp.initDataUnsafe.user = {
 ```javascript
 function initTelegramAuth() {
   const tg = window.Telegram?.WebApp;
-  
+
   // 1. Проверяем, что запущено в Telegram
   if (!tg) {
     showAccessDeniedScreen('not_telegram');
     return false;
   }
-  
+
   const user = tg.initDataUnsafe?.user;
-  
+
   // 2. Проверяем, что есть данные пользователя
   if (!user || !user.id) {
     showAccessDeniedScreen('no_user_data');
     return false;
   }
-  
+
   // 3. ГЛАВНАЯ ПРОВЕРКА: есть ли пользователь в whitelist
-  const admin = ALLOWED_ADMINS.find(a => a.telegramId === user.id);
-  
+  const admin = ALLOWED_ADMINS.find((a) => a.telegramId === user.id);
+
   if (!admin) {
     // ❌ ДОСТУП ЗАПРЕЩЁН — ID не в списке
     showAccessDeniedScreen('not_in_whitelist', user);
     return false;
   }
-  
+
   // ✅ Пользователь в whitelist — ПОЛНЫЙ ДОСТУП
-  
+
   // Сохраняем данные Telegram пользователя
   setState('telegramUser', {
     id: user.id,
@@ -1444,15 +1486,15 @@ function initTelegramAuth() {
     username: user.username || '',
     language_code: user.language_code || 'ru',
     is_premium: user.is_premium || false,
-    photo_url: user.photo_url || ''
+    photo_url: user.photo_url || '',
   });
-  
+
   // Все админы имеют полный доступ
   setState('currentUser', {
     telegramId: user.id,
-    name: admin.name
+    name: admin.name,
   });
-  
+
   setState('isAuthenticated', true);
   return true;
 }
@@ -1464,25 +1506,25 @@ function initTelegramAuth() {
 function showAccessDeniedScreen(reason, user = null) {
   setState('isAuthenticated', false);
   setState('accessDeniedReason', reason);
-  
+
   const messages = {
-    'not_telegram': {
+    not_telegram: {
       title: '⚠️ Ошибка запуска',
       text: 'Приложение работает только в Telegram',
-      icon: '📱'
+      icon: '📱',
     },
-    'no_user_data': {
+    no_user_data: {
       title: '⚠️ Ошибка авторизации',
       text: 'Не удалось получить данные пользователя',
-      icon: '🔐'
+      icon: '🔐',
     },
-    'not_in_whitelist': {
+    not_in_whitelist: {
       title: '🚫 Доступ запрещён',
       text: `Ваш аккаунт (ID: ${user?.id}) не имеет доступа к этому приложению.\n\nОбратитесь к администратору.`,
-      icon: '🔒'
-    }
+      icon: '🔒',
+    },
   };
-  
+
   renderAccessDeniedPage(messages[reason]);
 }
 
@@ -1542,7 +1584,7 @@ if (isAuthenticated()) {
 // Полная инициализация
 function initTelegramWebApp() {
   const tg = window.Telegram?.WebApp;
-  
+
   if (!tg) {
     console.warn('Telegram WebApp not available');
     // Для разработки: создаём mock пользователя
@@ -1551,36 +1593,33 @@ function initTelegramWebApp() {
     }
     return;
   }
-  
+
   // 1. Сигнал готовности
   tg.ready();
-  
+
   // 2. Раскрываем на весь экран
   tg.expand();
-  
+
   // 3. Цвета хедера
   tg.setHeaderColor('#2180ce');
   tg.setBackgroundColor(tg.colorScheme === 'dark' ? '#1a1a1a' : '#ffffff');
-  
+
   // 4. Авторизация
   if (!initTelegramAuth()) {
     return;
   }
-  
+
   // 5. Тема (light/dark)
-  document.documentElement.setAttribute(
-    'data-theme', 
-    tg.colorScheme || 'light'
-  );
-  
+  document.documentElement.setAttribute('data-theme', tg.colorScheme || 'light');
+
   // 6. Подписка на изменение темы
   tg.onEvent('themeChanged', () => {
     document.documentElement.setAttribute('data-theme', tg.colorScheme);
   });
-  
+
   // 7. Кнопка "Назад"
   tg.BackButton.onClick(() => navigateBack());
-  
+
   // 8. Haptic feedback
   window.haptic = {
     light: () => tg.HapticFeedback?.impactOccurred('light'),
@@ -1588,7 +1627,7 @@ function initTelegramWebApp() {
     heavy: () => tg.HapticFeedback?.impactOccurred('heavy'),
     success: () => tg.HapticFeedback?.notificationOccurred('success'),
     error: () => tg.HapticFeedback?.notificationOccurred('error'),
-    warning: () => tg.HapticFeedback?.notificationOccurred('warning')
+    warning: () => tg.HapticFeedback?.notificationOccurred('warning'),
   };
 }
 
@@ -1601,22 +1640,21 @@ function createMockTelegramUser() {
     username: 'dev_user',
     language_code: 'ru',
     is_premium: false,
-    photo_url: ''
+    photo_url: '',
   });
-  
+
   setState('currentUser', {
     telegramId: 999999999,
     role: 'admin',
     employeeId: null,
-    permissions: ['create_tasks', 'manage_projects', 'manage_employees', 'view_analytics']
+    permissions: ['create_tasks', 'manage_projects', 'manage_employees', 'view_analytics'],
   });
-  
+
   setState('isAuthenticated', true);
 }
 
 function isDevelopment() {
-  return window.location.hostname === 'localhost' || 
-         window.location.hostname === '127.0.0.1';
+  return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 }
 ```
 
@@ -1626,12 +1664,13 @@ function isDevelopment() {
 function renderUserInfo() {
   const user = AppState.telegramUser;
   const fullName = [user.first_name, user.last_name].filter(Boolean).join(' ');
-  
+
   return `
     <div class="user-info">
-      ${user.photo_url 
-        ? `<img src="${user.photo_url}" class="user-avatar" alt="${fullName}">`
-        : `<div class="user-avatar-placeholder">${user.first_name[0]}</div>`
+      ${
+        user.photo_url
+          ? `<img src="${user.photo_url}" class="user-avatar" alt="${fullName}">`
+          : `<div class="user-avatar-placeholder">${user.first_name[0]}</div>`
       }
       <div class="user-details">
         <span class="user-name">${fullName}</span>
@@ -1644,6 +1683,7 @@ function renderUserInfo() {
 ```
 
 ### Hash Routing
+
 ```javascript
 // Роутинг
 window.addEventListener('hashchange', handleRouteChange);
@@ -1656,6 +1696,7 @@ function handleRouteChange() {
 ```
 
 ### Performance Considerations
+
 - Virtual scrolling для длинных списков (>100 items)
 - Debounce для поиска (300ms)
 - Lazy rendering для collapsed sections
@@ -1666,4 +1707,3 @@ function handleRouteChange() {
 ## 🚀 Готов к Фазе 2 Фронтенда
 
 План создан. Готов начать разработку фронтенда!
-

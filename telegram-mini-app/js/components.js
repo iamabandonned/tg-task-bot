@@ -9,18 +9,18 @@ let toastTimeout = null;
 function showToast(message, type = 'info', duration = 3000) {
   const container = document.getElementById('toast-container');
   if (!container) return;
-  
+
   // Очищаем предыдущий toast
   container.innerHTML = '';
   clearTimeout(toastTimeout);
-  
+
   const icons = {
     success: '✓',
     error: '✕',
     warning: '⚠',
-    info: 'ℹ'
+    info: 'ℹ',
   };
-  
+
   const toast = document.createElement('div');
   toast.className = `toast toast--${type} toast-enter`;
   toast.innerHTML = `
@@ -33,14 +33,14 @@ function showToast(message, type = 'info', duration = 3000) {
       </svg>
     </button>
   `;
-  
+
   container.appendChild(toast);
-  
+
   // Haptic feedback
   if (type === 'success') haptic.success();
   if (type === 'error') haptic.error();
   if (type === 'warning') haptic.warning();
-  
+
   // Auto hide
   toastTimeout = setTimeout(() => hideToast(), duration);
 }
@@ -48,7 +48,7 @@ function showToast(message, type = 'info', duration = 3000) {
 function hideToast() {
   const container = document.getElementById('toast-container');
   const toast = container?.querySelector('.toast');
-  
+
   if (toast) {
     toast.classList.remove('toast-enter');
     toast.classList.add('toast-exit');
@@ -63,19 +63,13 @@ function hideToast() {
 let currentModal = null;
 
 function showModal(options) {
-  const {
-    title,
-    content,
-    footer,
-    centered = false,
-    onClose
-  } = options;
-  
+  const { title, content, footer, centered = false, onClose } = options;
+
   const container = document.getElementById('modal-container');
   if (!container) return;
-  
+
   currentModal = { onClose };
-  
+
   container.innerHTML = `
     <div class="modal-backdrop" onclick="closeModal()"></div>
     <div class="modal ${centered ? 'modal--centered' : ''} modal-content">
@@ -94,15 +88,15 @@ function showModal(options) {
       ${footer ? `<div class="modal__footer">${footer}</div>` : ''}
     </div>
   `;
-  
+
   container.classList.remove('hidden');
-  
+
   // Animate in
   requestAnimationFrame(() => {
     container.querySelector('.modal-backdrop').classList.add('visible');
     container.querySelector('.modal-content').classList.add('visible');
   });
-  
+
   // Haptic
   haptic.light();
 }
@@ -110,17 +104,17 @@ function showModal(options) {
 function closeModal() {
   const container = document.getElementById('modal-container');
   if (!container) return;
-  
+
   const backdrop = container.querySelector('.modal-backdrop');
   const modal = container.querySelector('.modal-content');
-  
+
   if (backdrop) backdrop.classList.remove('visible');
   if (modal) modal.classList.remove('visible');
-  
+
   setTimeout(() => {
     container.classList.add('hidden');
     container.innerHTML = '';
-    
+
     if (currentModal?.onClose) {
       currentModal.onClose();
     }
@@ -139,9 +133,9 @@ function showConfirm(options) {
     confirmClass = 'btn--primary',
     icon = '❓',
     onConfirm,
-    onCancel
+    onCancel,
   } = options;
-  
+
   showModal({
     title: '',
     centered: true,
@@ -156,9 +150,9 @@ function showConfirm(options) {
       <button class="btn btn--secondary" onclick="handleConfirmCancel()">${escapeHtml(cancelText)}</button>
       <button class="btn ${confirmClass}" onclick="handleConfirmOk()">${escapeHtml(confirmText)}</button>
     `,
-    onClose: onCancel
+    onClose: onCancel,
   });
-  
+
   // Store callbacks
   window._confirmCallbacks = { onConfirm, onCancel };
 }
@@ -191,12 +185,12 @@ function renderCheckbox(options) {
     label = '',
     indeterminate = false,
     onChange,
-    disabled = false
+    disabled = false,
   } = options;
-  
+
   const indeterminateClass = indeterminate ? 'checkbox--indeterminate' : '';
   const disabledAttr = disabled ? 'disabled' : '';
-  
+
   return `
     <label class="checkbox ${indeterminateClass}">
       <input 
@@ -221,15 +215,8 @@ function renderCheckbox(options) {
 // ===== TOGGLE SWITCH =====
 
 function renderToggle(options) {
-  const {
-    id,
-    name,
-    checked = false,
-    label = '',
-    onChange,
-    disabled = false
-  } = options;
-  
+  const { id, name, checked = false, label = '', onChange, disabled = false } = options;
+
   return `
     <label class="toggle">
       <input 
@@ -250,14 +237,8 @@ function renderToggle(options) {
 // ===== SEARCH BAR =====
 
 function renderSearchBar(options) {
-  const {
-    id = 'search',
-    placeholder = 'Поиск...',
-    value = '',
-    onInput,
-    onClear
-  } = options;
-  
+  const { id = 'search', placeholder = 'Поиск...', value = '', onInput, onClear } = options;
+
   return `
     <div class="search-bar">
       <svg class="search-bar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -272,14 +253,18 @@ function renderSearchBar(options) {
         value="${escapeHtml(value)}"
         oninput="${onInput || ''}"
       >
-      ${value ? `
+      ${
+        value
+          ? `
         <button class="search-bar__clear" onclick="${onClear || ''}">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
-      ` : ''}
+      `
+          : ''
+      }
     </div>
   `;
 }
@@ -287,16 +272,11 @@ function renderSearchBar(options) {
 // ===== AVATAR =====
 
 function renderAvatar(options) {
-  const {
-    src,
-    firstName = '',
-    lastName = '',
-    size = 'md'
-  } = options;
-  
+  const { src, firstName = '', lastName = '', size = 'md' } = options;
+
   const sizeClass = size === 'sm' ? 'avatar--sm' : size === 'lg' ? 'avatar--lg' : '';
   const initials = getInitials(firstName, lastName);
-  
+
   if (src) {
     return `
       <div class="avatar ${sizeClass}">
@@ -304,7 +284,7 @@ function renderAvatar(options) {
       </div>
     `;
   }
-  
+
   return `
     <div class="avatar ${sizeClass}">${initials}</div>
   `;
@@ -318,19 +298,19 @@ function renderBadge(text, variant = 'neutral') {
 
 function renderStatusBadge(status) {
   const variants = {
-    'pending': 'primary',
-    'in_progress': 'warning',
-    'completed': 'success'
+    pending: 'primary',
+    in_progress: 'warning',
+    completed: 'success',
   };
   return renderBadge(getStatusLabel(status), variants[status] || 'neutral');
 }
 
 function renderPriorityBadge(priority) {
   const variants = {
-    'low': 'neutral',
-    'normal': 'primary',
-    'high': 'warning',
-    'urgent': 'error'
+    low: 'neutral',
+    normal: 'primary',
+    high: 'warning',
+    urgent: 'error',
   };
   return renderBadge(getPriorityLabel(priority), variants[priority] || 'neutral');
 }
@@ -338,13 +318,8 @@ function renderPriorityBadge(priority) {
 // ===== EMPTY STATE =====
 
 function renderEmptyState(options) {
-  const {
-    icon = '📭',
-    title = 'Нет данных',
-    text = '',
-    action
-  } = options;
-  
+  const { icon = '📭', title = 'Нет данных', text = '', action } = options;
+
   return `
     <div class="empty-state">
       <div class="empty-state__icon">${icon}</div>
@@ -365,20 +340,21 @@ function renderTreeNode(node, options = {}) {
     checkedIds = [],
     onToggle,
     onCheck,
-    renderActions
+    renderActions,
   } = options;
-  
+
   const hasChildren = node.children && node.children.length > 0;
   const isExpanded = expanded;
   const isChecked = checkedIds.includes(node.id);
   const isRoot = level === 0;
-  
-  const childrenHtml = hasChildren && isExpanded
-    ? node.children.map(child => 
-        renderTreeNode(child, { ...options, level: level + 1 })
-      ).join('')
-    : '';
-  
+
+  const childrenHtml =
+    hasChildren && isExpanded
+      ? node.children
+          .map((child) => renderTreeNode(child, { ...options, level: level + 1 }))
+          .join('')
+      : '';
+
   return `
     <div class="tree-node ${isRoot ? 'tree-node--root' : ''}" data-id="${node.id}">
       <div class="tree-node__header">
@@ -391,11 +367,15 @@ function renderTreeNode(node, options = {}) {
           </svg>
         </span>
         
-        ${showCheckbox ? renderCheckbox({
-          id: `check-${node.id}`,
-          checked: isChecked,
-          onChange: onCheck ? `${onCheck}(${node.id})` : ''
-        }) : ''}
+        ${
+          showCheckbox
+            ? renderCheckbox({
+                id: `check-${node.id}`,
+                checked: isChecked,
+                onChange: onCheck ? `${onCheck}(${node.id})` : '',
+              })
+            : ''
+        }
         
         <div class="tree-node__content">
           ${node.color ? `<span style="color: ${node.color}">●</span>` : ''}
@@ -405,11 +385,15 @@ function renderTreeNode(node, options = {}) {
         ${renderActions ? renderActions(node) : ''}
       </div>
       
-      ${hasChildren ? `
+      ${
+        hasChildren
+          ? `
         <div class="tree-node__children collapse-content ${isExpanded ? 'expanded' : ''}">
           ${childrenHtml}
         </div>
-      ` : ''}
+      `
+          : ''
+      }
     </div>
   `;
 }
@@ -442,7 +426,7 @@ function renderStatCard(value, label, color = null) {
 function renderProgressBar(value, max = 100, variant = '') {
   const percent = Math.min(100, Math.max(0, (value / max) * 100));
   const variantClass = variant ? `progress--${variant}` : '';
-  
+
   return `
     <div class="progress ${variantClass}">
       <div class="progress__bar" style="width: ${percent}%"></div>
@@ -453,19 +437,27 @@ function renderProgressBar(value, max = 100, variant = '') {
 // ===== CHIPS =====
 
 function renderChips(items, onRemove) {
-  return items.map(item => `
+  return items
+    .map(
+      (item) => `
     <span class="chip chip--primary">
       ${escapeHtml(typeof item === 'string' ? item : item.name)}
-      ${onRemove ? `
+      ${
+        onRemove
+          ? `
         <button class="chip__remove" onclick="${onRemove}(${typeof item === 'string' ? `'${item}'` : item.id})">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
-      ` : ''}
+      `
+          : ''
+      }
     </span>
-  `).join('');
+  `
+    )
+    .join('');
 }
 
 // ===== ACTION BAR =====
@@ -489,10 +481,10 @@ function showNotificationSettingsModal() {
   const rules = getState('notificationRules') || getDefaultRules();
   const showEmailEdit = getState('showEmailEdit') || false;
   const emails = settings.emails || [];
-  
+
   // Сохраняем текущее состояние формы перед показом
   setState('notificationSettingsBackup', { ...settings }, true);
-  
+
   showModal({
     title: 'Настройки уведомлений',
     content: `
@@ -504,10 +496,12 @@ function showNotificationSettingsModal() {
           ${renderToggle({
             id: 'notif-email',
             checked: settings.emailEnabled,
-            label: 'Email уведомления'
+            label: 'Email уведомления',
           })}
           
-          ${settings.emailEnabled ? `
+          ${
+            settings.emailEnabled
+              ? `
             <button class="btn btn--sm btn--outline mt-3" onclick="toggleEmailEditSmooth()">
               ${showEmailEdit ? 'Скрыть' : 'Изменить'}
             </button>
@@ -521,10 +515,13 @@ function showNotificationSettingsModal() {
                 </div>
               </div>
               <div class="emails-list" id="emails-list-container">
-                ${emails.length > 0 ? emails.map((item, i) => {
-                  const email = typeof item === 'string' ? item : item.email;
-                  const name = typeof item === 'string' ? '' : item.name;
-                  return `
+                ${
+                  emails.length > 0
+                    ? emails
+                        .map((item, i) => {
+                          const email = typeof item === 'string' ? item : item.email;
+                          const name = typeof item === 'string' ? '' : item.name;
+                          return `
                     <div class="email-item">
                       <div class="email-item__info">
                         ${name ? `<span class="email-item__name">${escapeHtml(name)}</span>` : ''}
@@ -533,10 +530,15 @@ function showNotificationSettingsModal() {
                       <button class="btn btn--sm btn--ghost" onclick="removeNotificationEmailSmooth(${i})">×</button>
                     </div>
                   `;
-                }).join('') : '<p class="text-muted text-sm">Нет добавленных email</p>'}
+                        })
+                        .join('')
+                    : '<p class="text-muted text-sm">Нет добавленных email</p>'
+                }
               </div>
             </div>
-          ` : ''}
+          `
+              : ''
+          }
         </div>
         
         <!-- Notification types -->
@@ -547,19 +549,19 @@ function showNotificationSettingsModal() {
             ${renderToggle({
               id: 'notif-on-complete',
               checked: settings.notifyOnComplete !== false,
-              label: 'При выполнении задачи'
+              label: 'При выполнении задачи',
             })}
             
             ${renderToggle({
               id: 'notif-on-deadline',
               checked: settings.notifyOnDeadline !== false,
-              label: 'При надвигающемся дедлайне'
+              label: 'При надвигающемся дедлайне',
             })}
             
             ${renderToggle({
               id: 'notif-on-overdue',
               checked: settings.notifyOnOverdue !== false,
-              label: 'При просрочке задачи'
+              label: 'При просрочке задачи',
             })}
           </div>
         </div>
@@ -571,7 +573,9 @@ function showNotificationSettingsModal() {
             <button class="btn btn--sm btn--ghost" onclick="showRuleEditInModal(null)">+ Добавить</button>
           </div>
           <div class="reminder-rules" id="notification-rules-list">
-            ${rules.map((rule, index) => `
+            ${rules
+              .map(
+                (rule, index) => `
               <div class="reminder-rule">
                 <span class="reminder-rule__icon">${rule.icon || '📋'}</span>
                 <span class="reminder-rule__text">${escapeHtml(rule.text)}</span>
@@ -590,7 +594,9 @@ function showNotificationSettingsModal() {
                   </button>
                 </div>
               </div>
-            `).join('')}
+            `
+              )
+              .join('')}
           </div>
         </div>
       </div>
@@ -598,15 +604,36 @@ function showNotificationSettingsModal() {
     footer: `
       <button class="btn btn--secondary" onclick="closeModal()">Закрыть</button>
       <button class="btn btn--primary" onclick="saveNotificationSettings()">Сохранить</button>
-    `
+    `,
   });
 }
 
 function getDefaultRules() {
   return [
-    { icon: '📅', text: 'Срок ≤ 7 дней → ежедневно', condition: '<=', value: 7, unit: 'day', frequency: 'daily' },
-    { icon: '📆', text: 'Срок > 7 дней → еженедельно', condition: '>', value: 7, unit: 'day', frequency: 'weekly' },
-    { icon: '⚠️', text: 'Просрочено → ежедневно', condition: 'overdue', value: 0, unit: 'day', frequency: 'daily' }
+    {
+      icon: '📅',
+      text: 'Срок ≤ 7 дней → ежедневно',
+      condition: '<=',
+      value: 7,
+      unit: 'day',
+      frequency: 'daily',
+    },
+    {
+      icon: '📆',
+      text: 'Срок > 7 дней → еженедельно',
+      condition: '>',
+      value: 7,
+      unit: 'day',
+      frequency: 'weekly',
+    },
+    {
+      icon: '⚠️',
+      text: 'Просрочено → ежедневно',
+      condition: 'overdue',
+      value: 0,
+      unit: 'day',
+      frequency: 'daily',
+    },
   ];
 }
 
@@ -626,51 +653,52 @@ function addNotificationEmailSmooth() {
   const nameInput = document.getElementById('new-email-name');
   const email = emailInput?.value?.trim();
   const name = nameInput?.value?.trim();
-  
+
   if (!email || !isValidEmail(email)) {
     showToast('Введите корректный email', 'error');
     return;
   }
-  
+
   const settings = getState('notificationSettings') || {};
   const emails = settings.emails || [];
-  
-  const exists = emails.some(item => {
+
+  const exists = emails.some((item) => {
     const e = typeof item === 'string' ? item : item.email;
     return e === email;
   });
-  
+
   if (exists) {
     showToast('Email уже добавлен', 'warning');
     return;
   }
-  
+
   emails.push({ email, name: name || '' });
   setState('notificationSettings', { ...settings, emails }, true);
-  
+
   // Обновляем список без перезагрузки модалки
   updateEmailsList(emails);
-  
+
   // Очищаем поля
   emailInput.value = '';
   nameInput.value = '';
-  
+
   haptic.success();
 }
 
 function updateEmailsList(emails) {
   const container = document.getElementById('emails-list-container');
   if (!container) return;
-  
+
   if (emails.length === 0) {
     container.innerHTML = '<p class="text-muted text-sm">Нет добавленных email</p>';
     return;
   }
-  
-  container.innerHTML = emails.map((item, i) => {
-    const email = typeof item === 'string' ? item : item.email;
-    const name = typeof item === 'string' ? '' : item.name;
-    return `
+
+  container.innerHTML = emails
+    .map((item, i) => {
+      const email = typeof item === 'string' ? item : item.email;
+      const name = typeof item === 'string' ? '' : item.name;
+      return `
       <div class="email-item">
         <div class="email-item__info">
           ${name ? `<span class="email-item__name">${escapeHtml(name)}</span>` : ''}
@@ -679,7 +707,8 @@ function updateEmailsList(emails) {
         <button class="btn btn--sm btn--ghost" onclick="removeNotificationEmailSmooth(${i})">×</button>
       </div>
     `;
-  }).join('');
+    })
+    .join('');
 }
 
 function removeNotificationEmailSmooth(index) {
@@ -696,17 +725,17 @@ function showRuleEditInModal(index) {
   const rules = getState('notificationRules') || getDefaultRules();
   const rule = index !== null ? rules[index] : null;
   setState('editingRuleIndex', index !== null ? index : -1, true);
-  
+
   // Создаём inline форму
   const rulesContainer = document.getElementById('notification-rules-list');
   if (!rulesContainer) return;
-  
+
   // Проверяем, есть ли уже форма
   const existingForm = document.getElementById('rule-edit-form');
   if (existingForm) {
     existingForm.remove();
   }
-  
+
   const formHtml = `
     <div class="rule-edit-form" id="rule-edit-form">
       <div class="form-group">
@@ -756,9 +785,9 @@ function showRuleEditInModal(index) {
       </div>
     </div>
   `;
-  
+
   rulesContainer.insertAdjacentHTML('beforeend', formHtml);
-  
+
   // Плавная прокрутка к форме
   setTimeout(() => {
     const form = document.getElementById('rule-edit-form');
@@ -766,7 +795,7 @@ function showRuleEditInModal(index) {
       form.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, 50);
-  
+
   haptic.light();
 }
 
@@ -781,17 +810,28 @@ function saveRuleInline() {
   const value = parseInt(document.getElementById('rule-value')?.value) || 0;
   const unit = document.getElementById('rule-unit')?.value;
   const frequency = document.getElementById('rule-frequency')?.value;
-  
-  const unitNames = { minute: 'минут', hour: 'часов', day: 'дней', week: 'недель', month: 'месяцев' };
-  const freqNames = { 
-    once: 'один раз', daily: 'ежедневно', weekly: 'еженедельно',
-    monthly: 'раз в месяц', quarterly: 'раз в квартал', halfyear: 'раз в полгода', yearly: 'раз в год'
+
+  const unitNames = {
+    minute: 'минут',
+    hour: 'часов',
+    day: 'дней',
+    week: 'недель',
+    month: 'месяцев',
+  };
+  const freqNames = {
+    once: 'один раз',
+    daily: 'ежедневно',
+    weekly: 'еженедельно',
+    monthly: 'раз в месяц',
+    quarterly: 'раз в квартал',
+    halfyear: 'раз в полгода',
+    yearly: 'раз в год',
   };
   const condNames = { '<=': '≤', '>': '>', '<': '<', '>=': '≥' };
-  
+
   let text = '';
   let icon = '📋';
-  
+
   if (condition === 'overdue') {
     text = `Просрочено → ${freqNames[frequency]}`;
     icon = '⚠️';
@@ -799,25 +839,25 @@ function saveRuleInline() {
     text = `Срок ${condNames[condition]} ${value} ${unitNames[unit]} → ${freqNames[frequency]}`;
     icon = value <= 7 ? '📅' : '📆';
   }
-  
+
   const rule = { icon, text, condition, value, unit, frequency };
-  
+
   const rules = getState('notificationRules') || getDefaultRules();
-  
+
   const isNew = editIndex < 0;
   const newIndex = isNew ? rules.length : editIndex;
-  
+
   if (editIndex >= 0) {
     rules[editIndex] = rule;
   } else {
     rules.push(rule);
   }
-  
+
   setState('notificationRules', [...rules], true);
-  
+
   // Обновляем список правил
   updateRulesList(rules, isNew ? newIndex : -1);
-  
+
   haptic.success();
 }
 
@@ -832,8 +872,10 @@ function deleteRuleSmooth(index) {
 function updateRulesList(rules, newRuleIndex = -1) {
   const container = document.getElementById('notification-rules-list');
   if (!container) return;
-  
-  container.innerHTML = rules.map((rule, index) => `
+
+  container.innerHTML = rules
+    .map(
+      (rule, index) => `
     <div class="reminder-rule ${newRuleIndex === index ? 'reminder-rule--new' : ''}" data-rule-index="${index}">
       <span class="reminder-rule__icon">${rule.icon || '📋'}</span>
       <span class="reminder-rule__text">${escapeHtml(rule.text)}</span>
@@ -852,8 +894,10 @@ function updateRulesList(rules, newRuleIndex = -1) {
         </button>
       </div>
     </div>
-  `).join('');
-  
+  `
+    )
+    .join('');
+
   // Мерцание для нового правила
   if (newRuleIndex >= 0) {
     const newRule = container.querySelector(`[data-rule-index="${newRuleIndex}"]`);
@@ -872,16 +916,16 @@ function updateRulesList(rules, newRuleIndex = -1) {
 
 function saveNotificationSettings() {
   const settings = getState('notificationSettings') || {};
-  
+
   const newSettings = {
     ...settings,
     emailEnabled: document.getElementById('notif-email')?.checked || false,
     telegramEnabled: document.getElementById('notif-telegram')?.checked || false,
     notifyOnComplete: document.getElementById('notif-on-complete')?.checked || false,
     notifyOnDeadline: document.getElementById('notif-on-deadline')?.checked || false,
-    notifyOnOverdue: document.getElementById('notif-on-overdue')?.checked || false
+    notifyOnOverdue: document.getElementById('notif-on-overdue')?.checked || false,
   };
-  
+
   setState('notificationSettings', newSettings);
   closeModal();
   showToast('Настройки сохранены', 'success');
@@ -919,4 +963,3 @@ window.showRuleEditInModal = showRuleEditInModal;
 window.cancelRuleEdit = cancelRuleEdit;
 window.saveRuleInline = saveRuleInline;
 window.deleteRuleSmooth = deleteRuleSmooth;
-

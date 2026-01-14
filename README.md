@@ -16,30 +16,36 @@ cd tg-task-bot
 Проект представляет собой статический веб-сайт, для работы локально можно использовать любой HTTP-сервер:
 
 **Вариант 1: Python (если установлен)**
+
 ```bash
 cd telegram-mini-app
 python -m http.server 8000
 ```
+
 Откройте в браузере: `http://localhost:8000`
 
 **Вариант 2: Node.js (если установлен)**
+
 ```bash
 cd telegram-mini-app
 npx http-server -p 8000
 ```
 
 **Вариант 3: PHP (если установлен)**
+
 ```bash
 cd telegram-mini-app
 php -S localhost:8000
 ```
 
 **Вариант 4: Live Server (VS Code расширение)**
+
 - Установите расширение "Live Server" в VS Code
 - Откройте `telegram-mini-app/index.html`
 - Нажмите "Go Live" в статус-баре
 
 **Вариант 5: Просто откройте файл**
+
 - Откройте `telegram-mini-app/index.html` напрямую в браузере
 - ⚠️ Некоторые функции могут не работать из-за CORS политики
 
