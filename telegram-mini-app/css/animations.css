@@ -2,6 +2,42 @@
    ANIMATIONS - Transitions, Keyframes, Effects
    ============================================ */
 
+:root {
+  --transition-micro: 150ms;    
+  --transition-normal: 250ms;   
+  --transition-complex: 400ms;  
+  --transition-fast: 120ms;
+  
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+
+  --anim-offset-sm: 20px;
+  --anim-offset-xs: 10px;
+  --anim-scale-start: 0.95;
+
+  --spinner-speed: 800ms; 
+  --spinner-size-md: 40px;
+  --spinner-size-sm: 20px;
+  --spinner-border-md: 3px;
+  --spinner-border-sm: 2px;
+  
+  --pulse-duration: 2s;
+  --pulse-opacity-min: 0.5;
+  --ease-pulse: cubic-bezier(0.4, 0, 0.6, 1);
+
+  --anim-shimmer-duration: 1.5s;
+
+  --anim-bounce-height: -10px;
+  
+  --anim-shake-offset: 4px;
+
+  --collapse-max-height: 500px;
+  --ripple-size: 100px;
+  --ripple-opacity: 0.3;
+  --checkmark-length: 24;
+  --stagger-step: 50ms;
+}
+
 /* === PAGE TRANSITIONS === */
 .page-enter {
   opacity: 0;
@@ -11,9 +47,10 @@
 .page-enter-active {
   opacity: 1;
   transform: translateX(0);
-  transition:
-    opacity var(--transition-normal),
-    transform var(--transition-normal);
+  transition: 
+    opacity var(--transition-normal) var(--ease-standard),
+    transform var(--transition-normal) var(--ease-standard);
+  will-change: opacity, transform;
 }
 
 .page-exit {
@@ -24,34 +61,27 @@
 .page-exit-active {
   opacity: 0;
   transform: translateX(-20px);
-  transition:
-    opacity var(--transition-normal),
-    transform var(--transition-normal);
+  transition: 
+    opacity var(--transition-normal) var(--ease-standard),
+    transform var(--transition-normal) var(--ease-standard);
+  will-change: opacity, transform;
 }
 
 /* === FADE ANIMATIONS === */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 @keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(var(--anim-offset-sm));
   }
   to {
     opacity: 1;
@@ -62,7 +92,7 @@
 @keyframes fadeInDown {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(calc(var(--anim-offset-sm) * -1));
   }
   to {
     opacity: 1;
@@ -71,22 +101,24 @@
 }
 
 .fade-in {
-  animation: fadeIn var(--transition-normal) ease forwards;
+  animation: fadeIn var(--transition-normal) var(--ease-standard) forwards;
 }
 
 .fade-in-up {
-  animation: fadeInUp var(--transition-normal) ease forwards;
+  animation: fadeInUp var(--transition-normal) var(--ease-standard) forwards;
+  will-change: opacity, transform;
 }
 
 .fade-in-down {
-  animation: fadeInDown var(--transition-normal) ease forwards;
+  animation: fadeInDown var(--transition-normal) var(--ease-standard) forwards;
+  will-change: opacity, transform;
 }
 
 /* === SCALE ANIMATIONS === */
 @keyframes scaleIn {
   from {
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(var(--anim-scale-start));
   }
   to {
     opacity: 1;
@@ -101,65 +133,54 @@
   }
   to {
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(var(--anim-scale-start));
   }
 }
 
 .scale-in {
-  animation: scaleIn var(--transition-normal) ease forwards;
+  animation: scaleIn var(--transition-normal) var(--ease-out) forwards;
+  will-change: opacity, transform;
 }
 
 /* === SLIDE ANIMATIONS === */
 @keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(100%); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(-100%); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(100%); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-100%); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .slide-in-right {
-  animation: slideInRight var(--transition-normal) ease forwards;
+  animation: slideInRight var(--transition-complex) var(--ease-standard) forwards;
+  will-change: transform, opacity;
 }
 
 .slide-in-up {
-  animation: slideInUp var(--transition-normal) ease forwards;
+  animation: slideInUp var(--transition-complex) var(--ease-standard) forwards;
+  will-change: transform, opacity;
+}
+
+.slide-in-left {
+  animation: slideInLeft var(--transition-complex) var(--ease-standard) forwards;
+  will-change: transform, opacity;
+}
+
+.slide-in-down {
+  animation: slideInDown var(--transition-complex) var(--ease-standard) forwards;
+  will-change: transform, opacity;
 }
 
 /* === LOADING SPINNER === */
@@ -173,55 +194,64 @@
 }
 
 .loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--color-border);
+  width: var(--spinner-size-md);
+  height: var(--spinner-size-md);
+  border: var(--spinner-border-md) solid var(--color-border);
   border-top-color: var(--color-primary);
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  animation: spin var(--spinner-speed) linear infinite;
+  will-change: transform;
 }
 
 .loading-spinner--small {
-  width: 20px;
-  height: 20px;
-  border-width: 2px;
+  width: var(--spinner-size-sm);
+  height: var(--spinner-size-sm);
+  border-width: var(--spinner-border-sm);
 }
 
 /* === PULSE ANIMATION === */
 @keyframes pulse {
-  0%,
-  100% {
+  0%, 100% {
     opacity: 1;
   }
   50% {
-    opacity: 0.5;
+    opacity: var(--pulse-opacity-min);
   }
 }
 
 .pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse var(--pulse-duration) var(--ease-pulse) infinite;
+  will-change: opacity;
 }
 
 /* === SKELETON LOADING === */
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 .skeleton {
+  position: relative; 
+  overflow: hidden;   
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   background: linear-gradient(
     90deg,
-    var(--color-bg-secondary) 25%,
-    var(--color-bg-tertiary) 50%,
-    var(--color-bg-secondary) 75%
+    transparent,
+    var(--color-bg-tertiary), 
+    transparent
   );
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: var(--radius-sm);
+  animation: shimmer var(--anim-shimmer-duration) infinite linear;
+  will-change: transform;
 }
 
 .skeleton-text {
@@ -243,48 +273,38 @@
 
 /* === BOUNCE ANIMATION === */
 @keyframes bounce {
-  0%,
-  100% {
+  0%, 100% {
     transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1); 
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(var(--anim-bounce-height));
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1); 
   }
 }
 
 .bounce {
-  animation: bounce 0.5s ease;
+  animation: bounce var(--transition-complex) forwards;
+  will-change: transform;
 }
 
 /* === SHAKE ANIMATION (for errors) === */
 @keyframes shake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  10%,
-  30%,
-  50%,
-  70%,
-  90% {
-    transform: translateX(-5px);
-  }
-  20%,
-  40%,
-  60%,
-  80% {
-    transform: translateX(5px);
-  }
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(calc(var(--anim-shake-offset) * -1)); }
+  20%, 40%, 60%, 80% { transform: translateX(var(--anim-shake-offset)); }
 }
 
 .shake {
-  animation: shake 0.5s ease;
+  animation: shake var(--transition-complex) var(--ease-standard);
+  will-change: transform;
 }
 
 /* === RIPPLE EFFECT === */
 .ripple {
   position: relative;
   overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .ripple::after {
@@ -292,28 +312,29 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 0;
-  height: 0;
-  background: rgba(255, 255, 255, 0.3);
+  width: var(--ripple-size);
+  height: var(--ripple-size);
+  background: rgba(255, 255, 255, var(--ripple-opacity));
   border-radius: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(0);
   opacity: 0;
+  transition: 
+    transform var(--transition-complex) var(--ease-out),
+    opacity var(--transition-complex) var(--ease-out);
+  will-change: transform, opacity;
+  pointer-events: none;
 }
 
 .ripple:active::after {
-  width: 200px;
-  height: 200px;
-  opacity: 0;
-  transition:
-    width 0.3s ease,
-    height 0.3s ease,
-    opacity 0.3s ease;
+  transform: translate(-50%, -50%) scale(4);
+  opacity: 1;
+  transition: 0s; 
 }
 
 /* === CHECKBOX ANIMATION === */
 @keyframes checkmark {
   0% {
-    stroke-dashoffset: 24;
+    stroke-dashoffset: var(--checkmark-length);
   }
   100% {
     stroke-dashoffset: 0;
@@ -321,12 +342,18 @@
 }
 
 .checkbox-animated .checkmark {
-  stroke-dasharray: 24;
-  stroke-dashoffset: 24;
+  stroke-dasharray: var(--checkmark-length);
+  stroke-dashoffset: var(--checkmark-length);
+  transition: stroke-dashoffset var(--transition-normal) var(--ease-standard);
 }
 
 .checkbox-animated input:checked + .checkmark {
-  animation: checkmark 0.3s ease forwards;
+  animation: checkmark var(--transition-normal) var(--ease-standard) forwards;
+}
+
+.checkbox-animated:active {
+  transform: scale(0.95);
+  transition: transform var(--transition-micro) var(--ease-standard);
 }
 
 /* === COLLAPSE/EXPAND === */
@@ -340,7 +367,7 @@
 }
 
 .collapse-content.expanded {
-  max-height: 2000px;
+  max-height: var(--collapse-max-height);
   opacity: 1;
 }
 
@@ -394,7 +421,7 @@
 
 .modal-content {
   opacity: 0;
-  transform: scale(0.95) translateY(10px);
+  transform: scale(0.95) translateY(var(--anim-offset-xs));
   transition:
     opacity var(--transition-normal),
     transform var(--transition-normal);
@@ -444,34 +471,34 @@
 }
 
 .stagger-item:nth-child(1) {
-  animation-delay: 0ms;
+  animation-delay: calc(var(--stagger-step) * 0);
 }
 .stagger-item:nth-child(2) {
-  animation-delay: 50ms;
+  animation-delay: calc(var(--stagger-step) * 1);
 }
 .stagger-item:nth-child(3) {
-  animation-delay: 100ms;
+  animation-delay: calc(var(--stagger-step) * 2);
 }
 .stagger-item:nth-child(4) {
-  animation-delay: 150ms;
+  animation-delay: calc(var(--stagger-step) * 3);
 }
 .stagger-item:nth-child(5) {
-  animation-delay: 200ms;
+  animation-delay: calc(var(--stagger-step) * 4);
 }
 .stagger-item:nth-child(6) {
-  animation-delay: 250ms;
+  animation-delay: calc(var(--stagger-step) * 5);
 }
 .stagger-item:nth-child(7) {
-  animation-delay: 300ms;
+  animation-delay: calc(var(--stagger-step) * 6);
 }
 .stagger-item:nth-child(8) {
-  animation-delay: 350ms;
+  animation-delay: calc(var(--stagger-step) * 7);
 }
 .stagger-item:nth-child(9) {
-  animation-delay: 400ms;
+  animation-delay: calc(var(--stagger-step) * 8);
 }
 .stagger-item:nth-child(10) {
-  animation-delay: 450ms;
+  animation-delay: calc(var(--stagger-step) * 9);
 }
 
 /* === BUTTON PRESS EFFECT === */

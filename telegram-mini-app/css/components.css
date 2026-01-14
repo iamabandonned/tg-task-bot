@@ -2,6 +2,38 @@
    COMPONENTS - Reusable UI Components
    ============================================ */
 
+:root {
+  --icon-size-xl: 64px;
+  --icon-size-lg: 48px;
+  --button-min-height: 44px;
+  --button-min-height-sm: 36px;
+  --button-min-height-lg: 52px;
+  --input-min-height: 44px;
+  --checkbox-box-size: 20px;
+  --checkbox-border-width: 2px;
+  --checkbox-svg-size: 12px;
+  --checkbox-svg-stroke: 3px;
+  --checkbox-indeterminate-width: 10px;
+  --checkbox-indeterminate-height: 2px;
+  --toggle-width: 48px;
+  --toggle-height: 28px;
+  --toggle-knob-size: 24px;
+  --toggle-knob-translate: 20px;
+  --control-inner-offset: 2px;
+  --avatar-size-md: 40px;
+  --avatar-size-sm: 32px;
+  --avatar-size-lg: 56px;
+  --modal-centered-max-width: 400px;
+  --toggle-icon-size: 24px;
+  --progress-height: 8px;
+  --divider-height: 1px;
+  --tab-underline-offset: -1px;
+  --chip-remove-padding: 2px;
+  --letter-spacing-xs: 0.5px;
+  --gap-xs: 2px;
+  --input-first-flex: 0.8;
+}
+
 /* === LOADING SCREEN === */
 .loading-screen {
   position: fixed;
@@ -40,7 +72,7 @@
 }
 
 .access-denied__icon {
-  font-size: 64px;
+  font-size: var(--icon-size-xl);
   margin-bottom: var(--space-4);
 }
 
@@ -73,7 +105,7 @@
   transition: all var(--transition-fast);
   cursor: pointer;
   border: none;
-  min-height: 44px;
+  min-height: var(--button-min-height);
 }
 
 .btn--primary {
@@ -135,13 +167,13 @@
 .btn--sm {
   padding: var(--space-2) var(--space-3);
   font-size: var(--font-size-sm);
-  min-height: 36px;
+  min-height: var(--button-min-height-sm);
 }
 
 .btn--lg {
   padding: var(--space-4) var(--space-6);
   font-size: var(--font-size-lg);
-  min-height: 52px;
+  min-height: var(--button-min-height-lg);
 }
 
 .btn--block {
@@ -170,7 +202,7 @@
   transition:
     border-color var(--transition-fast),
     box-shadow var(--transition-fast);
-  min-height: 44px;
+  min-height: var(--input-min-height);
 }
 
 .input:focus {
@@ -252,9 +284,9 @@
 }
 
 .checkbox__box {
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--color-border);
+  width: var(--checkbox-box-size);
+  height: var(--checkbox-box-size);
+  border: var(--checkbox-border-width) solid var(--color-border);
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
@@ -270,10 +302,10 @@
 }
 
 .checkbox__box svg {
-  width: 12px;
-  height: 12px;
+  width: var(--checkbox-svg-size);
+  height: var(--checkbox-svg-size);
   stroke: white;
-  stroke-width: 3;
+  stroke-width: var(--checkbox-svg-stroke);
   opacity: 0;
   transform: scale(0.5);
   transition: all var(--transition-fast);
@@ -296,8 +328,8 @@
 
 .checkbox--indeterminate .checkbox__box::after {
   content: '';
-  width: 10px;
-  height: 2px;
+  width: var(--checkbox-indeterminate-width);
+  height: var(--checkbox-indeterminate-height);
   background-color: white;
 }
 
@@ -315,8 +347,8 @@
 }
 
 .toggle__switch {
-  width: 48px;
-  height: 28px;
+  width: var(--toggle-width);
+  height: var(--toggle-height);
   background-color: var(--color-bg-tertiary);
   border-radius: var(--radius-full);
   position: relative;
@@ -327,10 +359,10 @@
 .toggle__switch::after {
   content: '';
   position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 24px;
-  height: 24px;
+  top: var(--control-inner-offset);
+  left: var(--control-inner-offset);
+  width: var(--toggle-knob-size);
+  height: var(--toggle-knob-size);
   background-color: white;
   border-radius: 50%;
   box-shadow: var(--shadow-sm);
@@ -342,7 +374,7 @@
 }
 
 .toggle__input:checked + .toggle__switch::after {
-  transform: translateX(20px);
+  transform: translateX(var(--toggle-knob-translate));
 }
 
 .toggle__label {
@@ -364,8 +396,8 @@
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23666666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 12px center;
-  min-height: 44px;
+  background-position: right var(--input-icon-offset, 12px) center;
+  min-height: var(--input-min-height);
   transition:
     border-color 0.25s ease,
     box-shadow 0.25s ease,
@@ -512,8 +544,8 @@
 
 /* === AVATAR === */
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: var(--avatar-size-md);
+  height: var(--avatar-size-md);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -526,14 +558,14 @@
 }
 
 .avatar--sm {
-  width: 32px;
-  height: 32px;
+  width: var(--avatar-size-sm);
+  height: var(--avatar-size-sm);
   font-size: var(--font-size-xs);
 }
 
 .avatar--lg {
-  width: 56px;
-  height: 56px;
+  width: var(--avatar-size-lg);
+  height: var(--avatar-size-lg);
   font-size: var(--font-size-lg);
 }
 
@@ -555,7 +587,7 @@
 }
 
 .empty-state__icon {
-  font-size: 48px;
+  font-size: var(--icon-size-lg);
   margin-bottom: var(--space-4);
   opacity: 0.5;
 }
@@ -668,7 +700,7 @@
 }
 
 .modal--centered {
-  max-width: 400px;
+  max-width: var(--modal-centered-max-width);
   margin: auto;
   border-radius: var(--radius-xl);
   max-height: 80vh;
@@ -758,8 +790,8 @@
 }
 
 .tree-node__toggle {
-  width: 24px;
-  height: 24px;
+  width: var(--toggle-icon-size);
+  height: var(--toggle-icon-size);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -803,7 +835,7 @@
 }
 
 .tree-node__children.expanded {
-  max-height: 2000px;
+  max-height: var(--collapse-max-height);
   opacity: 1;
 }
 
@@ -898,7 +930,7 @@
 /* === PROGRESS BAR === */
 .progress {
   width: 100%;
-  height: 8px;
+  height: var(--progress-height);
   background-color: var(--color-bg-tertiary);
   border-radius: var(--radius-full);
   overflow: hidden;
@@ -925,7 +957,7 @@
 
 /* === DIVIDER === */
 .divider {
-  height: 1px;
+  height: var(--divider-height);
   background-color: var(--color-border);
   margin: var(--space-4) 0;
 }
@@ -954,7 +986,7 @@
 }
 
 .chip__remove {
-  padding: 2px;
+  padding: var(--chip-remove-padding);
   margin-right: calc(-1 * var(--space-1));
   background: none;
   border: none;
@@ -985,7 +1017,7 @@
   cursor: pointer;
   white-space: nowrap;
   border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
+  margin-bottom: var(--tab-underline-offset);
   transition: all var(--transition-fast);
 }
 
@@ -1076,7 +1108,7 @@
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: var(--letter-spacing-xs);
 }
 
 .settings-section__title:not(.settings-section__header .settings-section__title) {
@@ -1144,7 +1176,7 @@
 }
 
 .email-edit-section.expanded {
-  max-height: 500px;
+  max-height: var(--collapse-max-height);
   padding: var(--space-3);
   margin-top: var(--space-3);
 }
@@ -1155,7 +1187,7 @@
 }
 
 .input-row .input:first-child {
-  flex: 0.8;
+  flex: var(--input-first-flex);
 }
 
 .input-row .input:nth-child(2) {
@@ -1165,7 +1197,7 @@
 .email-item__info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--gap-xs);
 }
 
 .email-item__name {

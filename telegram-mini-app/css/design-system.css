@@ -12,7 +12,8 @@
 }
 
 html {
-  font-size: 16px;
+  --root-font-size: 16px;
+  font-size: var(--root-font-size);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
 }
@@ -151,6 +152,9 @@ body {
   --header-height: 56px;
   --bottom-nav-height: 64px;
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --scrollbar-size: 6px;
+  --focus-outline-width: 2px;
+  --focus-outline-offset: 2px;
 }
 
 /* === BASE ELEMENTS === */
@@ -374,8 +378,8 @@ ol {
 
 /* === SCROLLBAR === */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
 }
 
 ::-webkit-scrollbar-track {
@@ -399,8 +403,8 @@ ol {
 
 /* === FOCUS VISIBLE === */
 :focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: var(--focus-outline-width) solid var(--color-primary);
+  outline-offset: var(--focus-outline-offset);
 }
 
 button:focus:not(:focus-visible),

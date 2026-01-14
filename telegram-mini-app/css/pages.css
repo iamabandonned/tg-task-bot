@@ -2,6 +2,47 @@
    PAGES - Page-specific Styles
    ============================================ */
 
+:root {
+  --btn-size: 40px;
+  --btn-icon-size: 44px;
+  --icon-size-sm: 24px;
+  --bottom-nav-indicator-width: 32px;
+  --bottom-nav-indicator-height: 3px;
+  --calendar-weekday-font-size: 10px;
+  --calendar-weekday-padding: 2px;
+  --calendar-gap: 2px;
+  --calendar-day-size: 28px;
+  --project-selector-max-height: 300px;
+  --employee-selector-max-height: 350px;
+  --project-node-toggle-size: 24px;
+  --project-node-color-size: 12px;
+  --project-node-action-size: 28px;
+  --progress-bar-height: 6px;
+  --color-option-size: 32px;
+  --progress-ring-size: 120px;
+  --progress-ring-stroke: 8px;
+  --progress-ring-dash: 251;
+  --progress-legend-dot-size: 10px;
+  --timeline-task-color-width: 4px;
+  --timeline-task-color-height: 32px;
+  --progress-bar-sm-height: 4px;
+  --badge-offset: 4px;
+  --badge-min-width: 18px;
+  --badge-height: 18px;
+  --badge-padding-x: 5px;
+  --badge-font-size: 11px;
+  --filter-tree-node-toggle-size: 20px;
+  --filter-tree-node-color-size: 8px;
+  --checkbox-sm-size: 18px;
+  --project-stat-min-width: 40px;
+  --filter-tree-max-height: 200px;
+  --accent-border-sm: 3px;
+  --accent-border-md: 4px;
+  --tag-padding-y: 2px;
+  --tag-padding-x: 8px;
+  --task-card-color-height: 40px;
+}
+
 /* === APP LAYOUT === */
 .app {
   display: flex;
@@ -23,7 +64,6 @@
   border-bottom: 1px solid var(--color-border);
   z-index: var(--z-sticky);
 }
-
 .header__title {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
@@ -36,8 +76,8 @@
 }
 
 .header__btn {
-  width: 40px;
-  height: 40px;
+  width: var(--btn-size);
+  height: var(--btn-size);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -100,15 +140,15 @@
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 32px;
-  height: 3px;
+  width: var(--bottom-nav-indicator-width);
+  height: var(--bottom-nav-indicator-height);
   background-color: var(--color-primary);
   border-radius: 0 0 var(--radius-sm) var(--radius-sm);
 }
 
 .bottom-nav__icon {
-  width: 24px;
-  height: 24px;
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
 }
 
 .bottom-nav__label {
@@ -137,7 +177,7 @@
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: var(--letter-spacing-xs);
   margin-bottom: var(--space-3);
 }
 
@@ -273,21 +313,21 @@
 }
 
 .calendar__weekdays span {
-  font-size: 10px;
+  font-size: var(--calendar-weekday-font-size);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-muted);
-  padding: 2px;
+  padding: var(--calendar-weekday-padding);
 }
 
 .calendar__days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 2px;
+  gap: var(--calendar-gap);
 }
 
 .calendar__day {
-  width: 28px;
-  height: 28px;
+  width: var(--calendar-day-size);
+  height: var(--calendar-day-size);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -340,7 +380,7 @@
 
 /* Project Selector Tree */
 .project-selector {
-  max-height: 300px;
+  max-height: var(--project-selector-max-height);
   overflow-y: auto;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
@@ -350,7 +390,7 @@
 
 /* Employee Selector */
 .employee-selector {
-  max-height: 350px;
+  max-height: var(--employee-selector-max-height);
   overflow-y: auto;
 }
 
@@ -523,8 +563,8 @@
 }
 
 .project-node__toggle {
-  width: 24px;
-  height: 24px;
+  width: var(--project-node-toggle-size);
+  height: var(--project-node-toggle-size);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -552,8 +592,8 @@
 }
 
 .project-node__color {
-  width: 12px;
-  height: 12px;
+  width: var(--project-node-color-size);
+  height: var(--project-node-color-size);
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -588,8 +628,8 @@
 }
 
 .project-node__action {
-  width: 28px;
-  height: 28px;
+  width: var(--project-node-action-size);
+  height: var(--project-node-action-size);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -625,7 +665,7 @@
 /* Progress bar */
 .progress-bar {
   flex: 1;
-  height: 6px;
+  height: var(--progress-bar-height);
   background-color: var(--color-bg-tertiary);
   border-radius: var(--radius-full);
   overflow: hidden;
@@ -645,8 +685,8 @@
 
 /* Color Picker in Modal */
 .color-option {
-  width: 32px;
-  height: 32px;
+  width: var(--color-option-size);
+  height: var(--color-option-size);
   border-radius: var(--radius-md);
   cursor: pointer;
   border: 2px solid transparent;
@@ -696,8 +736,8 @@
 }
 
 .department-header__toggle {
-  width: 24px;
-  height: 24px;
+  width: var(--project-node-toggle-size);
+  height: var(--project-node-toggle-size);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -849,7 +889,7 @@
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: var(--letter-spacing-xs);
   margin-bottom: var(--space-3);
 }
 
@@ -902,8 +942,8 @@
 
 .progress-ring {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: var(--progress-ring-size);
+  height: var(--progress-ring-size);
   flex-shrink: 0;
 }
 
@@ -916,16 +956,16 @@
 .progress-ring__bg {
   fill: none;
   stroke: var(--color-bg-tertiary);
-  stroke-width: 8;
+  stroke-width: var(--progress-ring-stroke);
 }
 
 .progress-ring__fill {
   fill: none;
   stroke: var(--color-success);
-  stroke-width: 8;
+  stroke-width: var(--progress-ring-stroke);
   stroke-linecap: round;
-  stroke-dasharray: 251;
-  stroke-dashoffset: calc(251 - (251 * var(--progress) / 100));
+  stroke-dasharray: var(--progress-ring-dash);
+  stroke-dashoffset: calc(var(--progress-ring-dash) - (var(--progress-ring-dash) * var(--progress) / 100));
   transition: stroke-dashoffset 0.5s ease;
 }
 
@@ -954,8 +994,8 @@
 }
 
 .progress-legend__dot {
-  width: 10px;
-  height: 10px;
+  width: var(--progress-legend-dot-size);
+  height: var(--progress-legend-dot-size);
   border-radius: 50%;
 }
 
@@ -1009,8 +1049,8 @@
 }
 
 .project-stat-card__color {
-  width: 12px;
-  height: 12px;
+  width: var(--project-node-color-size);
+  height: var(--project-node-color-size);
   border-radius: 50%;
 }
 
@@ -1030,7 +1070,7 @@
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
-  min-width: 40px;
+  min-width: var(--project-stat-min-width);
   text-align: right;
 }
 
@@ -1150,8 +1190,8 @@
 }
 
 .timeline-task__color {
-  width: 4px;
-  height: 32px;
+  width: var(--timeline-task-color-width);
+  height: var(--timeline-task-color-height);
   border-radius: var(--radius-sm);
   flex-shrink: 0;
 }
@@ -1234,8 +1274,8 @@
 }
 
 .analytics-item__color {
-  width: 12px;
-  height: 12px;
+  width: var(--project-node-color-size);
+  height: var(--project-node-color-size);
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -1295,7 +1335,7 @@
 }
 
 .analytics-task--overdue {
-  border-left: 3px solid var(--color-error);
+  border-left: var(--accent-border-sm) solid var(--color-error);
 }
 
 .analytics-task__title {
@@ -1313,7 +1353,7 @@
 }
 
 .analytics-task__tag {
-  padding: 2px 8px;
+  padding: var(--tag-padding-y) var(--tag-padding-x);
   border-radius: var(--radius-sm);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
@@ -1378,7 +1418,7 @@
 
 /* Progress bar small */
 .progress-bar--sm {
-  height: 4px;
+  height: var(--progress-bar-sm-height);
 }
 
 /* ========================================
@@ -1414,15 +1454,15 @@
 
 .btn__badge {
   position: absolute;
-  top: -4px;
-  right: -4px;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
+  top: calc(-1 * var(--badge-offset));
+  right: calc(-1 * var(--badge-offset));
+  min-width: var(--badge-min-width);
+  height: var(--badge-height);
+  padding: 0 var(--badge-padding-x);
   background-color: var(--color-error);
   color: white;
   border-radius: var(--radius-full);
-  font-size: 11px;
+  font-size: var(--badge-font-size);
   font-weight: var(--font-weight-semibold);
   display: flex;
   align-items: center;
@@ -1431,8 +1471,8 @@
 
 .btn--icon {
   position: relative;
-  width: 44px;
-  height: 44px;
+  width: var(--btn-icon-size);
+  height: var(--btn-icon-size);
   padding: 0;
 }
 
@@ -1458,7 +1498,7 @@
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: var(--letter-spacing-xs);
   margin-bottom: var(--space-3);
 }
 
@@ -1475,7 +1515,7 @@
 }
 
 .filter-modal__tree {
-  max-height: 200px;
+  max-height: var(--filter-tree-max-height);
   overflow-y: auto;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
@@ -1500,8 +1540,8 @@
 }
 
 .filter-tree-node__toggle {
-  width: 20px;
-  height: 20px;
+  width: var(--filter-tree-node-toggle-size);
+  height: var(--filter-tree-node-toggle-size);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1516,13 +1556,13 @@
 }
 
 .filter-tree-node__toggle--empty {
-  width: 20px;
+  width: var(--filter-tree-node-toggle-size);
   flex-shrink: 0;
 }
 
 .filter-tree-node__color {
-  width: 8px;
-  height: 8px;
+  width: var(--filter-tree-node-color-size);
+  height: var(--filter-tree-node-color-size);
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -1546,8 +1586,8 @@
 }
 
 .checkbox--sm .checkbox__box {
-  width: 18px;
-  height: 18px;
+  width: var(--checkbox-sm-size);
+  height: var(--checkbox-sm-size);
 }
 
 .empty-state--small {
@@ -1651,11 +1691,11 @@
 }
 
 .task-card--overdue {
-  border-left: 4px solid var(--color-error);
+  border-left: var(--accent-border-md) solid var(--color-error);
 }
 
 .task-card--urgent {
-  border-left: 4px solid var(--color-warning);
+  border-left: var(--accent-border-md) solid var(--color-warning);
 }
 
 .task-card__header {
@@ -1667,8 +1707,8 @@
 }
 
 .task-card__color {
-  width: 4px;
-  height: 40px;
+  width: var(--timeline-task-color-width);
+  height: var(--task-card-color-height);
   border-radius: var(--radius-sm);
   flex-shrink: 0;
 }
@@ -1706,7 +1746,7 @@
 }
 
 .task-card__project-tag {
-  padding: 2px 8px;
+  padding: var(--tag-padding-y) var(--tag-padding-x);
   border-radius: var(--radius-sm);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
@@ -1777,8 +1817,8 @@
 }
 
 .color-picker__option {
-  width: 32px;
-  height: 32px;
+  width: var(--color-option-size);
+  height: var(--color-option-size);
   border-radius: var(--radius-md);
   cursor: pointer;
   border: 2px solid transparent;
