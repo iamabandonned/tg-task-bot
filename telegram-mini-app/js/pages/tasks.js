@@ -746,7 +746,6 @@ function handleTaskFormChange(field, value) {
 function toggleProjectExpand(projectId) {
   const expanded = getState('expandedProjects') || [];
   const isExpanded = expanded.includes(projectId);
-
   if (isExpanded) {
     setState(
       'expandedProjects',
@@ -765,7 +764,6 @@ function toggleProjectExpand(projectId) {
 function toggleDepartmentExpand(deptId) {
   const expanded = getState('expandedDepartments') || [];
   const isExpanded = expanded.includes(deptId);
-
   if (isExpanded) {
     setState(
       'expandedDepartments',
@@ -780,7 +778,6 @@ function toggleDepartmentExpand(deptId) {
   toggleDeptNodeExpand(deptId, !isExpanded);
   haptic.light();
 }
-
 // Обновление DOM без перезагрузки страницы
 function toggleTreeNodeExpand(nodeId, expand) {
   const toggle = document.querySelector(`[onclick="toggleProjectExpand(${nodeId})"]`);
@@ -810,18 +807,62 @@ function toggleDeptNodeExpand(deptId, expand) {
 }
 
 function toggleProjectSelection(projectId, checked) {
+  // Preserve scroll position of project list to avoid jump on re-render
+  const projectSelector = document.querySelector('.project-selector');
+  const projectSelectorScroll = projectSelector ? projectSelector.scrollTop : 0;
+
   const selected = getState('taskForm.selectedProjects') || [];
+  const projects = getState('projects') || [];
+  console.debug('[toggleProjectSelection] start', { projectId, checked, selectedBefore: selected });
 
   if (checked) {
-    if (!selected.includes(projectId)) {
-      setState('taskForm.selectedProjects', [...selected, projectId], true);
-    }
+    // Add the project and all its descendants
+    const descendants = getDescendantIds(projects, projectId);
+    console.debug('[toggleProjectSelection] descendants=', descendants);
+
+    let newSelected = [...new Set([...selected, projectId, ...descendants])];
+
+    // For each ancestor, if all its descendants are selected, mark the ancestor selected too
+    const ancestors = getAncestorIds(projects, projectId);
+    console.debug('[toggleProjectSelection] ancestors=', ancestors);
+    ancestors.forEach((ancestorId) => {
+      const ancestorDesc = getDescendantIds(projects, ancestorId);
+      const allDescSelected = ancestorDesc.every((id) => newSelected.includes(id));
+      if (allDescSelected) newSelected.push(ancestorId);
+    });
+
+    const finalSelection = Array.from(new Set(newSelected));
+    console.debug('[toggleProjectSelection] finalSelection(add)=', finalSelection);
+    setState('taskForm.selectedProjects', finalSelection);
+    requestAnimationFrame(() => {
+      const sel = document.querySelector('.project-selector');
+      if (sel) sel.scrollTop = projectSelectorScroll;
+    });
   } else {
-    setState(
-      'taskForm.selectedProjects',
-      selected.filter((id) => id !== projectId),
-      true
-    );
+    // Remove the project and all its descendants
+    const descendants = getDescendantIds(projects, projectId);
+    console.debug('[toggleProjectSelection] descendants=', descendants);
+
+    let newSelected = selected.filter((id) => id !== projectId && !descendants.includes(id));
+
+    // For each ancestor, if not all descendants are selected anymore, ensure ancestor is not selected
+    const ancestors = getAncestorIds(projects, projectId);
+    console.debug('[toggleProjectSelection] ancestors=', ancestors);
+    ancestors.forEach((ancestorId) => {
+      const ancestorDesc = getDescendantIds(projects, ancestorId);
+      const allDescSelected = ancestorDesc.every((id) => newSelected.includes(id));
+      if (!allDescSelected) {
+        newSelected = newSelected.filter((id) => id !== ancestorId);
+      }
+    });
+
+    const finalSelection = Array.from(new Set(newSelected));
+    console.debug('[toggleProjectSelection] finalSelection(remove)=', finalSelection);
+    setState('taskForm.selectedProjects', finalSelection);
+    requestAnimationFrame(() => {
+      const sel = document.querySelector('.project-selector');
+      if (sel) sel.scrollTop = projectSelectorScroll;
+    });
   }
 
   // Обновляем только секцию с выбранными, не всю страницу
@@ -914,6 +955,10 @@ function removeDepartmentFromTask(deptId) {
 
 // Выбор всех проектов
 function toggleAllProjectsSelection() {
+  // Preserve scroll position of project list to avoid jump on re-render
+  const projectSelector = document.querySelector('.project-selector');
+  const projectSelectorScroll = projectSelector ? projectSelector.scrollTop : 0;
+
   const isAllSelected = getState('taskForm.allProjectsSelected');
 
   if (isAllSelected) {
@@ -925,12 +970,27 @@ function toggleAllProjectsSelection() {
     setState('taskForm.selectedProjects', [], true);
   }
 
+  requestAnimationFrame(() => {
+    const sel = document.querySelector('.project-selector');
+    if (sel) sel.scrollTop = projectSelectorScroll;
+  });
+
   haptic.selection();
 }
 
 function clearProjectSelection() {
+  // Preserve scroll position of project list to avoid jump on re-render
+  const projectSelector = document.querySelector('.project-selector');
+  const projectSelectorScroll = projectSelector ? projectSelector.scrollTop : 0;
+
   setState('taskForm.selectedProjects', []);
   setState('taskForm.allProjectsSelected', false);
+
+  requestAnimationFrame(() => {
+    const sel = document.querySelector('.project-selector');
+    if (sel) sel.scrollTop = projectSelectorScroll;
+  });
+
   haptic.light();
 }
 
@@ -950,11 +1010,21 @@ function updateSelectedEmployeesSummary() {
 }
 
 function removeProjectFromTask(projectId) {
+  // Preserve scroll position of project list to avoid jump on re-render
+  const projectSelector = document.querySelector('.project-selector');
+  const projectSelectorScroll = projectSelector ? projectSelector.scrollTop : 0;
+
   const selected = getState('taskForm.selectedProjects') || [];
   setState(
     'taskForm.selectedProjects',
     selected.filter((id) => id !== projectId)
   );
+
+  requestAnimationFrame(() => {
+    const sel = document.querySelector('.project-selector');
+    if (sel) sel.scrollTop = projectSelectorScroll;
+  });
+
   haptic.light();
 }
 
