@@ -484,7 +484,7 @@ function filterTreeBySearch(nodes, query) {
 
 function renderProjectTreeNode(node, selectedIds, level) {
   const hasChildren = node.children && node.children.length > 0;
-  const isExpanded = getState('expandedProjects')?.includes(node.id) || level === 0;
+  const isExpanded = getState('expandedProjects')?.includes(node.id);
   const isSelected = selectedIds.includes(node.id);
 
   // Проверяем, выбраны ли все дети
@@ -509,12 +509,13 @@ function renderProjectTreeNode(node, selectedIds, level) {
           </svg>
         </span>
         
-        <label class="checkbox ${isIndeterminate ? 'checkbox--indeterminate' : ''}">
+        <label class="checkbox ${isIndeterminate ? 'checkbox--indeterminate' : ''}" onclick="event.stopPropagation()">
           <input 
             type="checkbox" 
             class="checkbox__input"
             ${isSelected ? 'checked' : ''}
-            onchange="toggleProjectSelection(${node.id}, this.checked)"
+            onclick="event.stopPropagation()"
+            onchange="(function(){ window._projectSelectorScroll = document.querySelector('.project-selector') && document.querySelector('.project-selector').scrollTop; })(); toggleProjectSelection(${node.id}, this.checked)"
           >
           <span class="checkbox__box">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
@@ -746,6 +747,7 @@ function handleTaskFormChange(field, value) {
 function toggleProjectExpand(projectId) {
   const expanded = getState('expandedProjects') || [];
   const isExpanded = expanded.includes(projectId);
+  console.log('[toggleProjectExpand] id=', projectId, 'action=', isExpanded ? 'collapse' : 'expand');
   if (isExpanded) {
     setState(
       'expandedProjects',
@@ -764,6 +766,7 @@ function toggleProjectExpand(projectId) {
 function toggleDepartmentExpand(deptId) {
   const expanded = getState('expandedDepartments') || [];
   const isExpanded = expanded.includes(deptId);
+  console.log('[toggleDepartmentExpand] id=', deptId, 'action=', isExpanded ? 'collapse' : 'expand');
   if (isExpanded) {
     setState(
       'expandedDepartments',
@@ -780,6 +783,7 @@ function toggleDepartmentExpand(deptId) {
 }
 // Обновление DOM без перезагрузки страницы
 function toggleTreeNodeExpand(nodeId, expand) {
+  console.log('[toggleTreeNodeExpand] id=', nodeId, 'expand=', expand);
   const toggle = document.querySelector(`[onclick="toggleProjectExpand(${nodeId})"]`);
   if (toggle) {
     toggle.classList.toggle('expanded', expand);
@@ -791,6 +795,7 @@ function toggleTreeNodeExpand(nodeId, expand) {
 }
 
 function toggleDeptNodeExpand(deptId, expand) {
+  console.log('[toggleDeptNodeExpand] id=', deptId, 'expand=', expand);
   const header = document.querySelector(`[onclick="toggleDepartmentExpand(${deptId})"]`);
   if (header) {
     const toggle = header.querySelector('.tree-node__toggle');
