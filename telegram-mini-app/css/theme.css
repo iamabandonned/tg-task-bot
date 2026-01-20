@@ -2,6 +2,39 @@
    THEME - Light/Dark Mode Support
    ============================================ */
 
+:root {
+  /* Default (light) theme variables */
+  --color-primary: #3a9be8;
+  --color-primary-hover: #2180ce;
+  --color-primary-light: #e8f6ff;
+  --color-primary-dark: #2b7fc1;
+
+  --color-secondary: #6b7280;
+  --color-secondary-hover: #8791a0;
+
+  --color-success: #2f9e4a;
+  --color-warning: #d99a2f;
+  --color-error: #d6454a;
+  --color-info: #17a2b8;
+
+  --color-text-primary: #111827;
+  --color-text-secondary: #374151;
+  --color-text-muted: #6b7280;
+  --color-text-inverse: #ffffff;
+
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8fafc;
+  --color-bg-tertiary: #f1f5f9;
+  --color-bg-hover: #f3f4f6;
+
+  --color-border: #e6e9ee;
+  --color-border-focus: #3a9be8;
+
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-md: 0 4px 6px rgba(16, 24, 40, 0.08);
+  --shadow-lg: 0 10px 15px rgba(16, 24, 40, 0.1);
+}
+
 /* === DARK THEME === */
 [data-theme='dark'] {
   /* === PRIMARY === */

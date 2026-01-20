@@ -338,8 +338,8 @@
   transition: all var(--transition-fast);
 }
 
-.calendar__day:hover:not(.calendar__day--empty):not(.calendar__day--past) {
-  background-color: var(--color-bg-hover);
+.calendar__day:hover:not(.calendar__day--empty):not(.calendar__day--past):not(.calendar__day--selected) { 
+  background-color: var(--color-bg-hover); 
 }
 
 .calendar__day--empty {
@@ -359,10 +359,6 @@
 .calendar__day--selected {
   background-color: var(--color-primary);
   color: white;
-}
-
-.calendar__day--selected:hover {
-  background-color: var(--color-primary-hover);
 }
 
 /* === DATETIME MANUAL INPUT === */
@@ -423,6 +419,7 @@
 }
 
 .employee-department__list {
+  overflow-y: hidden;
   padding-left: var(--space-4);
   margin-top: var(--space-2);
 }
